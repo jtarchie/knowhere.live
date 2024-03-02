@@ -1,0 +1,11 @@
+version: 3
+
+tasks:
+  build:
+    cmds:
+      - deno fmt src/
+      - deno lint src/
+      - tsc
+      - yarn run build
+  watch-build: yarn run build --watch
+  default: yarn run local
