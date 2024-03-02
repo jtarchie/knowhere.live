@@ -3,6 +3,7 @@ import { Map as SignalMap } from "../signals/map";
 import { SearchQuery } from "../search_query";
 import { states } from "../states";
 import mapboxgl from "mapbox-gl";
+import { URLManager } from "./url_manager";
 
 interface Manager {
   add: (query: SearchQuery) => void;
@@ -20,6 +21,7 @@ class SearchManager {
     this.currentState = "";
     this.managers = [
       new LayerManager(map),
+      new URLManager(map),
     ];
     this.map = map;
     this.queries = new SignalMap();
@@ -28,7 +30,7 @@ class SearchManager {
   state(name: string) {
     this.currentState = name;
     this.map.fitBounds(states[name]);
-    this.updateParams();
+    this.managers.forEach((manager) => manager.state(name));
   }
 
   add(originalQuery: string) {
@@ -49,7 +51,6 @@ class SearchManager {
     });
 
     this.managers.forEach((manager) => manager.add(searchQuery));
-    this.updateParams();
   }
 
   remove(originalQuery: string) {
@@ -60,23 +61,7 @@ class SearchManager {
 
     this.managers.forEach((manager) => manager.remove(searchQuery));
     this.map.removeSource(searchQuery.source());
-    this.updateParams();
-
     this.queries.delete(originalQuery);
-  }
-
-  updateParams() {
-    const params = new URLSearchParams(window.location.search);
-    params.set("state", this.currentState);
-    params.set(
-      "queries",
-      this.queries.values().map((sq) => sq.query).join(","),
-    );
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${params}`,
-    );
   }
 }
 
