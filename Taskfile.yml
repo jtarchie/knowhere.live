@@ -5,7 +5,7 @@ tasks:
     cmds:
       - deno fmt src/
       - deno lint src/
-      - tsc
+      - npx tsc
       - yarn run build
   watch-build: yarn run build --watch
   default: yarn run local

@@ -4,15 +4,23 @@ import { SearchQuery } from "../search_query";
 import { states } from "../states";
 import mapboxgl from "mapbox-gl";
 
+interface Manager {
+  add: (query: SearchQuery) => void;
+  remove: (query: SearchQuery) => void;
+  state: (name: string) => void;
+}
+
 class SearchManager {
   currentState: string;
-  layerManager: LayerManager;
+  managers: Manager[];
   map: mapboxgl.Map;
   queries: SignalMap<SearchQuery>;
 
   constructor(map: mapboxgl.Map) {
     this.currentState = "";
-    this.layerManager = new LayerManager(map);
+    this.managers = [
+      new LayerManager(map),
+    ];
     this.map = map;
     this.queries = new SignalMap();
   }
@@ -40,19 +48,18 @@ class SearchManager {
       clusterRadius: 10,
     });
 
-    this.layerManager.add(searchQuery);
-
+    this.managers.forEach((manager) => manager.add(searchQuery));
     this.updateParams();
   }
 
   remove(originalQuery: string) {
-    const query = this.queries.get(originalQuery);
-    if (!query) {
+    const searchQuery = this.queries.get(originalQuery);
+    if (!searchQuery) {
       return;
     }
 
-    this.layerManager.remove(query);
-    this.map.removeSource(query.source());
+    this.managers.forEach((manager) => manager.remove(searchQuery));
+    this.map.removeSource(searchQuery.source());
     this.updateParams();
 
     this.queries.delete(originalQuery);

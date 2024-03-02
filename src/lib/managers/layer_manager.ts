@@ -8,6 +8,8 @@ class LayerManager {
     this.map = map;
   }
 
+  state(_: string) {}
+
   add(searchQuery: SearchQuery) {
     this.map.addLayer({
       id: searchQuery.layerName("layer"),
