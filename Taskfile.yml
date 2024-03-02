@@ -7,5 +7,6 @@ tasks:
       - deno lint src/
       - npx tsc
       - yarn run build
-  watch-build: yarn run build --watch
+      - yarn run test
   default: yarn run local
+  watch-build: yarn run build --watch

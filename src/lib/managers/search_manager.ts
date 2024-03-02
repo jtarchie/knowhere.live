@@ -4,6 +4,7 @@ import { SearchQuery } from "../search_query";
 import { states } from "../states";
 import mapboxgl from "mapbox-gl";
 import { URLManager } from "./url_manager";
+import { SourceManager } from "./source_manager";
 
 interface Manager {
   add: (query: SearchQuery) => void;
@@ -20,6 +21,7 @@ class SearchManager {
   constructor(map: mapboxgl.Map) {
     this.currentState = "";
     this.managers = [
+      new SourceManager(map),
       new LayerManager(map),
       new URLManager(map),
     ];
@@ -41,15 +43,6 @@ class SearchManager {
     const searchQuery = new SearchQuery(originalQuery);
     this.queries.set(originalQuery, searchQuery);
 
-    this.map.addSource(searchQuery.source(), {
-      type: "geojson",
-      data: `/api/search?search=${
-        encodeURIComponent(searchQuery.apiQuery({ prefix: this.currentState }))
-      }`,
-      cluster: true,
-      clusterRadius: 10,
-    });
-
     this.managers.forEach((manager) => manager.add(searchQuery));
   }
 
@@ -59,8 +52,9 @@ class SearchManager {
       return;
     }
 
-    this.managers.forEach((manager) => manager.remove(searchQuery));
-    this.map.removeSource(searchQuery.source());
+    this.managers.slice().reverse().forEach((manager) =>
+      manager.remove(searchQuery)
+    );
     this.queries.delete(originalQuery);
   }
 }
