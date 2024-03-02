@@ -5,6 +5,7 @@ import { states } from "../states";
 import mapboxgl from "mapbox-gl";
 import { URLManager } from "./url_manager";
 import { SourceManager } from "./source_manager";
+import { PopupManager } from "./popup_manager";
 
 interface Manager {
   add: (query: SearchQuery) => void;
@@ -23,6 +24,7 @@ class SearchManager {
     this.managers = [
       new SourceManager(map),
       new LayerManager(map),
+      new PopupManager(map),
       new URLManager(map),
     ];
     this.map = map;
