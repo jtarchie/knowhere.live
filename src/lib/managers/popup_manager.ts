@@ -1,6 +1,5 @@
-import mapboxgl, { MapEventType, MapMouseEvent } from "mapbox-gl";
+import mapboxgl, { MapLayerMouseEvent } from "mapbox-gl";
 import { SearchQuery } from "../search_query";
-import { features } from "process";
 
 class PopupManager {
   map: mapboxgl.Map;
@@ -10,39 +9,52 @@ class PopupManager {
     this.map = map;
     this.popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false
+      closeOnClick: false,
     });
   }
 
-  state(_: string) { }
+  state(_: string) {}
 
   add(searchQuery: SearchQuery) {
-    this.map.on("mouseenter", searchQuery.layerName("layer"), (event: MapLayerMouseEvent) => {
-      this.map.getCanvas().style.cursor = 'pointer';
+    this.map.on(
+      "mouseenter",
+      searchQuery.layerName("layer"),
+      (event: MapLayerMouseEvent) => {
+        this.map.getCanvas().style.cursor = "pointer";
 
-      if (event.features.length == 0) {
-        return
-      }
+        if (!event?.features?.length) {
+          return;
+        }
 
-      const coordinates = event.features[0]?.geometry?.coordinates;
-      const name = event.features[0]?.properties?.name;
+        const geometry = event.features[0].geometry;
 
-      if (!name || !coordinates) {
-        return;
-      }
+        if (geometry.type !== "Point") {
+          return;
+        }
 
-      while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
+        const coordinates = (geometry as GeoJSON.Point).coordinates as [
+          number,
+          number,
+        ];
+        const name = event.features[0]?.properties?.name;
 
-      // Set the popup's content and location and add it to the map
-      this.popup.setLngLat(coordinates)
-        .setHTML(name) // Set the name as the popup content
-        .addTo(this.map);
-    });
+        if (!name || !coordinates) {
+          return;
+        }
 
-    this.map.on('mouseleave', searchQuery.layerName("layer"), () => {
-      this.map.getCanvas().style.cursor = '';
+        while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        // Set the popup's content and location and add it to the map
+        this.popup.setLngLat(coordinates)
+          .setHTML(name) // Set the name as the popup content
+          .addTo(this.map);
+      },
+    );
+
+    this.map.on("mouseleave", searchQuery.layerName("layer"), () => {
+      this.map.getCanvas().style.cursor = "";
       this.popup.remove();
     });
   }
