@@ -2,14 +2,18 @@ import { LayerManager } from "./layer_manager";
 import { describe, it, vi } from "vitest";
 import { SearchQuery } from "../search_query";
 import { Map as MockMap } from "../mocks/map";
+import { AnyLayer } from "mapbox-gl";
 
 describe("LayerManager", () => {
   it("should add a layer", ({ expect }) => {
     const map = MockMap();
-    vi.spyOn(map, "addLayer");
+    const on = vi.spyOn(map, "on");
 
     const layerManager = new LayerManager(map);
     layerManager.add(new SearchQuery("test"));
+
+    on.mock.calls[0][1]("");
+
     expect(map.addLayer).toHaveBeenCalledWith({
       id: "test-layer",
       type: "circle",
@@ -25,6 +29,7 @@ describe("LayerManager", () => {
 
   it("should remove a layer", ({ expect }) => {
     const map = MockMap();
+    vi.spyOn(map, "getLayer").mockReturnValue({} as AnyLayer);
 
     const layerManager = new LayerManager(map);
     layerManager.remove(new SearchQuery("test"));

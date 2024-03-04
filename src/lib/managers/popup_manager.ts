@@ -59,9 +59,7 @@ class PopupManager {
     });
   }
 
-  remove(searchQuery: SearchQuery) {
-    this.map.removeLayer(searchQuery.layerName("layer"));
-  }
+  remove(_: SearchQuery) {}
 }
 
 export { PopupManager };
