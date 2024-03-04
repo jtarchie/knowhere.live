@@ -31,8 +31,8 @@ class SearchQuery {
     return `${this.query}-${name}`;
   }
 
-  source() {
-    return this.query;
+  sourceName(name: string = "") {
+    return `${this.query}-${name}`;
   }
 
   apiQuery(params: Record<string, string> = {}) {

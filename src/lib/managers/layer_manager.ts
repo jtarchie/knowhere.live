@@ -16,7 +16,7 @@ class LayerManager {
           this.map.addLayer({
             id: layerName,
             type: "circle",
-            source: searchQuery.source(),
+            source: searchQuery.sourceName(),
             paint: {
               "circle-radius": 6,
               "circle-color": searchQuery.color,

@@ -15,7 +15,7 @@ class SourceManager {
   }
 
   add(searchQuery: SearchQuery) {
-    this.map.addSource(searchQuery.source(), {
+    this.map.addSource(searchQuery.sourceName(), {
       type: "geojson",
       data: `/api/search?search=${
         encodeURIComponent(searchQuery.apiQuery({ prefix: this.currentState }))
@@ -26,7 +26,7 @@ class SourceManager {
   }
 
   remove(searchQuery: SearchQuery) {
-    this.map.removeSource(searchQuery.source());
+    this.map.removeSource(searchQuery.sourceName());
   }
 }
 

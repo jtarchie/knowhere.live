@@ -17,7 +17,7 @@ describe("LayerManager", () => {
     expect(map.addLayer).toHaveBeenCalledWith({
       id: "test-layer",
       type: "circle",
-      source: "test",
+      source: "test-",
       paint: {
         "circle-radius": 6,
         "circle-color": "#E69F00",
