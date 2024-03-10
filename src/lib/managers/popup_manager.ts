@@ -54,7 +54,6 @@ class PopupManager {
       searchQuery.layerName("knn"),
       (event: MapLayerMouseEvent) => {
         // show nothing if no features present
-        console.log("Event", event);
         if (!event?.features?.length) {
           return;
         }

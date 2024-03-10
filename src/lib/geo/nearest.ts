@@ -15,23 +15,38 @@ function groupNearest(sources: RadiusSet[]): GeoJSON.Feature[][] {
 
   for (let i = 0; i < sources[0].features.length; i++) {
     const originFeature = sources[0].features[i];
+    const originCoords = (originFeature.geometry as GeoJSON.Point).coordinates;
     const originBbox = bboxFromRadius(originFeature, sources[0].radius);
     const possibles = [originFeature];
 
     for (let j = 1; j < sources.length; j++) {
       const source = sources[j];
+      let closestFeature: GeoJSON.Feature | null = null;
+      let shortestDistance = Infinity;
 
       for (let k = 0; k < source.features.length; k++) {
-        const bbox = bboxFromRadius(source.features[k], source.radius);
+        const feature = source.features[k];
+        const bbox = bboxFromRadius(feature, source.radius);
 
         if (bboxOverlap(originBbox, bbox)) {
-          possibles.push(source.features[k]);
-          break;
+          const candidateCoords =
+            (feature.geometry as GeoJSON.Point).coordinates;
+          const distance = approximateDistance(
+            originCoords,
+            candidateCoords,
+          ); // Assuming miles
+
+          if (distance < shortestDistance) {
+            shortestDistance = distance;
+            closestFeature = feature;
+          }
         }
       }
 
-      if (possibles.length !== j + 1) {
-        break;
+      if (closestFeature) {
+        possibles.push(closestFeature);
+      } else {
+        break; // No matching feature found, no need to continue
       }
     }
 
@@ -70,6 +85,32 @@ function bboxOverlap(box1: GeoJSON.BBox, box2: GeoJSON.BBox): boolean {
 
   return (minLat1 <= maxLat2 && maxLat1 >= minLat2) &&
     (minLng1 <= maxLng2 && maxLng1 >= minLng2);
+}
+
+function approximateDistance(
+  coords1: GeoJSON.Position,
+  coords2: GeoJSON.Position,
+): number {
+  // Convert latitude and longitude from degrees to radians
+  const toRad = (degree: number) => degree * Math.PI / 180;
+
+  const lat1 = toRad(coords1[1]);
+  const lon1 = toRad(coords1[0]);
+  const lat2 = toRad(coords2[1]);
+  const lon2 = toRad(coords2[0]);
+
+  // Earth's radius in kilometers (approx.)
+  const R = 6371;
+
+  // Difference in coordinates
+  const dLat = lat2 - lat1;
+  const dLon = lon2 - lon1;
+
+  // Convert to approximate distance using Pythagoras
+  const distance = Math.sqrt(dLat * dLat + dLon * dLon) * R;
+
+  // Convert to miles if necessary
+  return distance;
 }
 
 export { groupNearest };
