@@ -22,8 +22,9 @@ class LayerManager {
       return {
         radius: searchQuery.radius.value,
         features: features,
+        query: searchQuery,
       };
-    });
+    }).sort((a, b) => a.features.length - b.features.length);
 
     const results = groupNearest(sourceWithRadius);
 
@@ -35,7 +36,7 @@ class LayerManager {
       results.map((row) => row[i])
     );
     transposedResults.forEach((features, index) => {
-      const sourceName = queries[index].sourceName("knn");
+      const sourceName = sourceWithRadius[index].query.sourceName("knn");
       const source = this.map.getSource(sourceName) as mapboxgl.GeoJSONSource;
       source.setData({
         type: "FeatureCollection",

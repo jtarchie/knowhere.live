@@ -25,7 +25,7 @@ describe("SearchManager", () => {
       expect(map.addSource).toHaveBeenCalled();
     });
 
-    it.only("does not add query if it already exists", ({ expect }) => {
+    it("does not add query if it already exists", ({ expect }) => {
       const map = MockMap();
 
       const searchManager = new SearchManager(map);

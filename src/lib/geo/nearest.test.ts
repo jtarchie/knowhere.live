@@ -28,7 +28,7 @@ const newYorkJSON = {
   properties: {},
 } as GeoJSON.Feature;
 
-describe.only("groupNearest", () => {
+describe("groupNearest", () => {
   it("returns nothing on empty input", ({ expect }) => {
     const results = groupNearest([]);
     expect(results).toEqual([]);
