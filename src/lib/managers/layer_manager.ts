@@ -115,6 +115,8 @@ class LayerManager {
     if (this.map.getSource(sourceName)) {
       this.map.removeSource(sourceName);
     }
+
+    this.map.once("idle", () => this.draw());
   }
 }
 
