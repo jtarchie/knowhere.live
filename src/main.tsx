@@ -17,6 +17,11 @@ const map = new mapboxgl.Map({
   ],
 });
 
+map.addControl(
+  new mapboxgl.NavigationControl(),
+  "top-right",
+);
+
 map.on("load", () => {
   const manager = new SearchManager(map);
   loadMapFromParams(manager);
