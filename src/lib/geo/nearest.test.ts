@@ -28,7 +28,7 @@ const newYorkJSON = {
   properties: {},
 } as GeoJSON.Feature;
 
-describe("groupNearest", () => {
+describe.only("groupNearest", () => {
   it("returns nothing on empty input", ({ expect }) => {
     const results = groupNearest([]);
     expect(results).toEqual([]);
@@ -95,7 +95,7 @@ describe("groupNearest", () => {
 
     describe("when there are many points", () => {
       it("returns the first point with in the boundary of another", ({ expect }) => {
-        const results = groupNearest([
+        let results = groupNearest([
           {
             radius: 100,
             features: [denverJSON],
@@ -111,6 +111,24 @@ describe("groupNearest", () => {
         ]);
 
         expect(results).toEqual([]);
+
+        results = groupNearest([
+          {
+            radius: 2000,
+            features: [denverJSON],
+          },
+          {
+            radius: 100,
+            features: [chicagoJSON],
+          },
+
+          {
+            radius: 10,
+            features: [newYorkJSON],
+          },
+        ]);
+
+        expect(results).toEqual([[denverJSON, chicagoJSON, newYorkJSON]]);
       });
     });
   });

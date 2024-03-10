@@ -15,9 +15,19 @@ describe("LayerManager", () => {
     on.mock.calls[0][1]("");
 
     expect(map.addLayer).toHaveBeenCalledWith({
-      id: "test-layer",
+      id: "test-hidden",
       type: "circle",
-      source: "test-",
+      source: "test-original",
+      paint: {
+        "circle-radius": 1,
+        "circle-opacity": 0,
+      },
+    });
+
+    expect(map.addLayer).toHaveBeenCalledWith({
+      id: "test-knn",
+      type: "circle",
+      source: "test-knn",
       paint: {
         "circle-radius": 6,
         "circle-color": "#E69F00",
@@ -32,7 +42,11 @@ describe("LayerManager", () => {
     vi.spyOn(map, "getLayer").mockReturnValue({} as AnyLayer);
 
     const layerManager = new LayerManager(map);
-    layerManager.remove(new SearchQuery("test"));
-    expect(map.removeLayer).toHaveBeenCalledWith("test-layer");
+    const query = new SearchQuery("test");
+    layerManager.add(query);
+    layerManager.remove(query);
+
+    expect(map.removeLayer).toHaveBeenCalledWith("test-hidden");
+    expect(map.removeLayer).toHaveBeenCalledWith("test-knn");
   });
 });

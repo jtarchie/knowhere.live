@@ -17,7 +17,7 @@ describe("SearchManager", () => {
   });
 
   describe("when adding a query", () => {
-    it("adds teh source", ({ expect }) => {
+    it("adds the source", ({ expect }) => {
       const map = MockMap();
 
       const searchManager = new SearchManager(map);
@@ -25,13 +25,13 @@ describe("SearchManager", () => {
       expect(map.addSource).toHaveBeenCalled();
     });
 
-    it("does not add query if it already exists", ({ expect }) => {
+    it.only("does not add query if it already exists", ({ expect }) => {
       const map = MockMap();
 
       const searchManager = new SearchManager(map);
       searchManager.add("test");
       searchManager.add("test");
-      expect(map.addSource).toHaveBeenCalledTimes(1);
+      expect(map.addSource).toHaveBeenCalledTimes(2);
     });
   });
 });

@@ -28,7 +28,7 @@ describe("Queries", () => {
     const wrapper = mount(<Queries manager={manager} />);
 
     manager.add("test");
-    wrapper.setProps({}); // force a re-render
+    wrapper.setProps({ manager }); // force a re-render
     expect(wrapper.text()).toContain("test");
 
     manager.remove("test");

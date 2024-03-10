@@ -1,3 +1,5 @@
+import { Signal, signal } from "@preact/signals";
+
 class SearchQuery {
   static colorPalette = [
     "#E69F00", // Orange
@@ -18,9 +20,11 @@ class SearchQuery {
 
   query: string;
   color: string;
+  radius: Signal<number>;
 
   constructor(query: string) {
     this.query = query;
+    this.radius = signal(5);
 
     this.color = SearchQuery
       .colorPalette[SearchQuery.counter % SearchQuery.colorPalette.length];
@@ -31,7 +35,7 @@ class SearchQuery {
     return `${this.query}-${name}`;
   }
 
-  sourceName(name: string = "") {
+  sourceName(name: string = "original") {
     return `${this.query}-${name}`;
   }
 

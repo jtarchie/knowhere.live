@@ -39,6 +39,19 @@ function Queries({ manager }: { manager: SearchManager }) {
                   </svg>
                 </button>
               </div>
+              <div class="w-full flex flex-row items-center gap-2">
+                <input
+                  type="range"
+                  min="1"
+                  max="50"
+                  value={sq.radius}
+                  onInput={(event) =>
+                    sq.radius.value = parseInt(event.currentTarget.value)}
+                  class="range range-xs flex-grow"
+                  step="1"
+                />
+                <span class="text-sm">{sq.radius.value} miles</span>
+              </div>
             </li>
           );
         })}

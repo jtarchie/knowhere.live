@@ -23,6 +23,8 @@ function SearchInput({ manager }: { manager: SearchManager }) {
           value={searchQuery}
           onInput={onInput}
           placeholder="Search"
+          required
+          minlength={3}
         />
         <button type="submit">
           <svg

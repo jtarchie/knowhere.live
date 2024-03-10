@@ -23,13 +23,14 @@ function groupNearest(sources: RadiusSet[]): GeoJSON.Feature[][] {
 
       for (let k = 0; k < source.features.length; k++) {
         const bbox = bboxFromRadius(source.features[k], source.radius);
+
         if (bboxOverlap(originBbox, bbox)) {
           possibles.push(source.features[k]);
           break;
         }
       }
 
-      if (possibles.length !== j) {
+      if (possibles.length !== j + 1) {
         break;
       }
     }

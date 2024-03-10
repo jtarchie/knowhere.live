@@ -20,8 +20,6 @@ class SourceManager {
       data: `/api/search?search=${
         encodeURIComponent(searchQuery.apiQuery({ prefix: this.currentState }))
       }`,
-      cluster: true,
-      clusterRadius: 10,
     });
   }
 
