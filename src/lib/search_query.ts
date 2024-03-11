@@ -18,12 +18,12 @@ class SearchQuery {
   ];
   static counter = 0;
 
-  query: string;
+  original: string;
   color: string;
   radius: Signal<number>;
 
   constructor(query: string) {
-    this.query = query;
+    this.original = query;
     this.radius = signal(5);
 
     this.color = SearchQuery
@@ -32,18 +32,18 @@ class SearchQuery {
   }
 
   layerName(name: string) {
-    return `${this.query}-${name}`;
+    return `${this.original}-${name}`;
   }
 
   sourceName(name: string = "original") {
-    return `${this.query}-${name}`;
+    return `${this.original}-${name}`;
   }
 
   apiQuery(params: Record<string, string> = {}) {
     const additionalTags = Object.entries(params).map(([key, value]) =>
       `[${key}="${value}"]`
     );
-    return `nw[*="${this.query}"]${additionalTags}`;
+    return `nw[*="${this.original}"]${additionalTags}`;
   }
 }
 

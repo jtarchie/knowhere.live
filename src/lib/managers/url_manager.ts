@@ -30,7 +30,7 @@ class URLManager {
     params.set("state", this.currentState);
     params.set(
       "queries",
-      [...this.queries].map((sq) => sq.query).join(","),
+      [...this.queries].map((sq) => sq.original).join(","),
     );
     window.history.replaceState(
       {},

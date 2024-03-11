@@ -13,6 +13,7 @@ class LayerManager {
 
     map.once("idle", () => this.draw());
     map.on("zoomend", () => this.draw());
+    map.on("dragend", () => this.draw());
   }
 
   draw() {
@@ -24,7 +25,15 @@ class LayerManager {
         features: features,
         query: searchQuery,
       };
-    }).sort((a, b) => a.features.length - b.features.length);
+    }).sort((a, b) => {
+      // First, sort by the length of features
+      const featureDiff = a.features.length - b.features.length;
+      if (featureDiff !== 0) {
+        return featureDiff;
+      }
+      // If the number of features is the same, sort by query.query in ascending order
+      return a.query.original.localeCompare(b.query.original);
+    });
 
     const results = groupNearest(sourceWithRadius);
 
@@ -45,7 +54,7 @@ class LayerManager {
     });
   }
 
-  state(_: string) {}
+  state(_: string) { }
 
   add(searchQuery: SearchQuery) {
     this.map.addSource(searchQuery.sourceName("knn"), {

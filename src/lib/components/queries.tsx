@@ -22,12 +22,12 @@ function Queries({ manager }: { manager: SearchManager }) {
                     style={style}
                   >
                   </div>
-                  {sq.query}
+                  {sq.original}
                 </div>
                 <button
-                  onClick={() => manager.remove(sq.query)}
+                  onClick={() => manager.remove(sq.original)}
                   class="btn btn-xs btn-error btn-circle"
-                  title={`Remove ${sq.query} from the map`}
+                  title={`Remove ${sq.original} from the map`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
