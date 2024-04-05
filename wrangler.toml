@@ -1,5 +1,7 @@
+compatibility_date = "2024-04-05"
+
 [vars]
-API_URL="http://localhost:8080"
+API_URL = "http://localhost:8080"
 
 [env.production.vars]
-API_URL="https://knowhere.fly.dev:443"
+API_URL = "https://knowhere.fly.dev:443"
