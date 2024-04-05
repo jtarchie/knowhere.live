@@ -1,6 +1,6 @@
 export async function onRequest(context) {
   const request = context.request;
-  const modifyURL = new URL(context.env.API_URL)
+  const modifyURL = new URL(context.env.API_URL || "https://knowhere.fly.dev:443")
   const url = new URL(request.url);
 
   url.protocol = modifyURL.protocol;
