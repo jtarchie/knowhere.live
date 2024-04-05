@@ -54,7 +54,7 @@ class LayerManager {
     });
   }
 
-  state(_: string) { }
+  state(_: string) {}
 
   add(searchQuery: SearchQuery) {
     this.map.addSource(searchQuery.sourceName("knn"), {
