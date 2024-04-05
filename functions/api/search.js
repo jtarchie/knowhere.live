@@ -1,10 +1,11 @@
 export async function onRequest(context) {
   const request = context.request;
+  const modifyURL = new URL(context.env.API_URL)
   const url = new URL(request.url);
 
-  url.protocol = "https:";
-  url.hostname = "knowhere.fly.dev";
-  url.port = "443";
+  url.protocol = modifyURL.protocol;
+  url.hostname = modifyURL.hostname;
+  url.port = modifyURL.port;
 
   const newRequest = new Request(url, request);
   let response = await fetch(newRequest, {

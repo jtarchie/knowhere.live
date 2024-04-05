@@ -1,0 +1,5 @@
+[vars]
+API_URL="http://localhost:8080"
+
+[env.production.vars]
+API_URL="https://knowhere.fly.dev:443"
