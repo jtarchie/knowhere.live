@@ -1,7 +1,7 @@
 import { LayerManager } from "./layer_manager";
 import { Map as SignalMap } from "../signals/map";
 import { SearchQuery } from "../search_query";
-import { states } from "../states";
+import { findBySlug, State } from "../states";
 import mapboxgl from "mapbox-gl";
 import { URLManager } from "./url_manager";
 import { SourceManager } from "./source_manager";
@@ -14,13 +14,12 @@ interface Manager {
 }
 
 class SearchManager {
-  currentState: string;
+  currentState?: State;
   managers: Manager[];
   map: mapboxgl.Map;
   queries: SignalMap<SearchQuery>;
 
   constructor(map: mapboxgl.Map) {
-    this.currentState = "";
     this.managers = [
       new SourceManager(map),
       new LayerManager(map),
@@ -32,8 +31,8 @@ class SearchManager {
   }
 
   state(name: string) {
-    this.currentState = name;
-    this.map.fitBounds(states[name]);
+    this.currentState = findBySlug(name);
+    this.map.fitBounds(this.currentState.bounds);
     this.managers.forEach((manager) => manager.state(name));
   }
 

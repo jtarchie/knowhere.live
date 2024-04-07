@@ -12,7 +12,7 @@ describe("SearchManager", () => {
 
     const searchManager = new SearchManager(map);
     searchManager.state("CA");
-    expect(searchManager.currentState).toEqual("CA");
+    expect(searchManager.currentState?.name).toEqual("Alabama");
     expect(map.fitBounds).toHaveBeenCalled();
   });
 
