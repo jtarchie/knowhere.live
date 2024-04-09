@@ -37,19 +37,21 @@ class LayerManager {
 
     const results = groupNearest(sourceWithRadius);
 
-    if (results.length === 0) {
-      return;
+    let transposedResults = sourceWithRadius.map(
+      () => [],
+    ) as GeoJSON.Feature[][];
+    if (0 < results.length) {
+      transposedResults = results[0].map((_, i) =>
+        results.map((row) => row[i])
+      );
     }
 
-    const transposedResults = results[0].map((_, i) =>
-      results.map((row) => row[i])
-    );
-    transposedResults.forEach((features, index) => {
-      const sourceName = sourceWithRadius[index].query.sourceName("knn");
+    sourceWithRadius.forEach((sourceRadius, index) => {
+      const sourceName = sourceRadius.query.sourceName("knn");
       const source = this.map.getSource(sourceName) as mapboxgl.GeoJSONSource;
       source.setData({
         type: "FeatureCollection",
-        features: features,
+        features: transposedResults[index] || [],
       });
     });
   }

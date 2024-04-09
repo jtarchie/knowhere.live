@@ -4,6 +4,7 @@ import { vi } from "vitest";
 function MockMap(): mapboxgl.Map {
   const events = new Map();
   const fireEvents = ["idle"];
+  const getSource = { setData: vi.fn() };
 
   return {
     addLayer: vi.fn(() => {
@@ -32,7 +33,7 @@ function MockMap(): mapboxgl.Map {
     getLayer: vi.fn(),
     getLayers: vi.fn(),
     getRenderWorldCopies: vi.fn(),
-    getSource: vi.fn(),
+    getSource: vi.fn(() => getSource),
     getStyle: vi.fn(),
     getZoom: vi.fn(),
     off: vi.fn((name) => {

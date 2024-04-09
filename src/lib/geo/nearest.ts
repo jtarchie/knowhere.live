@@ -7,9 +7,9 @@ function groupNearest(sources: RadiusSet[]): GeoJSON.Feature[][] {
   if (sources.length == 0) {
     return [];
   }
-  if (sources.length == 1) {
-    return [sources[0].features];
-  }
+  // if (sources.length == 1) {
+  //   return [sources[0].features];
+  // }
 
   const results: GeoJSON.Feature[][] = [];
 

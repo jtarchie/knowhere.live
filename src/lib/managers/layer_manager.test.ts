@@ -2,7 +2,7 @@ import { LayerManager } from "./layer_manager";
 import { describe, it, vi } from "vitest";
 import { SearchQuery } from "../search_query";
 import { Map as MockMap } from "../mocks/map";
-import { AnyLayer } from "mapbox-gl";
+import { AnyLayer, GeoJSONSource } from "mapbox-gl";
 
 describe("LayerManager", () => {
   it("should add a layer", ({ expect }) => {
@@ -34,6 +34,11 @@ describe("LayerManager", () => {
         "circle-stroke-width": 2,
         "circle-stroke-color": "#ffffff",
       },
+    });
+
+    expect((map.getSource("") as GeoJSONSource).setData).toHaveBeenCalledWith({
+      "type": "FeatureCollection",
+      "features": [],
     });
   });
 
