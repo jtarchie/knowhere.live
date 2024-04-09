@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { SearchManager } from "../managers/search_manager";
+import { states } from "../states";
 
 function SearchInput({ manager }: { manager: SearchManager }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +42,15 @@ function SearchInput({ manager }: { manager: SearchManager }) {
           </svg>
         </button>
       </div>
+      <select
+        class="select w-full max-w-xs"
+        value={manager.currentState.slug}
+        onChange={(event) => manager.state(event.currentTarget.value)}
+      >
+        <option disabled selected>Select a state</option>
+        {states.map((state) => <option value={state.slug}>{state.name}
+        </option>)}
+      </select>
     </form>
   );
 }

@@ -213,4 +213,4 @@ function findBySlug(name: string): State {
 }
 
 export type { State };
-export { findBySlug };
+export { findBySlug, states };
