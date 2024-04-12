@@ -11,10 +11,7 @@ class LayerManager {
     this.map = map;
     this.queries = new Map();
 
-    map.on("dragend", () => this.draw());
-    map.on("moveend", () => this.draw());
-    map.on("zoomend", () => this.draw());
-    map.once("idle", () => this.draw());
+    map.on("idle", () => this.draw());
   }
 
   draw() {
