@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240605.0",
+    "@codemirror/lang-javascript": "^6.2.2",
     "@preact/preset-vite": "^2.8.2",
     "@preact/signals": "^1.2.3",
     "@testing-library/preact": "^3.2.4",
@@ -26,6 +27,7 @@
     "@types/node": "^20.14.2",
     "@vitest/browser": "^1.6.0",
     "autoprefixer": "^10.4.19",
+    "codemirror": "^6.0.1",
     "daisyui": "^4.12.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^4.1.0",

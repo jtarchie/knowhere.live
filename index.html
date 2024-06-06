@@ -1,66 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Knowhere | Discover Your Ideal Location</title>
+  <meta charset="utf-8">
+  <title>Knowhere to live</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <link rel="stylesheet" href="/src/index.css" />
 </head>
 
-<body class="bg-gradient-to-r from-blue-500 to-teal-500 min-h-screen text-gray-800">
-  <div class="container mx-auto px-4 py-8">
-    <nav class="flex justify-between items-center mb-8">
-      <a href="/" class="text-white text-2xl font-bold">Knowhere</a>
-      <div>
-        <button class="btn btn-ghost btn-sm rounded-btn text-white line-through">Features</button>
-        <button class="btn btn-ghost btn-sm rounded-btn text-white line-through">Pricing</button>
-        <a class="btn btn-ghost btn-sm rounded-btn text-white" href="mailto:hello@knowhere.live">Contact</a>
-      </div>
-    </nav>
-    <div class="hero bg-base-200" style="background-image: url(/images/hero.webp);">
-      <div class="hero-overlay bg-opacity-60"></div>
-      <div class="hero-content text-center text-neutral-content">
-        <div class="max-w-md">
-          <h1 class="text-5xl font-bold text-white mb-4">Discover Your Ideal Location</h1>
-          <p class="text-xl font-semibold text-gray-200 mb-6">Find your perfect location based on your
-            criteria with Knowhere</p>
-        </div>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20 mt-20">
-      <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold mb-3">What We Are Building</h2>
-        <p>
-          An innovative application designed to help you discover geographical areas that perfectly match your
-          real estate criteria. Whether it's a home near a school or a business location near a highway exit,
-          Knowhere guides you to your ideal destination.
-        </p>
-      </div>
-      <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold mb-3">Why We Are Building It</h2>
-        <p>
-          To simplify the process of finding the perfect location. We empower our users with knowledge and
-          tools to find places that meet their specific needs and preferences, turning the concept of "knowing
-          where you want to be" into reality.
-        </p>
-      </div>
-    </div>
-    <section id="newsletter" class="text-center bg-white p-8 rounded-lg shadow-lg mb-20">
-      <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
-      <p class="mb-4">Enter your email to learn more and stay updated on Knowhere.</p>
-      <form action="https://buttondown.email/api/emails/embed-subscribe/knowhere?tag=landing_page" method="post"
-        target="popupwindow" onsubmit="window.open('https://buttondown.email/knowhere?tag=landing_page', 'popupwindow')"
-        class="flex justify-center items-center gap-2">
-        <input type="email" name="email" placeholder="Your Email Address" class="input input-bordered text-white"
-          required>
-        <button type="submit" class="btn btn-primary">Subscribe</button>
-      </form>
-    </section>
-    <footer class="text-center text-white">
-      <p>© 2024 Knowhere. All rights reserved.</p>
-    </footer>
+<body class="m-0 p-0">
+  <div class="absolute top-0 bottom-0 w-full">
+    <div id="map"></div>
   </div>
+  <div id="content" class="absolute top-0 p-2">
+  </div>
+  <script src="/src/main.tsx" type="module"></script>
 </body>
 
 </html>

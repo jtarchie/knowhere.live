@@ -1,4 +1,11 @@
 import mapboxgl from "mapbox-gl";
+// import { basicSetup, EditorView } from 'codemirror';
+// import { javascript } from '@codemirror/lang-javascript';
+
+import "mapbox-gl/dist/mapbox-gl.css";
+import "./index.css";
+
+const targetElement = document.querySelector('#editor')!
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoianRhcmNoaSIsImEiOiJjbHBobmx0YWQwOG01MmlxeDAydGxlN2c5In0.o3yTh6k7uo_e3CBi_32R9Q";
@@ -108,3 +115,9 @@ map.on("load", () => {
     filter: ["==", ["geometry-type"], "LineString"],
   });
 });
+
+
+// let editor = new EditorView({
+//   extensions: [basicSetup, javascript()],
+//   parent: targetElement,
+// })
