@@ -1,11 +1,9 @@
-import mapboxgl from "mapbox-gl";
-// import { basicSetup, EditorView } from 'codemirror';
-// import { javascript } from '@codemirror/lang-javascript';
+import mapboxgl, { GeoJSONSource } from "mapbox-gl";
+import { basicSetup, EditorView } from "codemirror";
+import { javascript } from "@codemirror/lang-javascript";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./index.css";
-
-const targetElement = document.querySelector('#editor')!
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoianRhcmNoaSIsImEiOiJjbHBobmx0YWQwOG01MmlxeDAydGxlN2c5In0.o3yTh6k7uo_e3CBi_32R9Q";
@@ -34,51 +32,49 @@ const payload = {
 };
 
 return payload
-`;
+`.trim();
 
-map.once("idle", () => {
-  const bounds = new mapboxgl.LngLatBounds();
+const editorElement = document.querySelector("#content")!;
 
-  map.querySourceFeatures("map-data").forEach(function (feature) {
-    bounds.extend(
-      (feature.geometry as GeoJSON.Point)
-        .coordinates as mapboxgl.LngLatBoundsLike,
-    );
-  });
-
-  map.fitBounds(bounds);
+const editor = new EditorView({
+  doc: source,
+  extensions: [basicSetup, javascript()],
+  parent: editorElement,
 });
 
+function loadData() {
+  const uri = `/proxy/api/runtime?source=${
+    encodeURIComponent(editor.state.doc.toString())
+  }`;
+
+  const source = map.getSource("map-data") as GeoJSONSource;
+  if (source) {
+    source.setData(uri);
+  } else {
+    map.addSource("map-data", {
+      type: "geojson",
+      data: uri,
+    });
+  }
+
+  map.once("idle", () => {
+    const bounds = new mapboxgl.LngLatBounds();
+
+    map.querySourceFeatures("map-data").forEach(function (feature) {
+      bounds.extend(
+        (feature.geometry as GeoJSON.Point)
+          .coordinates as mapboxgl.LngLatBoundsLike,
+      );
+    });
+
+    map.fitBounds(bounds);
+  });
+}
+
 map.on("load", () => {
-  map.addSource("map-data", {
-    type: "geojson",
-    data: `/proxy/api/runtime?source=${encodeURIComponent(source)}`,
-  });
+  const defaultColor = "#555";
 
-  const defaultColor = "#56B4E9";
-
-  map.addLayer({
-    id: "map-data-marker",
-    type: "circle",
-    source: "map-data",
-    paint: {
-      "circle-radius": [
-        "match",
-        ["get", "marker-size"],
-        "small",
-        4,
-        "medium",
-        8,
-        "large",
-        12,
-        8,
-      ],
-      "circle-color": ["coalesce", ["get", "marker-color"], defaultColor],
-      "circle-stroke-width": 2,
-      "circle-stroke-color": "#ffffff",
-    },
-    filter: ["==", ["geometry-type"], "Point"],
-  });
+  loadData();
 
   map.addLayer({
     id: "map-data-fill",
@@ -104,6 +100,29 @@ map.on("load", () => {
   });
 
   map.addLayer({
+    id: "map-data-marker",
+    type: "circle",
+    source: "map-data",
+    paint: {
+      "circle-radius": [
+        "match",
+        ["get", "marker-size"],
+        "small",
+        4,
+        "medium",
+        8,
+        "large",
+        12,
+        8,
+      ],
+      "circle-color": ["coalesce", ["get", "marker-color"], defaultColor],
+      "circle-stroke-width": 2,
+      "circle-stroke-color": "#ffffff",
+    },
+    filter: ["==", ["geometry-type"], "Point"],
+  });
+
+  map.addLayer({
     id: "map-data-line",
     type: "line",
     source: "map-data",
@@ -116,8 +135,12 @@ map.on("load", () => {
   });
 });
 
-
-// let editor = new EditorView({
-//   extensions: [basicSetup, javascript()],
-//   parent: targetElement,
-// })
+document.addEventListener("keydown", function (event) {
+  if (event.ctrlKey && event.key === "r") {
+    event.preventDefault(); // Prevent default browser refresh
+    loadData();
+  }
+  if (event.ctrlKey && event.key === "s") {
+    editorElement.classList.toggle("hidden");
+  }
+});
