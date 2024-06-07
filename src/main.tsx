@@ -43,6 +43,19 @@ const editor = new EditorView({
 });
 
 function loadData() {
+  map.once("idle", () => {
+    const bounds = new mapboxgl.LngLatBounds();
+
+    map.querySourceFeatures("map-data").forEach(function (feature) {
+      bounds.extend(
+        (feature.geometry as GeoJSON.Point)
+          .coordinates as mapboxgl.LngLatBoundsLike,
+      );
+    });
+
+    map.fitBounds(bounds);
+  });
+
   const uri = `/proxy/api/runtime?source=${
     encodeURIComponent(editor.state.doc.toString())
   }`;
@@ -56,19 +69,6 @@ function loadData() {
       data: uri,
     });
   }
-
-  map.once("idle", () => {
-    const bounds = new mapboxgl.LngLatBounds();
-
-    map.querySourceFeatures("map-data").forEach(function (feature) {
-      bounds.extend(
-        (feature.geometry as GeoJSON.Point)
-          .coordinates as mapboxgl.LngLatBoundsLike,
-      );
-    });
-
-    map.fitBounds(bounds);
-  });
 }
 
 map.on("load", () => {
