@@ -1,6 +1,7 @@
-import mapboxgl, { GeoJSONSource } from "mapbox-gl";
+import mapboxgl, { GeoJSONSource, LngLatBoundsLike } from "mapbox-gl";
 import { basicSetup, EditorView } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
+import * as turf from "@turf/turf";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./index.css";
@@ -49,10 +50,7 @@ function setSource() {
     const bounds = new mapboxgl.LngLatBounds();
 
     map.querySourceFeatures("map-data").forEach(function (feature) {
-      bounds.extend(
-        (feature.geometry as GeoJSON.Point)
-          .coordinates as mapboxgl.LngLatBoundsLike,
-      );
+      bounds.extend(turf.bbox(feature) as LngLatBoundsLike);
     });
 
     map.fitBounds(bounds);
@@ -140,11 +138,13 @@ map.on("load", () => {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.metaKey || event.ctrlKey) {
+  if ((event.metaKey || event.ctrlKey) && event.shiftKey) {
     if (event.key === "f") {
+      event.preventDefault();
       setSource();
     }
     if (event.key === "d") {
+      event.preventDefault();
       editorElement.classList.toggle("hidden");
     }
   }
