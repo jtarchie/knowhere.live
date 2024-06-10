@@ -3,5 +3,5 @@
 ## Development
 
 ```bash
-task default watch-build -p
+task server
 ```
