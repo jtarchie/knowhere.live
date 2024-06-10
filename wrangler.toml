@@ -1,5 +1,5 @@
 compatibility_date = "2024-04-05"
-send_metrics = falsex
+send_metrics = false
 
 [vars]
 API_URL = "http://localhost:8080"
