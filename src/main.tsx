@@ -21,7 +21,7 @@ map.addControl(
   "top-right",
 );
 
-const source = `
+const defaultSource = `
 const entries = geo.query("nwr[name=Costco](prefix=colorado)");
 
 const payload = {
@@ -34,10 +34,12 @@ const payload = {
 return payload
 `.trim();
 
+const codeSource = localStorage.get("codeSource") || defaultSource;
+
 const editorElement = document.querySelector("#content")!;
 
 const editor = new EditorView({
-  doc: source,
+  doc: codeSource,
   extensions: [basicSetup, javascript()],
   parent: editorElement,
 });
@@ -56,9 +58,11 @@ function setSource() {
     map.fitBounds(bounds);
   });
 
-  const uri = `/proxy/api/runtime?source=${
-    encodeURIComponent(editor.state.doc.toString())
-  }`;
+  const codeSource = editor.state.doc.toString();
+
+  localStorage.setItem("codeSource", codeSource);
+
+  const uri = `/proxy/api/runtime?source=${encodeURIComponent(codeSource)}`;
 
   const source = map.getSource("map-data") as GeoJSONSource;
   if (source) {
