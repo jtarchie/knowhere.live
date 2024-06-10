@@ -34,7 +34,7 @@ const payload = {
 return payload
 `.trim();
 
-const codeSource = localStorage.get("codeSource") || defaultSource;
+const codeSource = localStorage.getItem("codeSource") || defaultSource;
 
 const editorElement = document.querySelector("#content")!;
 
