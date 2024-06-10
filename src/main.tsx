@@ -42,7 +42,7 @@ const editor = new EditorView({
   parent: editorElement,
 });
 
-function loadData() {
+function setSource() {
   map.once("idle", () => {
     const bounds = new mapboxgl.LngLatBounds();
 
@@ -74,7 +74,7 @@ function loadData() {
 map.on("load", () => {
   const defaultColor = "#555";
 
-  loadData();
+  setSource();
 
   map.addLayer({
     id: "map-data-fill",
@@ -136,11 +136,12 @@ map.on("load", () => {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.ctrlKey && event.key === "r") {
-    event.preventDefault(); // Prevent default browser refresh
-    loadData();
-  }
-  if (event.ctrlKey && event.key === "s") {
-    editorElement.classList.toggle("hidden");
+  if (event.metaKey || event.ctrlKey) {
+    if (event.key === "f") {
+      setSource();
+    }
+    if (event.key === "d") {
+      editorElement.classList.toggle("hidden");
+    }
   }
 });
