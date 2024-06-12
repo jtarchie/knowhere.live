@@ -22,7 +22,7 @@ jobs:
         with:
          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Task
-        run: task build
+        run: task
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
