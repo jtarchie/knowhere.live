@@ -47,13 +47,12 @@ const editor = new EditorView({
 
 function setSource() {
   map.once("idle", () => {
-    const bounds = new mapboxgl.LngLatBounds();
-
-    map.querySourceFeatures("map-data").forEach(function (feature) {
-      bounds.extend(turf.bbox(feature) as LngLatBoundsLike);
+    const bbox = turf.bbox({
+      type: "FeatureCollection",
+      features: map.querySourceFeatures("map-data"),
     });
 
-    map.fitBounds(bounds);
+    map.fitBounds(bbox as LngLatBoundsLike);
   });
 
   const codeSource = editor.state.doc.toString();
