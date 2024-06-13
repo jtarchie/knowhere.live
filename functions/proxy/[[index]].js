@@ -12,7 +12,7 @@ export async function onRequest(context) {
     cf: {
       // Always cache this fetch regardless of content type
       // for a max of 5 seconds before revalidating the resource
-      cacheTtl: 5,
+      cacheTtl: 1500,
       cacheEverything: true,
     },
     headers: {
