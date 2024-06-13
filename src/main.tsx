@@ -1,7 +1,8 @@
-import mapboxgl, { GeoJSONSource, LngLatBoundsLike } from "mapbox-gl";
 import { basicSetup, EditorView } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import * as turf from "@turf/turf";
+import * as pako from "pako";
+import mapboxgl, { GeoJSONSource, LngLatBoundsLike } from "mapbox-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./index.css";
@@ -37,19 +38,27 @@ const payload = {
 return payload
 `.trim();
 
-const codeSource = localStorage.getItem("codeSource") || defaultSource;
-
 const editorElement = document.querySelector("#content")!;
 
+const params = new URLSearchParams(window.location.search);
+let currentSource = params.get("source");
+
+if (currentSource) {
+  const compressedData = Uint8Array.from(atob(currentSource), c => c.charCodeAt(0));
+  const decompressedData = pako.inflate(compressedData);
+  currentSource = new TextDecoder().decode(decompressedData);
+  editorElement.classList.toggle("hidden");
+} else {
+  currentSource = localStorage.getItem("codeSource") || defaultSource;
+}
+
 const editor = new EditorView({
-  doc: codeSource,
+  doc: currentSource,
   extensions: [basicSetup, javascript()],
   parent: editorElement,
 });
 
-async function setSource() {
-  const codeSource = editor.state.doc.toString();
-
+async function setSource(codeSource: string) {
   localStorage.setItem("codeSource", codeSource);
 
   const uri = `/proxy/api/runtime?source=${encodeURIComponent(codeSource)}`;
@@ -82,12 +91,25 @@ async function setSource() {
       map.fitBounds(bbox as LngLatBoundsLike, { padding: 20 });
     }
   });
+
+  const params = new URLSearchParams(window.location.search);
+
+  const inputData = new TextEncoder().encode(codeSource);
+  const compressedData = pako.deflate(inputData);
+  const base64String = btoa(String.fromCharCode(...compressedData));
+
+  params.set("source", base64String);
+  window.history.replaceState(
+    {},
+    "",
+    `${window.location.pathname}?${params}`,
+  );
 }
 
 map.on("load", () => {
   const defaultColor = "#555";
 
-  setSource().then(() => {
+  setSource(editor.state.doc.toString()).then(() => {
     map.addLayer({
       id: "map-data-fill",
       type: "fill",
@@ -152,7 +174,7 @@ document.addEventListener("keydown", function (event) {
   if ((event.metaKey || event.ctrlKey) && event.shiftKey) {
     if (event.key === "f") {
       event.preventDefault();
-      setSource();
+      setSource(editor.state.doc.toString());
     }
     if (event.key === "d") {
       event.preventDefault();
