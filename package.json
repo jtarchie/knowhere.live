@@ -20,7 +20,7 @@
     "@preact/signals": "^1.2.3",
     "@testing-library/preact": "^3.2.4",
     "@timohausmann/quadtree-ts": "^2.2.2",
-    "@turf/circle": "^6.5.0",
+    "@turf/circle": "^7.0.0",
     "@turf/turf": "^7.0.0",
     "@types/enzyme": "^3.10.18",
     "@types/mapbox-gl": "^3.1.0",
@@ -38,11 +38,11 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
-    "vite": "^5.2.12",
+    "vite": "^5.3.0",
     "vitest": "^1.6.0",
     "vitest-webgl-canvas-mock": "^1.1.0",
     "webdriverio": "^8.38.2",
-    "wrangler": "^3.59.0"
+    "wrangler": "^3.60.2"
   },
   "resolutions": {
     "string-width": "7.1.0"
