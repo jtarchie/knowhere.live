@@ -2,7 +2,11 @@ import { basicSetup, EditorView } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import * as turf from "@turf/turf";
 import * as pako from "pako";
-import mapboxgl, { GeoJSONSource, LngLatBoundsLike } from "mapbox-gl";
+import mapboxgl, {
+  GeoJSONSource,
+  LngLatBoundsLike,
+  MapboxGeoJSONFeature,
+} from "mapbox-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./index.css";
@@ -44,7 +48,10 @@ const params = new URLSearchParams(window.location.search);
 let currentSource = params.get("source");
 
 if (currentSource) {
-  const compressedData = Uint8Array.from(atob(currentSource), c => c.charCodeAt(0));
+  const compressedData = Uint8Array.from(
+    atob(currentSource),
+    (c) => c.charCodeAt(0),
+  );
   const decompressedData = pako.inflate(compressedData);
   currentSource = new TextDecoder().decode(decompressedData);
   editorElement.classList.toggle("hidden");
@@ -119,6 +126,20 @@ map.on("load", () => {
         "fill-opacity": ["coalesce", ["get", "fill-opacity"], 0.3],
       },
       filter: ["==", ["geometry-type"], "Polygon"],
+    });
+
+    map.on("click", "map-data-fill", (event) => {
+      if (!event) return;
+
+      const features = event?.features as MapboxGeoJSONFeature[];
+
+      if (features.length > 0) {
+        const feature = features[0];
+        const url = feature.properties?.url; // Assuming your property is named 'url'
+        if (url) {
+          globalThis.open(url, "_blank");
+        }
+      }
     });
 
     map.addLayer({
