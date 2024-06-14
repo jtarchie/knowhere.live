@@ -1,6 +1,10 @@
 compatibility_date = "2024-04-05"
 send_metrics = false
 
+[[kv_namespaces]]
+binding = "URL_SHORTENER"
+id = "812608f3e6754cdb8ce9e1e36d9320df"
+
 [vars]
 API_URL = "http://localhost:8080"
 
