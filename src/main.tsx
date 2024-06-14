@@ -178,6 +178,22 @@ map.on("load", () => {
     });
 
     map.addLayer({
+      id: "map-data-marker-text",
+      type: "symbol",
+      source: "map-data",
+      layout: {
+        "text-field": ["get", "title"],
+        "text-offset": [0, 1.5],
+      },
+      "paint": {
+        "text-color": "#202",
+        "text-halo-color": "#fff",
+        "text-halo-width": 2,
+      },
+      filter: ["==", ["geometry-type"], "Point"],
+    });
+
+    map.addLayer({
       id: "map-data-line",
       type: "line",
       source: "map-data",
