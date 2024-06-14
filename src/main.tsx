@@ -142,6 +142,24 @@ map.on("load", () => {
       }
     });
 
+    map.on("mouseover", "map-data-fill", (event) => {
+      if (!event) return;
+
+      const features = event?.features as MapboxGeoJSONFeature[];
+
+      if (features.length > 0) {
+        const feature = features[0];
+        const url = feature.properties?.url; // Assuming your property is named 'url'
+        if (url) {
+          map.getCanvas().style.cursor = "pointer";
+        }
+      }
+    });
+
+    map.on("mouseleave", "map-data-fill", (_) => {
+      map.getCanvas().style.cursor = "default";
+    });
+
     map.addLayer({
       id: "map-data-fill-outline",
       type: "line",
