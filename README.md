@@ -3,5 +3,5 @@
 ## Development
 
 ```bash
-task server
+task -p server build
 ```
