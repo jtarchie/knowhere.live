@@ -1,4 +1,6 @@
 import { basicSetup, EditorView } from "codemirror";
+import { keymap } from "@codemirror/view";
+import {indentWithTab} from "@codemirror/commands"
 import { javascript } from "@codemirror/lang-javascript";
 import * as turf from "@turf/turf";
 import * as pako from "pako";
@@ -61,7 +63,11 @@ if (currentSource) {
 
 const editor = new EditorView({
   doc: currentSource,
-  extensions: [basicSetup, javascript()],
+  extensions: [
+    basicSetup,
+    keymap.of([indentWithTab]),
+    javascript()
+  ],
   parent: editorElement,
 });
 
