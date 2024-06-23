@@ -74,8 +74,10 @@ const editor = new EditorView({
 async function setSource(codeSource: string) {
   localStorage.setItem("codeSource", codeSource);
 
-  const uri = `/proxy/api/runtime?source=${encodeURIComponent(codeSource)}`;
-  const response = await fetch(uri);
+  const response = await fetch(`/proxy/api/runtime`, {
+    method: "PUT",
+    body: codeSource,
+  });
   let payload = await response.json();
   if (payload.error) {
     console.error(`Could not run script: ${payload.error}`);
