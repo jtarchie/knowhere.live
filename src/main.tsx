@@ -1,7 +1,4 @@
-import { basicSetup, EditorView } from "codemirror";
-import { keymap } from "@codemirror/view";
-import {indentWithTab} from "@codemirror/commands"
-import { javascript } from "@codemirror/lang-javascript";
+import { Editor } from "./editor";
 import * as turf from "@turf/turf";
 import * as pako from "pako";
 import mapboxgl, {
@@ -45,6 +42,7 @@ return payload
 `.trim();
 
 const editorElement = document.querySelector("#content")!;
+const editor = new Editor(editorElement);
 
 const params = new URLSearchParams(window.location.search);
 let currentSource = params.get("source");
@@ -56,20 +54,12 @@ if (currentSource) {
   );
   const decompressedData = pako.inflate(compressedData);
   currentSource = new TextDecoder().decode(decompressedData);
-  editorElement.classList.toggle("hidden");
+  editor.toggle();
 } else {
   currentSource = localStorage.getItem("codeSource") || defaultSource;
 }
 
-const editor = new EditorView({
-  doc: currentSource,
-  extensions: [
-    basicSetup,
-    keymap.of([indentWithTab]),
-    javascript()
-  ],
-  parent: editorElement,
-});
+editor.source = currentSource;
 
 async function setSource(codeSource: string) {
   localStorage.setItem("codeSource", codeSource);
@@ -124,7 +114,7 @@ async function setSource(codeSource: string) {
 map.on("load", () => {
   const defaultColor = "#555";
 
-  setSource(editor.state.doc.toString()).then(() => {
+  setSource(editor.source).then(() => {
     map.addLayer({
       id: "map-data-fill",
       type: "fill",
@@ -237,7 +227,7 @@ document.addEventListener("keydown", function (event) {
   if ((event.metaKey || event.ctrlKey) && event.shiftKey) {
     if (event.key === "f") {
       event.preventDefault();
-      setSource(editor.state.doc.toString());
+      setSource(editor.source);
     }
     if (event.key === "d") {
       event.preventDefault();
