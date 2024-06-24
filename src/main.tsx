@@ -24,12 +24,14 @@ const editor = new Editor(editorElement);
 const source = new Source(map, editor, "source");
 
 const defaultSource = `
-const entries = geo.query("nwr[name=Costco](prefix=colorado)");
+const entries = geo.query("nwr[name=~Costco](prefix=colorado)");
 
 const payload = {
   type: "FeatureCollection",
-  features: entries.map((entry) => {
-    return entry.asFeature();
+  features: entries.map((entry, index) => {
+    return entry.asFeature({
+      "marker-color": geo.color(index),
+    });
   }),
 };
 
