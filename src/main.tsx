@@ -54,6 +54,7 @@ function geoJSONfromSource(codeSource: string) {
       return payload.features;
     });
   }).then((features) => {
+    source.toParams(codeSource);
     map.features = features;
   });
 }

@@ -29,7 +29,7 @@ class Map {
       this.features = [];
       this.initLayers();
       this.initEvents();
-    })
+    });
   }
 
   set features(features: mapboxgl.MapboxGeoJSONFeature[]) {
