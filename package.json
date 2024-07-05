@@ -11,7 +11,7 @@
     "local": "wrangler pages dev dist/"
   },
   "dependencies": {
-    "preact": "^10.22.0"
+    "preact": "^10.22.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240620.0",
@@ -36,6 +36,7 @@
     "mapbox-gl": "^3.4.0",
     "pako": "^2.1.0",
     "postcss": "^8.4.38",
+    "preact-router": "^4.1.2",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.2",
     "vite": "^5.3.1",
