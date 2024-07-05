@@ -1,6 +1,9 @@
 export async function onRequest(context) {
+  const timeout = 1500;
   const request = context.request;
-  const modifyURL = new URL(context.env.API_URL || "https://knowhere.fly.dev:443")
+  const modifyURL = new URL(
+    context.env.API_URL || "https://knowhere.fly.dev:443",
+  );
   const url = new URL(request.url.replace("/proxy/", "/"));
 
   url.protocol = modifyURL.protocol;
@@ -10,9 +13,7 @@ export async function onRequest(context) {
   const newRequest = new Request(url, request);
   let response = await fetch(newRequest, {
     cf: {
-      // Always cache this fetch regardless of content type
-      // for a max of 5 seconds before revalidating the resource
-      cacheTtl: 1500,
+      cacheTtl: timeout,
       cacheEverything: true,
     },
     headers: {
@@ -23,6 +24,6 @@ export async function onRequest(context) {
   // Reconstruct the Response object to make its headers mutable.
   response = new Response(response.body, response);
   // Set cache control headers to cache on browser for 25 minutes
-  response.headers.set("Cache-Control", "max-age=1500");
+  response.headers.set("Cache-Control", `max-age=${timeout}`);
   return response;
 }
