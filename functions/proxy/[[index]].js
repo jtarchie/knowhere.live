@@ -11,13 +11,16 @@ export async function onRequest(context) {
   url.port = modifyURL.port;
 
   const newRequest = new Request(url, request);
-  newRequest.headers.set("Host", `${url.hostname}:${url.port}`);
-  newRequest.headers.delete("x-forwarded-for");
-
   let response = await fetch(newRequest, {
     cf: {
       cacheTtl: timeout,
       cacheEverything: true,
+    },
+    headers: {
+      "Host": `${url.hostname}:${url.port}`,
+      "User-Agent": request.headers.get("User-Agent"),
+      "Accept": request.headers.get("Accept"),
+      "Accept-Encoding": request.headers.get("Accept-Encoding"),
     },
   });
 
