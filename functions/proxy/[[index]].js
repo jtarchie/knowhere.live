@@ -12,6 +12,7 @@ export async function onRequest(context) {
 
   const newRequest = new Request(url, request);
   newRequest.headers.set("Host", `${url.hostname}:${url.port}`);
+  newRequest.headers.delete("x-forwarded-for");
 
   let response = await fetch(newRequest, {
     cf: {
