@@ -11,13 +11,12 @@ export async function onRequest(context) {
   url.port = modifyURL.port;
 
   const newRequest = new Request(url, request);
+  newRequest.headers.set("Host", `${url.hostname}:${url.port}`);
+
   let response = await fetch(newRequest, {
     cf: {
       cacheTtl: timeout,
       cacheEverything: true,
-    },
-    headers: {
-      "Host": `${url.hostname}:${url.port}`,
     },
   });
 
