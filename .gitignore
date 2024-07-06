@@ -25,3 +25,5 @@ dist-ssr
 
 .task/
 .wrangler
+
+docs/.vitepress/dist
