@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Knowhere API Docs",
   description: "API documentation for the Knowhere API.",
   outDir: "../dist/docs",
+  base: "/docs/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
