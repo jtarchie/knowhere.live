@@ -1,6 +1,6 @@
-import { Editor } from "../editor";
-import { Map } from "../map";
-import { Source } from "../source";
+import { Editor } from "../render/editor";
+import { Map } from "../render/map";
+import { Source } from "../render/source";
 
 import mapboxgl from "mapbox-gl";
 import { useEffect, useRef } from "preact/hooks";
@@ -49,7 +49,7 @@ function geoJSONfromSource(
   });
 }
 
-function Home({}: { path?: string }) {
+function Render({}: { path?: string }) {
   const map = useRef<Map>(null);
   const mapElement = useRef<HTMLDivElement>(null);
   const editorElement = useRef<HTMLDivElement>(null);
@@ -99,4 +99,4 @@ function Home({}: { path?: string }) {
   );
 }
 
-export { Home };
+export { Render };

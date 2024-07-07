@@ -1,11 +1,11 @@
 import { render } from "preact";
 import Router from "preact-router";
-import { Home } from "./pages/home";
+import { Render } from "./pages/render";
 
 function App() {
   return (
     <Router>
-      <Home path="/" />
+      <Render path="/" />
     </Router>
   );
 }
