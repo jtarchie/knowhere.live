@@ -3,7 +3,7 @@ version: 3
 tasks:
   default:
     cmds:
-      - deno fmt src/ functions/
+      - deno fmt src/ functions/ docs/
       - deno lint src/ functions/
       - npx tsc
       - yarn run build

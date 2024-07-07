@@ -4,22 +4,20 @@ layout: home
 
 hero:
   name: "Knowhere API Docs"
-  text: "API documentation for the Knowhere API."
-  tagline: My great project tagline
+  text: "Search our processed Open Street Map data."
   actions:
-    - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+    # - theme: brand
+    #   text: Markdown Examples
+    #   link: /markdown-examples
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Runtime API
+      link: /runtime
 
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+# features:
+#   - title: Feature A
+#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+#   - title: Feature B
+#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+#   - title: Feature C
+#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-
