@@ -14,9 +14,10 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: "Endpoints",
+        text: "API",
         items: [
           { text: "Runtime", link: "/runtime" },
+          { text: "Query", link: "/query" },
         ],
       },
     ],
