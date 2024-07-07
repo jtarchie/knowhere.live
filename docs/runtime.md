@@ -12,6 +12,157 @@ NOTE: The API endpoint goes through Cloudflare Proxy at the moment. This was
 designed to have some load balancing and security protection in front of my
 native API endpoint.
 
+## Functions
+
+These are functions available with in the javascript runtime.
+
+### `geo.query(query)`
+
+Performs a geographical query.
+
+**Parameters:**
+
+- `query`: A string representing the query. Please see [query](query) for the
+  supported syntax.
+
+**Returns:**
+
+- An array of results matching the query.
+
+**Example:**
+
+```javascript
+const results = geo.query("nwr[name=~Costco](prefix=colorado)");
+console.log(results); // Outputs results for Costcos in Colorado
+```
+
+### `geo.prefixes()`
+
+Retrieves available geographical prefixes.
+
+**Returns:**
+
+- An array of prefix objects.
+
+**Example:**
+
+```javascript
+const prefixes = geo.prefixes();
+console.log(prefixes); // Outputs available geographical prefixes
+```
+
+### `geo.asResults(...queries)`
+
+Combines multiple queries into a single result set.
+
+**Parameters:**
+
+- `queries`: Multiple query results.
+
+**Returns:**
+
+- A combined result set.
+
+**Example:**
+
+```javascript
+const allUnis = geo.asResults(
+  ...prefixes.flatMap((prefix) => {
+    return geo.query(`wr[amenity=university][name](prefix=${prefix.name})`);
+  }),
+);
+console.log(allUnis); // Outputs combined results for universities
+```
+
+### `geo.color(index)`
+
+Generates a color based on an index.
+
+**Parameters:**
+
+- `index`: A numerical index.
+
+**Returns:**
+
+- A color string.
+
+**Example:**
+
+```javascript
+const color = geo.color(1);
+console.log(color); // Outputs a color string based on the index
+```
+
+### `geo.asBounds(...entries)`
+
+Creates a bounding box from multiple entries.
+
+**Parameters:**
+
+- `entries`: Multiple entries to be included in the bounding box.
+
+**Returns:**
+
+- A bounding box object.
+
+**Example:**
+
+```javascript
+const bounds = geo.asBounds(entry1, entry2, entry3);
+console.log(bounds); // Outputs a bounding box object
+```
+
+### `assert.stab(message)`
+
+Inserts a stable checkpoint for debugging purposes.
+
+**Parameters:**
+
+- `message`: A string message indicating the checkpoint.
+
+**Example:**
+
+```javascript
+assert.stab("start");
+// Some code here
+assert.stab("query");
+```
+
+### `assert.eq(value1, value2, message)`
+
+Asserts that two values are equal.
+
+**Parameters:**
+
+- `value1`: The first value.
+- `value2`: The second value.
+- `message`: A string message indicating the assertion.
+
+**Example:**
+
+```javascript
+assert.eq(5, 5, "expected 5 to equal 5");
+```
+
+### `assert.geoJSON(payload)`
+
+Asserts that a payload is valid GeoJSON.
+
+**Parameters:**
+
+- `payload`: The GeoJSON payload.
+
+**Example:**
+
+```javascript
+const payload = {
+  type: "FeatureCollection",
+  features: [],
+};
+
+assert.geoJSON(payload); // Asserts the payload is valid GeoJSON
+```
+
 ## Examples
 
 ### List of counties
