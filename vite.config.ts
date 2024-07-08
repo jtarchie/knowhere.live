@@ -11,6 +11,12 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
       },
+      output: {
+        manualChunks: {
+          "mapbox-gl": ["mapbox-gl"],
+          "codemirror": ["codemirror", "@codemirror/view", "@codemirror/commands", "@codemirror/lang-javascript"]
+        }
+      }
     },
   },
 })
