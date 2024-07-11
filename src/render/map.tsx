@@ -48,7 +48,8 @@ class Map {
             point[0]
           }%2C${point[1]}`,
         );
-        url.searchParams.append("contours_minutes", "15,30,45,60");
+        const contourMinutes = [15, 30, 45, 60];
+        url.searchParams.append("contours_minutes", contourMinutes.join(","));
         url.searchParams.append(
           "contours_colors",
           colors.map((color) => color.slice(1)).join(","),
@@ -60,7 +61,34 @@ class Map {
         fetch(url.toString()).then(async (response) => {
           const featureCollection = await response
             .json() as GeoJSON.FeatureCollection;
-          features = features.concat(featureCollection.features);
+          features = features.concat(
+            featureCollection.features.flatMap((feature, index) => {
+              const coordinates =
+                (feature.geometry as GeoJSON.Polygon).coordinates;
+              let southernmostPoint = coordinates[0];
+
+              // Iterate through the coordinates to find the point with the smallest latitude
+              coordinates.forEach((point) => {
+                if (point[1] < southernmostPoint[1]) {
+                  southernmostPoint = point;
+                }
+              });
+              const point: GeoJSON.Feature = {
+                type: "Feature",
+                geometry: {
+                  "type": "Point",
+                  coordinates: southernmostPoint[0], // lon, lat
+                },
+                properties: {
+                  title: `${
+                    contourMinutes[contourMinutes.length - index - 1]
+                  }m drive`,
+                  "marker-color": feature.properties?.fill,
+                },
+              };
+              return [feature, point];
+            }),
+          );
           this.setSource(features);
         });
       }
