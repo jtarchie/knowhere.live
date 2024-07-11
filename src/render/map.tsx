@@ -1,5 +1,6 @@
 import * as mapboxgl from "mapbox-gl";
 import * as turf from "@turf/turf";
+import tinycolor from "tinycolor2";
 
 class Map {
   defaultBounds: mapboxgl.LngLatBoundsLike;
@@ -32,7 +33,45 @@ class Map {
     });
   }
 
-  set features(features: mapboxgl.MapboxGeoJSONFeature[]) {
+  set features(features: GeoJSON.Feature[]) {
+    this.setSource(features);
+
+    features.forEach((feature) => {
+      const properties = feature.properties || {};
+      if (properties.isochrone) {
+        const color = properties["marker-color"] || this.defaultColor;
+        const colors = generateLighterColors(color, 3);
+
+        const point = (feature.geometry as GeoJSON.Point).coordinates;
+        const url = new URL(
+          `https://api.mapbox.com/isochrone/v1/mapbox/driving-traffic/${
+            point[0]
+          }%2C${point[1]}`,
+        );
+        url.searchParams.append("contours_minutes", "15,30,45,60");
+        url.searchParams.append(
+          "contours_colors",
+          colors.map((color) => color.slice(1)).join(","),
+        );
+        url.searchParams.append("polygons", "true");
+        url.searchParams.append("denoise", "1");
+        url.searchParams.append("access_token", mapboxgl.accessToken);
+
+        fetch(url.toString()).then(async (response) => {
+          const featureCollection = await response
+            .json() as GeoJSON.FeatureCollection;
+          features = features.concat(featureCollection.features);
+          this.setSource(features);
+        });
+      }
+    });
+
+    this.map.once("idle", () => {
+      this.fitBounds();
+    });
+  }
+
+  private setSource(features: GeoJSON.Feature[]) {
     const source = this.map.getSource(
       this.sourceName,
     ) as mapboxgl.GeoJSONSource;
@@ -40,6 +79,7 @@ class Map {
       type: "FeatureCollection",
       features: features,
     };
+
     if (source) {
       source.setData(payload);
     } else {
@@ -48,9 +88,6 @@ class Map {
         data: payload,
       });
     }
-    this.map.once("idle", () => {
-      this.fitBounds();
-    });
   }
 
   onLoad(func: () => void) {
@@ -183,6 +220,18 @@ class Map {
       filter: ["==", ["geometry-type"], "LineString"],
     });
   }
+}
+
+function generateLighterColors(hex: string, steps: number) {
+  const colors: string[] = [hex];
+  let color = tinycolor(hex);
+
+  for (let i = 1; i <= steps; i++) {
+    color = color.lighten(10); // Increase the lightness by 10% for each step
+    colors.push(color.toHexString());
+  }
+
+  return colors;
 }
 
 export { Map };
