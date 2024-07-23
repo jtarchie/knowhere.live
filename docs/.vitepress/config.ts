@@ -20,6 +20,12 @@ export default defineConfig({
           { text: "Query", link: "/query" },
         ],
       },
+      {
+        text: "Map",
+        items: [
+          { text: "Examples", link: "/examples" },
+        ],
+      },
     ],
   },
 });
