@@ -30,7 +30,6 @@ Performs a geographical query.
 
 ```javascript
 const results = query.execute("nwr[name=~Costco](prefix=colorado)");
-console.log(results); // Outputs results for Costcos in Colorado
 ```
 
 ### `query.prefixes()`
@@ -45,7 +44,6 @@ Retrieves available geographical prefixes.
 
 ```javascript
 const prefixes = query.prefixes();
-console.log(prefixes); // Outputs available geographical prefixes
 ```
 
 ### `geo.asResults(...queries)`
@@ -68,12 +66,11 @@ const allUnis = geo.asResults(
     return query.execute(`wr[amenity=university][name](prefix=${prefix.name})`);
   }),
 );
-console.log(allUnis); // Outputs combined results for universities
 ```
 
 ### `colors.pick(index)`
 
-Generates a color based on an index.
+Generates a color based on an index. This returns color-blind friendly colors.
 
 **Parameters:**
 
@@ -81,13 +78,12 @@ Generates a color based on an index.
 
 **Returns:**
 
-- A color string.
+- A color in hexadecimal format.
 
 **Example:**
 
 ```javascript
 const color = colors.pick(1);
-console.log(color); // Outputs a color string based on the index
 ```
 
 ### `geo.asBounds(...entries)`
@@ -106,23 +102,6 @@ Creates a bounding box from multiple entries.
 
 ```javascript
 const bounds = geo.asBounds(entry1, entry2, entry3);
-console.log(bounds); // Outputs a bounding box object
-```
-
-### `assert.stab(message)`
-
-Inserts a stable checkpoint for debugging purposes.
-
-**Parameters:**
-
-- `message`: A string message indicating the checkpoint.
-
-**Example:**
-
-```javascript
-assert.stab("start");
-// Some code here
-assert.stab("query");
 ```
 
 ### `assert.eq(value1, value2, message)`

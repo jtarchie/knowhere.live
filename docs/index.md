@@ -6,9 +6,9 @@ hero:
   name: "Knowhere API Docs"
   text: "Search our processed Open Street Map data."
   actions:
-    # - theme: brand
-    #   text: Markdown Examples
-    #   link: /markdown-examples
+    - theme: brand
+      text: Map Examples
+      link: /examples
     - theme: alt
       text: Runtime API
       link: /runtime
