@@ -14,16 +14,13 @@ native API endpoint.
 
 ## Functions
 
-These are functions available with in the javascript runtime.
-
-### `geo.query(query)`
+### `query.execute(query)`
 
 Performs a geographical query.
 
 **Parameters:**
 
-- `query`: A string representing the query. Please see [query](query) for the
-  supported syntax.
+- `query`: A string representing the query.
 
 **Returns:**
 
@@ -32,11 +29,11 @@ Performs a geographical query.
 **Example:**
 
 ```javascript
-const results = geo.query("nwr[name=~Costco](prefix=colorado)");
+const results = query.execute("nwr[name=~Costco](prefix=colorado)");
 console.log(results); // Outputs results for Costcos in Colorado
 ```
 
-### `geo.prefixes()`
+### `query.prefixes()`
 
 Retrieves available geographical prefixes.
 
@@ -47,7 +44,7 @@ Retrieves available geographical prefixes.
 **Example:**
 
 ```javascript
-const prefixes = geo.prefixes();
+const prefixes = query.prefixes();
 console.log(prefixes); // Outputs available geographical prefixes
 ```
 
@@ -68,13 +65,13 @@ Combines multiple queries into a single result set.
 ```javascript
 const allUnis = geo.asResults(
   ...prefixes.flatMap((prefix) => {
-    return geo.query(`wr[amenity=university][name](prefix=${prefix.name})`);
+    return query.execute(`wr[amenity=university][name](prefix=${prefix.name})`);
   }),
 );
 console.log(allUnis); // Outputs combined results for universities
 ```
 
-### `geo.color(index)`
+### `colors.pick(index)`
 
 Generates a color based on an index.
 
@@ -89,7 +86,7 @@ Generates a color based on an index.
 **Example:**
 
 ```javascript
-const color = geo.color(1);
+const color = colors.pick(1);
 console.log(color); // Outputs a color string based on the index
 ```
 
