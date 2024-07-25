@@ -19,7 +19,7 @@ class Map {
     this.element = element;
     this.map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/streets-v12",
+      style: getMapStyle(),
       bounds: defaultBounds,
     });
     this.map.addControl(
@@ -247,6 +247,14 @@ class Map {
       },
       filter: ["==", ["geometry-type"], "LineString"],
     });
+  }
+}
+
+function getMapStyle() {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'mapbox://styles/mapbox/dark-v11';
+  } else {
+      return 'mapbox://styles/mapbox/streets-v12';
   }
 }
 
