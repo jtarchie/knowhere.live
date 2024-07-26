@@ -47,7 +47,7 @@ function MapPage({}: { path?: string }) {
       ],
     );
 
-    const source = new Source("source");
+    const source = new Source();
     const sourceCode = source.fromParams();
     map.current.onLoad(() => {
       geoJSONfromSource(source, map.current as Map, sourceCode);

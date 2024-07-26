@@ -18,7 +18,7 @@ return payload
 class Source {
   sourceName: string;
 
-  constructor(sourceName: string) {
+  constructor(sourceName: string = "source") {
     this.sourceName = sourceName;
   }
 
