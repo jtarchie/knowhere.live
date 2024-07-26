@@ -1,19 +1,19 @@
 import { BottomNav } from "../components/bottom-nav";
 import { javascript } from "@codemirror/lang-javascript";
-import { Source } from "../render/source";
+import { Manager } from "../render/manager";
 import { useCallback, useState } from "preact/hooks";
 import CodeMirror from "@uiw/react-codemirror";
 
-function EditorPage({}: { path?: string }) {
-  const prefersDarkMode = globalThis.matchMedia &&
-    globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
+const prefersDarkMode = globalThis.matchMedia &&
+  globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
 
-  const source = new Source();
-  const sourceCode = source.fromParams();
+function EditorPage({}: { path?: string }) {
+  const manager = new Manager();
+  const sourceCode = manager.fromParams();
   const [value, setValue] = useState(sourceCode);
   const onChange = useCallback((sourceCode: string) => {
     setValue(sourceCode);
-    source.toParams(sourceCode);
+    manager.toParams(sourceCode);
   }, []);
 
   return (

@@ -15,7 +15,7 @@ const payload = {
 return payload
 `.trim();
 
-class Source {
+class Manager {
   sourceName: string;
 
   constructor(sourceName: string = "source") {
@@ -57,4 +57,4 @@ class Source {
   }
 }
 
-export { Source };
+export { Manager };
