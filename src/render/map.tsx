@@ -1,4 +1,4 @@
-import * as mapboxgl from "mapbox-gl";
+import mapboxgl from "mapbox-gl";
 import * as turf from "@turf/turf";
 import tinycolor from "tinycolor2";
 
@@ -251,10 +251,13 @@ class Map {
 }
 
 function getMapStyle() {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'mapbox://styles/mapbox/dark-v11';
+  if (
+    globalThis.matchMedia &&
+    globalThis.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    return "mapbox://styles/mapbox/dark-v11";
   } else {
-      return 'mapbox://styles/mapbox/streets-v12';
+    return "mapbox://styles/mapbox/streets-v12";
   }
 }
 

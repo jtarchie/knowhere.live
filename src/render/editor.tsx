@@ -1,7 +1,11 @@
 import { basicSetup, EditorView } from "codemirror";
-import { keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
+import { keymap } from "@codemirror/view";
+import { oneDark } from "@codemirror/theme-one-dark";
+
+const prefersDarkMode = globalThis.matchMedia &&
+  globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
 
 class Editor {
   editor: EditorView;
@@ -14,6 +18,7 @@ class Editor {
         basicSetup,
         keymap.of([indentWithTab]),
         javascript(),
+        prefersDarkMode ? oneDark : [],
       ],
       parent: element,
     });

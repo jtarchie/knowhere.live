@@ -1,19 +1,28 @@
-import { Editor } from "./editor";
-import { Map } from "./map";
 import * as pako from "pako";
 
+const defaultSourceCode = `
+const entries = query.execute("nwr[name=~Costco](prefix=colorado)");
+
+const payload = {
+  type: "FeatureCollection",
+  features: entries.map((entry, index) => {
+    return entry.asFeature({
+      "marker-color": colors.pick(index),
+    });
+  }),
+};
+
+return payload
+`.trim();
+
 class Source {
-  editor: Editor;
-  map: Map;
   sourceName: string;
 
-  constructor(map: Map, editor: Editor, sourceName: string) {
-    this.map = map;
-    this.editor = editor;
+  constructor(sourceName: string) {
     this.sourceName = sourceName;
   }
 
-  fromParams(defaultSource: string) {
+  fromParams(defaultSource: string = defaultSourceCode): string {
     const params = new URLSearchParams(window.location.search);
     let currentSource = params.get(this.sourceName);
     if (currentSource) {
@@ -23,13 +32,11 @@ class Source {
       );
       const decompressedData = pako.inflate(compressedData);
       currentSource = new TextDecoder().decode(decompressedData);
-
-      this.editor.toggle();
     } else {
       currentSource = localStorage.getItem(this.sourceName) || defaultSource;
     }
 
-    this.editor.source = currentSource;
+    return currentSource;
   }
 
   toParams(source: string) {

@@ -1,4 +1,4 @@
-function Home({}: { path?: string }) {
+function HomePage({}: { path?: string }) {
   return (
     <div class="container mx-auto px-4 py-8 bg-gradient-to-r from-blue-500 to-teal-500 min-h-screen text-gray-800">
       <nav class="flex justify-between items-center mb-8">
@@ -90,4 +90,4 @@ function Home({}: { path?: string }) {
   );
 }
 
-export { Home };
+export { HomePage };
