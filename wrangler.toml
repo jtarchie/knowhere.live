@@ -5,6 +5,9 @@ send_metrics = false
 binding = "URL_SHORTENER"
 id = "812608f3e6754cdb8ce9e1e36d9320df"
 
+[build]
+command = "yarn run build"
+
 [vars]
 # API_URL = "http://localhost:8080"
 API_URL = "https://knowhere.fly.dev:443"

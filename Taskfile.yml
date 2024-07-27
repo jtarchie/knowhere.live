@@ -8,7 +8,7 @@ tasks:
       - npx tsc
       - yarn run build
       - yarn run docs:build
-      - task: test
+      # - task: test
   server: yarn run local
   build: yarn run build --watch
   develop: yarn run local

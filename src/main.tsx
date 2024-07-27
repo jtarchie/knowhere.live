@@ -1,4 +1,5 @@
 import { EditorPage } from "./pages/editor";
+import { FilterPage } from "./pages/filter";
 import { HomePage } from "./pages/home";
 import { MapPage } from "./pages/map";
 import { render } from "preact";
@@ -9,6 +10,7 @@ function App() {
     <Router>
       <MapPage path="/beta/map" />
       <EditorPage path="/beta/editor" />
+      <FilterPage path="/beta/filter" />
       <HomePage path="/" />
     </Router>
   );
