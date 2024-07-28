@@ -1,34 +1,24 @@
-import { Form, FormSchema } from "../component/form";
+import { Form, FormValues } from "../component/form";
 import { BottomNav } from "../components/bottom-nav";
-
-const schema: FormSchema = [
-  {
-    label: "Address",
-    name: "address",
-    type: "string",
-    hint: "Please enter your full address.",
-    placeholder: "1234 Main St",
-  },
-  {
-    label: "Description",
-    name: "description",
-    type: "text",
-    hint: "Provide a brief description.",
-    placeholder: "Enter your description here...",
-  },
-  {
-    label: "Subscribe",
-    name: "subscribe",
-    type: "checkbox",
-    hint: "Check this box to subscribe to our newsletter.",
-  },
-];
+import { Manager } from "../render/manager";
 
 function FilterPage({}: { path?: string }) {
+  const manager = new Manager();
+  const { filter, about, filterValues } = manager.load();
+  const onChange = (values: FormValues) => manager.persistFilterValues(values);
+
   return (
-    <div class="h-screen flex flex-col">
+    <div class="h-screen flex flex-col p-4">
+      {about != "" && (
+        <>
+          <h2 class="text-2xl">About</h2>
+          <p class="text-base">{about}</p>
+        </>
+      )}
       <Form
-        schema={schema}
+        schema={filter}
+        values={filterValues}
+        onChange={onChange}
         className="flex-1 h-full w-full p-4 overflow-y-auto"
       />
       <BottomNav />

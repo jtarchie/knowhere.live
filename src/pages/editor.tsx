@@ -9,11 +9,11 @@ const prefersDarkMode = globalThis.matchMedia &&
 
 function EditorPage({}: { path?: string }) {
   const manager = new Manager();
-  const sourceCode = manager.fromParams();
+  const { source: sourceCode } = manager.load();
   const [value, setValue] = useState(sourceCode);
   const onChange = useCallback((sourceCode: string) => {
     setValue(sourceCode);
-    manager.toParams(sourceCode);
+    manager.persistSource(sourceCode);
   }, []);
 
   return (

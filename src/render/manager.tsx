@@ -1,59 +1,33 @@
-import * as pako from "pako";
-
-const defaultSourceCode = `
-const entries = query.execute("nwr[name=~Costco](prefix=colorado)");
-
-const payload = {
-  type: "FeatureCollection",
-  features: entries.map((entry, index) => {
-    return entry.asFeature({
-      "marker-color": colors.pick(index),
-    });
-  }),
-};
-
-return payload
-`.trim();
+import { FormValues } from "../component/form.tsx";
+import manifests, { Manifest } from "../manifests/index.ts";
 
 class Manager {
-  sourceName: string;
+  load(manifestName: string = "demo"): Manifest {
+    const manifest = manifests[manifestName];
+    // const params = new URLSearchParams(window.location.search);
 
-  constructor(sourceName: string = "source") {
-    this.sourceName = sourceName;
-  }
-
-  fromParams(defaultSource: string = defaultSourceCode): string {
-    const params = new URLSearchParams(window.location.search);
-    let currentSource = params.get(this.sourceName);
-    if (currentSource) {
-      const compressedData = Uint8Array.from(
-        atob(currentSource),
-        (c) => c.charCodeAt(0),
-      );
-      const decompressedData = pako.inflate(compressedData);
-      currentSource = new TextDecoder().decode(decompressedData);
-    } else {
-      currentSource = localStorage.getItem(this.sourceName) || defaultSource;
+    // try local storage - overrides
+    const manifestPayload = localStorage.getItem("manifest");
+    if (manifestPayload) {
+      return Object.assign({}, manifest, JSON.parse(manifestPayload));
     }
 
-    return currentSource;
+    // no overrides provided, use default
+    return manifest;
   }
 
-  toParams(source: string) {
-    const params = new URLSearchParams(window.location.search);
+  persistFilterValues(values: FormValues) {
+    const manifest = localStorage.getItem("manifest") || "{}";
+    const payload = JSON.parse(manifest) as Manifest;
+    payload.filterValues = values;
+    localStorage.setItem("manifest", JSON.stringify(payload));
+  }
 
-    const inputData = new TextEncoder().encode(source);
-    const compressedData = pako.deflate(inputData);
-    const base64String = btoa(String.fromCharCode(...compressedData));
-
-    params.set(this.sourceName, base64String);
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${params}`,
-    );
-
-    localStorage.setItem(this.sourceName, source);
+  persistSource(source: string) {
+    const manifest = localStorage.getItem("manifest") || "{}";
+    const payload = JSON.parse(manifest) as Manifest;
+    payload.source = source;
+    localStorage.setItem("manifest", JSON.stringify(payload));
   }
 }
 

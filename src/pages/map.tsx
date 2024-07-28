@@ -36,11 +36,14 @@ function MapPage({}: { path?: string }) {
 
   useEffect(() => {
     const manager = new Manager();
-    const sourceCode = manager.fromParams();
+    const { source: sourceCode, filterValues } = manager.load();
+    const fullSourceCode = `const params = ${
+      JSON.stringify(filterValues)
+    }; ${sourceCode}`;
 
     fetch(`/proxy/api/runtime`, {
       method: "PUT",
-      body: sourceCode,
+      body: fullSourceCode,
     })
       .then((response) => response.json())
       .then((payload) => {
