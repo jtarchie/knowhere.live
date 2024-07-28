@@ -1,6 +1,4 @@
 import Map, { Layer, MapRef, NavigationControl, Source } from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-import "../index.css";
 import { BottomNav } from "../components/bottom-nav";
 import {
   applyTransformations,
