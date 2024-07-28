@@ -36,10 +36,16 @@ function MapPage({}: { path?: string }) {
 
   useEffect(() => {
     const manager = new Manager();
-    const { source: sourceCode, filterValues } = manager.load();
+    const { source, filterValues, filter } = manager.load();
+    const params = Object.fromEntries(
+      filter.map((
+        field,
+      ) => [field.name, filterValues[field.name] || field.defaultValue]),
+    );
+
     const fullSourceCode = `const params = ${
-      JSON.stringify(filterValues)
-    }; ${sourceCode}`;
+      JSON.stringify(params)
+    }; ${source}`;
 
     fetch(`/proxy/api/runtime`, {
       method: "PUT",
