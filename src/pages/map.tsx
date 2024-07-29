@@ -27,9 +27,16 @@ const defaultBounds: LngLatBoundsLike = [
   [-66.9513812, 49.384358],
 ];
 
+const emptyFeatureCollection: GeoJSON.FeatureCollection = {
+  features: [],
+  type: "FeatureCollection",
+};
+
 function MapPage({}: { path?: string }) {
   const mapRef = useRef<MapRef>();
-  const [allData, setAllData] = useState<GeoJSON.FeatureCollection>();
+  const [allData, setAllData] = useState<GeoJSON.FeatureCollection>(
+    emptyFeatureCollection,
+  );
   const geoJSON = useMemo(() => {
     return allData;
   }, [allData]);
@@ -55,7 +62,7 @@ function MapPage({}: { path?: string }) {
       .then((payload) => {
         if (payload.error) {
           console.error(`Could not run script: ${payload.error}`);
-          payload = { features: [], type: "FeatureCollection" };
+          payload = emptyFeatureCollection;
         }
 
         setAllData(payload as GeoJSON.FeatureCollection);
