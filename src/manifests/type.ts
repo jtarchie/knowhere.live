@@ -1,4 +1,4 @@
-import { FormSchema, FormValues } from "../component/form";
+import { FormSchema, FormValues } from "../form/types";
 
 interface Manifest {
   source: string;

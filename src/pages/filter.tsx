@@ -1,6 +1,7 @@
-import { Form, FormValues } from "../component/form";
+import { FormValues } from "../form/types";
 import { BottomNav } from "../components/bottom-nav";
 import { Manager } from "../render/manager";
+import { Form } from "../form/component";
 
 function FilterPage({}: { path?: string }) {
   const manager = new Manager();

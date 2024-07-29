@@ -1,4 +1,4 @@
-import { FormValues } from "../component/form.tsx";
+import { FormValues } from "../form/types";
 import manifests, { Manifest } from "../manifests/index.ts";
 
 class Manager {

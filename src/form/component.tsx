@@ -1,22 +1,6 @@
 import { RefCallback } from "preact";
 import { useCallback, useRef } from "preact/hooks";
-
-type FieldType = "string" | "text" | "checkbox" | "prefix";
-
-interface Field {
-  defaultValue?: string;
-  hint?: string;
-  label: string;
-  name: string;
-  placeholder?: string;
-  type: FieldType;
-}
-
-type FormSchema = Field[];
-
-interface FormValues {
-  [key: string]: FormDataEntryValue;
-}
+import { FormSchema, FormValues } from "./types";
 
 function Form(
   { schema = [], className = "", onChange = () => {}, values = {} }: {
@@ -104,5 +88,4 @@ function Form(
   );
 }
 
-export type { FormSchema, FormValues };
 export { Form };
