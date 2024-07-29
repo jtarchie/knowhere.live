@@ -1,11 +1,9 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 import mapboxgl, {
   CircleLayerSpecification,
   FillLayerSpecification,
   LineLayerSpecification,
   SymbolLayerSpecification,
 } from "mapbox-gl";
-import { Dispatch, StateUpdater } from "preact/hooks";
 import { MapRef } from "react-map-gl";
 import tinycolor from "tinycolor2";
 
@@ -136,9 +134,7 @@ const layers = [circle, line, polygonFill, polygonOutlineFill, symbol];
 
 function applyTransformations(
   geoJSON: GeoJSON.FeatureCollection,
-  setter: Dispatch<
-    StateUpdater<FeatureCollection<Geometry, GeoJsonProperties>>
-  >,
+  setter: (features: GeoJSON.FeatureCollection) => void,
 ) {
   geoJSON.features?.forEach((feature) => {
     const properties = feature.properties || {};

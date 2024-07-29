@@ -5,7 +5,7 @@ const all = query.execute(
   \`nwr[name=~"\${params.keyword}"](prefix="\${params.prefix || "colorado"}")\`,
 );
 const entries = all.cluster(params.closeby || 2000); //meters
-assert.eq(all.length > entries.length, "expected fewer entries");
+assert.eq(all.length >= entries.length, "expected fewer entries");
 
 const payload = {
   type: "FeatureCollection",

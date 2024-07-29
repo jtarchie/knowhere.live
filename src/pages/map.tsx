@@ -8,19 +8,11 @@ import {
   setupEvents,
   sourceName,
 } from "../render/layers";
-import {
-  Dispatch,
-  StateUpdater,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { Manager } from "../render/manager";
-import { LngLatBoundsLike, MapEvent } from "mapbox-gl";
+import { LngLatBoundsLike } from "mapbox-gl";
 import { fitBounds } from "../render/bounds";
 import { RefCallback } from "preact";
-import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 
 const defaultBounds: LngLatBoundsLike = [
   [-124.7844079, 24.396308],
@@ -40,6 +32,8 @@ function MapPage({}: { path?: string }) {
   const geoJSON = useMemo(() => {
     return allData;
   }, [allData]);
+
+  const resizeMap = () => fitBounds(mapRef.current as MapRef, defaultBounds);
 
   useEffect(() => {
     const manager = new Manager();
@@ -66,20 +60,19 @@ function MapPage({}: { path?: string }) {
         }
 
         setAllData(payload as GeoJSON.FeatureCollection);
+        mapRef.current?.once("idle", () => resizeMap());
+
         setupEvents(mapRef.current as MapRef);
         applyTransformations(
           payload,
-          setAllData as Dispatch<
-            StateUpdater<FeatureCollection<Geometry, GeoJsonProperties>>
-          >,
+          (features: GeoJSON.FeatureCollection) => {
+            setAllData(features);
+          },
         );
       }).catch((err) => {
         console.error("Could not load data", err);
       });
   }, []);
-
-  const onLoadData = (event: MapEvent) =>
-    fitBounds(event.target, defaultBounds);
 
   return (
     <div class="h-screen flex flex-col">
@@ -92,7 +85,6 @@ function MapPage({}: { path?: string }) {
             bounds: defaultBounds,
           }}
           mapStyle={getMapStyle()}
-          onLoad={onLoadData}
         >
           <NavigationControl position="top-right" />
           <Source id={sourceName} type="geojson" data={geoJSON}>
