@@ -29,15 +29,16 @@ function Form(
           <div key={index} className="form-control">
             {field.type === "string" && (
               <>
-                <label className="label">
+                <label className="label" for={field.name}>
                   <span className="label-text text-lg">{field.label}</span>
                 </label>
                 <input
-                  type="text"
-                  name={field.name}
                   className="input input-bordered input-lg"
-                  placeholder={field.placeholder}
+                  id={field.name}
+                  name={field.name}
                   onChange={onChangeCallback}
+                  placeholder={field.placeholder}
+                  type="text"
                   value={value}
                 />
                 {field.hint && (
@@ -47,14 +48,15 @@ function Form(
             )}
             {field.type === "text" && (
               <>
-                <label className="label">
+                <label className="label" for={field.name}>
                   <span className="label-text text-lg">{field.label}</span>
                 </label>
                 <textarea
-                  name={field.name}
                   className="textarea textarea-bordered textarea-lg"
-                  placeholder={field.placeholder}
+                  id={field.name}
+                  name={field.name}
                   onChange={onChangeCallback}
+                  placeholder={field.placeholder}
                   value={value}
                 >
                 </textarea>
@@ -65,15 +67,16 @@ function Form(
             )}
             {field.type === "checkbox" && (
               <>
-                <label className="label cursor-pointer">
+                <label className="label cursor-pointer" for={field.name}>
                   <span className="label-text text-lg">{field.label}</span>
                   <input
-                    type="checkbox"
-                    name={field.name}
-                    className="checkbox checkbox-lg"
-                    onChange={onChangeCallback}
-                    value={value}
                     checked={value == values[field.name].toString()}
+                    className="checkbox checkbox-lg"
+                    id={field.name}
+                    name={field.name}
+                    onChange={onChangeCallback}
+                    type="checkbox"
+                    value={value}
                   />
                 </label>
                 {field.hint && (

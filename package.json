@@ -40,6 +40,7 @@
     "daisyui": "^4.12.10",
     "enzyme": "^3.11.0",
     "enzyme-adapter-preact-pure": "^4.1.0",
+    "expect": "^29.7.0",
     "jsdom": "^24.1.1",
     "mapbox-gl": "^3.5.2",
     "pako": "^2.1.0",
