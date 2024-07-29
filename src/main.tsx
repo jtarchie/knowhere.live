@@ -5,8 +5,6 @@ import { MapPage } from "./pages/map";
 import { render } from "preact";
 import Router from "preact-router";
 
-import "./index.css";
-
 function App() {
   return (
     <Router>
