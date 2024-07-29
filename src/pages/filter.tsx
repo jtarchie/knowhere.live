@@ -21,7 +21,7 @@ function FilterPage({}: { path?: string }) {
   }, []);
 
   return (
-    <div class="h-screen flex flex-col p-4">
+    <div class="h-screen flex flex-col">
       {manifest.about != "" && (
         <>
           <h2 class="text-2xl">About</h2>
