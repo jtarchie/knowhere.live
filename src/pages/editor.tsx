@@ -1,7 +1,7 @@
 import { BottomNav } from "../components/bottom-nav";
 import { javascript } from "@codemirror/lang-javascript";
 import { Manager } from "../render/manager";
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import CodeMirror from "@uiw/react-codemirror";
 
 const prefersDarkMode = globalThis.matchMedia &&
@@ -9,17 +9,22 @@ const prefersDarkMode = globalThis.matchMedia &&
 
 function EditorPage({}: { path?: string }) {
   const manager = new Manager();
-  const { source: sourceCode } = manager.load();
-  const [value, setValue] = useState(sourceCode);
+  const [sourceCode, setSourceCode] = useState<string>("");
+
   const onChange = useCallback((sourceCode: string) => {
-    setValue(sourceCode);
+    setSourceCode(sourceCode);
     manager.persistSource(sourceCode);
+  }, []);
+
+  useEffect(() => {
+    const { source } = manager.load();
+    setSourceCode(source);
   }, []);
 
   return (
     <div class="h-screen flex flex-col">
       <CodeMirror
-        value={value}
+        value={sourceCode}
         className="flex-1 h-full w-full p-4 overflow-y-auto"
         extensions={[javascript()]}
         theme={prefersDarkMode ? "dark" : "light"}
