@@ -29,6 +29,12 @@ const manifest: Manifest = {
     placeholder: "Costco",
     defaultValue: "Costco",
     hint: "Name of a place",
+  }, {
+    type: "prefix",
+    label: "Area",
+    name: "prefix",
+    defaultValue: "colorado",
+    hint: "Select the area to search within",
   }],
   about: "This is a demo manifest. You can search all names for a keyword.",
   filterValues: {},

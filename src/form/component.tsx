@@ -1,6 +1,12 @@
 import { RefCallback } from "preact";
-import { useCallback, useRef } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { FormSchema, FormValues } from "./types";
+
+interface Prefix {
+  name: string;
+  slug: string;
+  bounds: number[][];
+}
 
 function Form(
   { schema = [], className = "", onChange = () => {}, values = {} }: {
@@ -15,6 +21,14 @@ function Form(
   const onChangeCallback = useCallback(() => {
     const entries = Object.fromEntries(new FormData(formRef.current));
     onChange(entries);
+  }, []);
+
+  const [prefixes, setPrefixes] = useState<Prefix[]>([]);
+  useEffect(() => {
+    fetch("/proxy/api/prefixes", { method: "GET" })
+      .then((response) => response.json())
+      .then((payload) => setPrefixes(payload.prefixes))
+      .catch((err) => console.log("could not load prefixes", err));
   }, []);
 
   return (
@@ -79,6 +93,33 @@ function Form(
                     value={value}
                   />
                 </label>
+                {field.hint && (
+                  <span className="label-text-alt">{field.hint}</span>
+                )}
+              </>
+            )}
+            {field.type === "prefix" && (
+              <>
+                <label className="label" for={field.name}>
+                  <span className="label-text text-lg">{field.label}</span>
+                </label>
+                <select
+                  className="select select-bordered select-lg w-full"
+                  name={field.name}
+                  id={field.name}
+                  onChange={onChangeCallback}
+                >
+                  {prefixes.map((prefix) => {
+                    return (
+                      <option
+                        value={prefix.slug}
+                        selected={prefix.slug == value}
+                      >
+                        {prefix.name}
+                      </option>
+                    );
+                  })}
+                </select>
                 {field.hint && (
                   <span className="label-text-alt">{field.hint}</span>
                 )}
