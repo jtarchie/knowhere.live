@@ -24,7 +24,9 @@ const emptyFeatureCollection: GeoJSON.FeatureCollection = {
   type: "FeatureCollection",
 };
 
-function MapPage({}: { path?: string }) {
+function MapPage(
+  { manifestName }: { path?: string; manifestName?: string },
+) {
   const mapRef = useRef<MapRef>();
   const [allData, setAllData] = useState<GeoJSON.FeatureCollection>(
     emptyFeatureCollection,
@@ -37,7 +39,7 @@ function MapPage({}: { path?: string }) {
 
   useEffect(() => {
     const manager = new Manager();
-    const { source, filterValues, filter } = manager.load();
+    const { source, filterValues, filter } = manager.load(manifestName);
     const params = Object.fromEntries(
       filter.map((
         field,
@@ -94,7 +96,7 @@ function MapPage({}: { path?: string }) {
           </Source>
         </Map>
       </div>
-      <BottomNav />
+      <BottomNav manifestName={manifestName} />
     </div>
   );
 }

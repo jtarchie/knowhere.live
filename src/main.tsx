@@ -8,9 +8,9 @@ import Router from "preact-router";
 function App() {
   return (
     <Router>
-      <MapPage path="/beta/map" />
-      <EditorPage path="/beta/editor" />
-      <FilterPage path="/beta/filter" />
+      <MapPage path="/beta/:manifestName/map" />
+      <EditorPage path="/beta/:manifestName/editor" />
+      <FilterPage path="/beta/:manifestName/filter" />
       <HomePage path="/" />
     </Router>
   );

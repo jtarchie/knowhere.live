@@ -7,7 +7,9 @@ import CodeMirror from "@uiw/react-codemirror";
 const prefersDarkMode = globalThis.matchMedia &&
   globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
 
-function EditorPage({}: { path?: string }) {
+function EditorPage(
+  { manifestName }: { path?: string; manifestName?: string },
+) {
   const manager = new Manager();
   const [sourceCode, setSourceCode] = useState<string>("");
 
@@ -17,7 +19,7 @@ function EditorPage({}: { path?: string }) {
   }, []);
 
   useEffect(() => {
-    const { source } = manager.load();
+    const { source } = manager.load(manifestName);
     setSourceCode(source);
   }, []);
 
@@ -30,7 +32,7 @@ function EditorPage({}: { path?: string }) {
         theme={prefersDarkMode ? "dark" : "light"}
         onChange={onChange}
       />
-      <BottomNav />
+      <BottomNav manifestName={manifestName} />
     </div>
   );
 }

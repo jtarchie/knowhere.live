@@ -5,7 +5,9 @@ import { Form } from "../form/component";
 import { useEffect, useState } from "preact/hooks";
 import { Manifest } from "../manifests/type";
 
-function FilterPage({}: { path?: string }) {
+function FilterPage(
+  { manifestName }: { path?: string; manifestName?: string },
+) {
   const manager = new Manager();
   const [manifest, setManifest] = useState<Manifest>({
     source: "",
@@ -16,7 +18,7 @@ function FilterPage({}: { path?: string }) {
   const onChange = (values: FormValues) => manager.persistFilterValues(values);
 
   useEffect(() => {
-    const manifest = manager.load();
+    const manifest = manager.load(manifestName);
     setManifest(manifest);
   }, []);
 
@@ -34,7 +36,7 @@ function FilterPage({}: { path?: string }) {
         onChange={onChange}
         className="flex-1 h-full w-full p-4 overflow-y-auto"
       />
-      <BottomNav />
+      <BottomNav manifestName={manifestName} />
     </div>
   );
 }

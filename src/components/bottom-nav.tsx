@@ -1,6 +1,6 @@
 import { route } from "preact-router";
 
-function BottomNav() {
+function BottomNav({ manifestName }: { manifestName?: string }) {
   const params = new URLSearchParams(window.location.search);
 
   const currentPath = window.location.pathname;
@@ -9,7 +9,10 @@ function BottomNav() {
 
   return (
     <div class="btm-nav bg-base-100 flex">
-      <button class={active("/beta/map")} onClick={redirect("/beta/map")}>
+      <button
+        class={active(`/beta/${manifestName}/map`)}
+        onClick={redirect(`/beta/${manifestName}/map`)}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -49,8 +52,8 @@ function BottomNav() {
         </button>
       )}
       <button
-        class={active("/beta/filter")}
-        onClick={redirect("/beta/filter")}
+        class={active(`/beta/${manifestName}/filter`)}
+        onClick={redirect(`/beta/${manifestName}/filter`)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
