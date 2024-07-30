@@ -1,21 +1,11 @@
 import { route } from "preact-router";
-import { Manager } from "../render/manager";
-import { useEffect, useState } from "preact/hooks";
-import { FormSchema } from "../form/types";
 
 function BottomNav() {
   const params = new URLSearchParams(window.location.search);
 
-  const [filter, setFilter] = useState<FormSchema>([]);
   const currentPath = window.location.pathname;
   const active = (path: string) => currentPath == path ? "active" : "";
   const redirect = (path: string) => () => route(path);
-
-  useEffect(() => {
-    const manager = new Manager();
-    const { filter } = manager.load();
-    setFilter(filter);
-  }, []);
 
   return (
     <div class="btm-nav bg-base-100 flex">
