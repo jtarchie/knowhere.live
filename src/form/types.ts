@@ -5,7 +5,7 @@ interface Input {
   value: string;
 }
 
-type FieldType = "string" | "text" | "checkbox" | "prefix";
+type FieldType = "string" | "text" | "checkbox" | "prefix" | "address";
 
 interface Field {
   defaultValue?: string;

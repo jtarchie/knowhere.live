@@ -1,10 +1,11 @@
+import { FormSchema, FormValues } from "./types";
 import { RefCallback } from "preact";
 import { useCallback, useRef } from "preact/hooks";
-import { FormSchema, FormValues } from "./types";
 import { String } from "./inputs/string";
 import { Text } from "./inputs/text";
 import { Checkbox } from "./inputs/checkbox";
 import { Prefix } from "./inputs/prefix";
+import { Address } from "./inputs/address";
 
 function Form(
   { schema = [], className = "", onChange = () => {}, values = {} }: {
@@ -57,6 +58,14 @@ function Form(
             )}
             {field.type === "prefix" && (
               <Prefix
+                index={index}
+                field={field}
+                onChange={onChangeCallback}
+                value={value}
+              />
+            )}
+            {field.type === "address" && (
+              <Address
                 index={index}
                 field={field}
                 onChange={onChangeCallback}

@@ -11,5 +11,4 @@ tasks:
       # - task: test
   server: yarn run local
   build: yarn run build --watch
-  develop: yarn run local
   test: yarn run test

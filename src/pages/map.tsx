@@ -1,5 +1,6 @@
 import Map, { Layer, MapRef, NavigationControl, Source } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import mapboxgl from "mapbox-gl";
 import "../index.css";
 import { BottomNav } from "../components/bottom-nav";
 import {
@@ -82,7 +83,7 @@ function MapPage(
         <Map
           ref={mapRef as unknown as RefCallback<MapRef>}
           style={{ width: "100%", height: "100%" }}
-          mapboxAccessToken="pk.eyJ1IjoianRhcmNoaSIsImEiOiJjbHBobmx0YWQwOG01MmlxeDAydGxlN2c5In0.o3yTh6k7uo_e3CBi_32R9Q"
+          mapboxAccessToken={mapboxgl.accessToken}
           initialViewState={{
             bounds: defaultBounds,
           }}
