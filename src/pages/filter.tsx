@@ -4,6 +4,7 @@ import { Manager } from "../render/manager";
 import { Form } from "../form/component";
 import { useEffect, useState } from "preact/hooks";
 import { Manifest } from "../manifests/type";
+import { route } from "preact-router";
 
 function FilterPage(
   { manifestName }: { path?: string; manifestName?: string },
@@ -15,7 +16,10 @@ function FilterPage(
     filterValues: {},
     about: "",
   });
-  const onChange = (values: FormValues) => manager.persistFilterValues(values);
+  const onSubmit = (values: FormValues) => {
+    manager.persistFilterValues(values);
+    route(`/beta/${manifestName}/map`);
+  };
 
   useEffect(() => {
     const manifest = manager.load(manifestName);
@@ -33,7 +37,7 @@ function FilterPage(
       <Form
         schema={manifest.filter}
         values={manifest.filterValues}
-        onChange={onChange}
+        onSubmit={onSubmit}
         className="flex-1 h-full w-full p-4 overflow-y-auto"
       />
       <BottomNav manifestName={manifestName} />

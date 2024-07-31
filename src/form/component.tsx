@@ -1,35 +1,68 @@
 import { FormSchema, FormValues } from "./types";
 import { RefCallback } from "preact";
-import { useCallback, useRef } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { String } from "./inputs/string";
 import { Text } from "./inputs/text";
 import { Checkbox } from "./inputs/checkbox";
 import { Prefix } from "./inputs/prefix";
 import { Address } from "./inputs/address";
 
+interface FormProps {
+  className: string;
+  onChange?: (values: FormValues) => void;
+  onSubmit?: (values: FormValues) => void;
+  schema: FormSchema;
+  values: FormValues;
+}
+
 function Form(
-  { schema = [], className = "", onChange = () => {}, values = {} }: {
-    schema: FormSchema;
-    className: string;
-    values: FormValues;
-    onChange: (values: FormValues) => void;
-  },
+  {
+    className = "",
+    onChange = () => {},
+    onSubmit = () => {},
+    schema = [],
+    values: initialValues = {},
+  }: FormProps,
 ) {
   const formRef = useRef<HTMLFormElement>();
+  const [values, setValues] = useState<FormValues>(initialValues);
+
+  useEffect(() => {
+    setValues(initialValues);
+  }, [initialValues]);
 
   const onChangeCallback = useCallback(() => {
     const entries = Object.fromEntries(new FormData(formRef.current));
     onChange(entries);
-  }, []);
+  }, [schema, onChange]);
+
+  const onSubmitCallback = useCallback((event: SubmitEvent) => {
+    event.stopPropagation();
+    const entries = Object.fromEntries(new FormData(formRef.current));
+    onSubmit(entries);
+    event.preventDefault();
+  }, [schema, onChange]);
+
+  const onResetCallback = useCallback((event: Event) => {
+    event.preventDefault();
+    const resetValues = schema.reduce((acc, field) => {
+      acc[field.name] = field.defaultValue || "";
+      return acc;
+    }, {} as FormValues);
+    setValues(resetValues);
+    onSubmit(resetValues);
+  }, [schema, onChange]);
 
   return (
     <form
       className={className}
       ref={formRef as unknown as RefCallback<HTMLFormElement>}
+      onSubmit={onSubmitCallback}
+      onReset={onResetCallback}
     >
       {schema.map((field, index) => {
         const value = (values[field.name] || field.defaultValue || "")
-          ?.toString();
+          .toString();
         return (
           <>
             {field.type === "string" && (
@@ -75,6 +108,14 @@ function Form(
           </>
         );
       })}
+      <div class="flex justify-center mt-4 space-x-4">
+        <button type="submit" class="btn btn-primary btn-lg">
+          Apply
+        </button>
+        <button type="reset" class="btn btn-secondary btn-lg">
+          Reset
+        </button>
+      </div>
     </form>
   );
 }
