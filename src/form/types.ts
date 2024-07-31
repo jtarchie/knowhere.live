@@ -1,3 +1,10 @@
+interface Input {
+  index: number;
+  field: Field;
+  onChange: () => void;
+  value: string;
+}
+
 type FieldType = "string" | "text" | "checkbox" | "prefix";
 
 interface Field {
@@ -15,4 +22,4 @@ interface FormValues {
   [key: string]: FormDataEntryValue;
 }
 
-export type { FormSchema, FormValues };
+export type { Field, FormSchema, FormValues, Input };
