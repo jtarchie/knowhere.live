@@ -1,7 +1,7 @@
 import { Manifest } from "./type";
 
 const source = `
-const entries = [geo.asPoint(params.address_lat || 0 , params.address_lng || 0)]
+const entries = [geo.asPoint(params.address_lat || 34.327737, params.address_lng || -118.722684)]
 
 const payload = {
   type: "FeatureCollection",

@@ -29,6 +29,8 @@ function MapPage(
   { manifestName }: { path?: string; manifestName?: string },
 ) {
   const mapRef = useRef<MapRef>();
+  const noResultsModalRef = useRef<HTMLDialogElement>();
+
   const [allData, setAllData] = useState<GeoJSON.FeatureCollection>(
     emptyFeatureCollection,
   );
@@ -62,6 +64,11 @@ function MapPage(
           payload = emptyFeatureCollection;
         }
 
+        if (payload.features.length === 0) {
+          noResultsModalRef.current?.showModal();
+          return;
+        }
+
         setAllData(payload as GeoJSON.FeatureCollection);
         mapRef.current?.once("idle", () => resizeMap());
 
@@ -78,27 +85,48 @@ function MapPage(
   }, []);
 
   return (
-    <div class="h-screen flex flex-col">
-      <div class="flex-1">
-        <Map
-          ref={mapRef as unknown as RefCallback<MapRef>}
-          style={{ width: "100%", height: "100%" }}
-          mapboxAccessToken={mapboxgl.accessToken}
-          initialViewState={{
-            bounds: defaultBounds,
-          }}
-          mapStyle={getMapStyle()}
-        >
-          <NavigationControl position="top-right" />
-          <Source id={sourceName} type="geojson" data={geoJSON}>
-            {layers.map((layer) => {
-              return <Layer {...layer} />;
-            })}
-          </Source>
-        </Map>
+    <>
+      <div class="h-screen flex flex-col">
+        <div class="flex-1">
+          <Map
+            ref={mapRef as unknown as RefCallback<MapRef>}
+            style={{ width: "100%", height: "100%" }}
+            mapboxAccessToken={mapboxgl.accessToken}
+            initialViewState={{
+              bounds: defaultBounds,
+            }}
+            mapStyle={getMapStyle()}
+          >
+            <NavigationControl position="top-right" />
+            <Source id={sourceName} type="geojson" data={geoJSON}>
+              {layers.map((layer) => {
+                return <Layer {...layer} />;
+              })}
+            </Source>
+          </Map>
+        </div>
+        <BottomNav manifestName={manifestName} />
       </div>
-      <BottomNav manifestName={manifestName} />
-    </div>
+      <dialog
+        ref={noResultsModalRef as unknown as RefCallback<HTMLDialogElement>}
+        class="modal"
+      >
+        <div class="modal-box">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <h3 class="text-lg font-bold">No results found!</h3>
+          <p class="py-4">
+            The search did not return any results. Please refine your{" "}
+            <a class="link link-primary" href={`/beta/${manifestName}/filter`}>
+              filter
+            </a>.
+          </p>
+        </div>
+      </dialog>
+    </>
   );
 }
 
