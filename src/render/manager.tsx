@@ -6,7 +6,7 @@ class Manager {
     const manifest = manifests[manifestName];
 
     // try local storage - overrides
-    const manifestPayload = localStorage.getItem("manifest");
+    const manifestPayload = sessionStorage.getItem("manifest");
     if (manifestPayload) {
       return Object.assign({}, manifest, JSON.parse(manifestPayload));
     }
@@ -16,17 +16,17 @@ class Manager {
   }
 
   persistFilterValues(values: FormValues) {
-    const manifest = localStorage.getItem("manifest") || "{}";
+    const manifest = sessionStorage.getItem("manifest") || "{}";
     const payload = JSON.parse(manifest) as Manifest;
     payload.filterValues = values;
-    localStorage.setItem("manifest", JSON.stringify(payload));
+    sessionStorage.setItem("manifest", JSON.stringify(payload));
   }
 
   persistSource(source: string) {
-    const manifest = localStorage.getItem("manifest") || "{}";
+    const manifest = sessionStorage.getItem("manifest") || "{}";
     const payload = JSON.parse(manifest) as Manifest;
     payload.source = source;
-    localStorage.setItem("manifest", JSON.stringify(payload));
+    sessionStorage.setItem("manifest", JSON.stringify(payload));
   }
 }
 
