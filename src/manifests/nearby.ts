@@ -77,15 +77,15 @@ const source = `
   Object.keys(params).forEach((key, index) => {
     if (filters[key] && params[key] == "1") {
       const asQueries = filters[key].map((query) =>
-        \`nwr\${query}(prefix=\${prefix})\`
+        \`nwr\${query}(prefix=\${prefix})(bb=\${boundary.min[0]},\${boundary.min[1]},\${boundary.max[0]},\${boundary.max[1]})\`
       );
       const results = query.union(...asQueries);
-      assert.eq(results.length > 0, asQueries.join(","))
-      const tree = results.asTree(0);
-      const nearby = tree.search(boundary, 500);
-      assert.eq(nearby.length > 0, asQueries.join(","))
+      // assert.eq(results.length > 0, asQueries.join(","))
+      // const tree = results.asTree(0);
+      // const nearby = tree.search(boundary, 500);
+      // assert.eq(nearby.length > 0, asQueries.join(","))
 
-      features = features.concat(nearby.map((result) => {
+      features = features.concat(results.map((result) => {
         return result.asFeature({
           "marker-color": colors.pick(index),
           "title": result.name,
