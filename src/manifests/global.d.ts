@@ -57,7 +57,6 @@ interface ResultArray extends Array<Result> {
 }
 
 interface Query {
-  prefixByPoint(Point): Prefix;
   union(...string): ResultArray;
 }
 
