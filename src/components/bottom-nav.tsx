@@ -1,7 +1,8 @@
 import { route } from "preact-router";
+import qs from "qs";
 
 function BottomNav({ manifestName }: { manifestName?: string }) {
-  const params = new URLSearchParams(window.location.search);
+  const params = qs.parse(window.location.search);
 
   const currentPath = window.location.pathname;
   const active = (path: string) => currentPath == path ? "active" : "";
@@ -29,7 +30,7 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
         </svg>
         <span class="btm-nav-label">Map</span>
       </button>
-      {params.get("editor") && (
+      {params.editor && (
         <button
           class={active("/beta/editor")}
           onClick={redirect("/beta/editor")}

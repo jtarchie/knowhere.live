@@ -4,7 +4,6 @@ import manifests, { Manifest } from "../manifests/index.ts";
 class Manager {
   load(manifestName: string = "demo"): Manifest {
     const manifest = manifests[manifestName];
-    // const params = new URLSearchParams(window.location.search);
 
     // try local storage - overrides
     const manifestPayload = localStorage.getItem("manifest");
