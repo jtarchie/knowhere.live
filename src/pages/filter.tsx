@@ -21,6 +21,10 @@ function FilterPage(
     route(`/beta/${manifestName}/map`);
   };
 
+  const onReset = (values: FormValues) => {
+    manager.persistFilterValues(values);
+  };
+
   useEffect(() => {
     const manifest = manager.load(manifestName);
     setManifest(manifest);
@@ -38,6 +42,7 @@ function FilterPage(
         schema={manifest.filter}
         values={manifest.filterValues}
         onSubmit={onSubmit}
+        onReset={onReset}
         className="flex-1 h-full w-full p-4 overflow-y-auto"
       />
       <BottomNav manifestName={manifestName} />

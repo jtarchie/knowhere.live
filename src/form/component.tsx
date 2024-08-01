@@ -10,6 +10,7 @@ import { Address } from "./inputs/address";
 interface FormProps {
   className: string;
   onChange?: (values: FormValues) => void;
+  onReset?: (values: FormValues) => void;
   onSubmit?: (values: FormValues) => void;
   schema: FormSchema;
   values: FormValues;
@@ -19,6 +20,7 @@ function Form(
   {
     className = "",
     onChange = () => {},
+    onReset = () => {},
     onSubmit = () => {},
     schema = [],
     values: initialValues = {},
@@ -50,7 +52,7 @@ function Form(
       return acc;
     }, {} as FormValues);
     setValues(resetValues);
-    onSubmit(resetValues);
+    onReset(resetValues);
   }, [schema, onChange]);
 
   console.log("values", values);
