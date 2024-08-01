@@ -16,16 +16,17 @@ class Manager {
   }
 
   persistFilterValues(values: FormValues) {
-    const manifest = sessionStorage.getItem("manifest") || "{}";
-    const payload = JSON.parse(manifest) as Manifest;
-    payload.filterValues = values;
-    sessionStorage.setItem("manifest", JSON.stringify(payload));
+    this.persist((m) => m.filterValues = values);
   }
 
   persistSource(source: string) {
+    this.persist((m) => m.source = source);
+  }
+
+  private persist(updates: (m: Manifest) => void) {
     const manifest = sessionStorage.getItem("manifest") || "{}";
     const payload = JSON.parse(manifest) as Manifest;
-    payload.source = source;
+    updates(payload);
     sessionStorage.setItem("manifest", JSON.stringify(payload));
   }
 }
