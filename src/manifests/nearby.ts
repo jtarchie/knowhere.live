@@ -71,7 +71,8 @@ const source = `
   const boundary = center.asBound().extend(10000); //meters
   features.push(boundary.asFeature({
     "fill": colors.pick(0),
-    "fill-opacity": 0.5,
+    "fill-opacity": 0,
+    "stroke": colors.pick(0),
   }))
 
   Object.keys(params).forEach((key, index) => {
