@@ -53,6 +53,8 @@ function Form(
     onSubmit(resetValues);
   }, [schema, onChange]);
 
+  console.log("values", values);
+
   return (
     <form
       className={className}
@@ -102,7 +104,12 @@ function Form(
                 index={index}
                 field={field}
                 onChange={onChangeCallback}
-                value={value}
+                address={{
+                  full_address: (values[`${field.name}_full_address`] ||
+                    "200 E Colfax Ave, Denver, CO 80203").toString(),
+                  lat: Number(values[`${field.name}_lat`] || 39.7401684),
+                  lon: Number(values[`${field.name}_lon`] || -104.9894902),
+                }}
               />
             )}
           </>

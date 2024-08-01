@@ -1,12 +1,26 @@
 import { AddressAutofill } from "@mapbox/search-js-react";
 import { Input } from "../types";
 import mapboxgl from "mapbox-gl";
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
-function Address({ index, field, onChange, value }: Input) {
-  const [lat, setLat] = useState<number>(0);
-  const [lon, setLon] = useState<number>(0);
-  const [address, setAddress] = useState<string>(value);
+function Address(
+  { index, field, onChange, address: value }: Input & {
+    address: {
+      full_address: string;
+      lat: number;
+      lon: number;
+    };
+  },
+) {
+  const [lat, setLat] = useState<number>(value.lat);
+  const [lon, setLon] = useState<number>(value.lon);
+  const [address, setAddress] = useState<string>(value.full_address);
+
+  useEffect(() => {
+    setLat(value.lat);
+    setLon(value.lon);
+    setAddress(value.full_address);
+  }, [value]);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
     const feature = response.features[0];

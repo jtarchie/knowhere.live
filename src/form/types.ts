@@ -2,7 +2,7 @@ interface Input {
   index: number;
   field: Field;
   onChange: () => void;
-  value: string;
+  value?: string;
 }
 
 type FieldType = "string" | "text" | "checkbox" | "prefix" | "address";
