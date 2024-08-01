@@ -1,14 +1,24 @@
+import qs from "qs";
 import { FormValues } from "../form/types";
 import manifests, { Manifest } from "../manifests/index.ts";
 
 class Manager {
   load(manifestName: string = "demo"): Manifest {
-    const manifest = manifests[manifestName];
+    let manifest = manifests[manifestName];
 
     // try local storage - overrides
     const manifestPayload = sessionStorage.getItem("manifest");
     if (manifestPayload) {
-      return Object.assign({}, manifest, JSON.parse(manifestPayload));
+      manifest = Object.assign({}, manifest, JSON.parse(manifestPayload));
+    }
+
+    const params = qs.parse(window.location.search);
+    if (params.values) {
+      manifest.filterValues = Object.assign(
+        {},
+        manifest.filterValues,
+        params.values,
+      );
     }
 
     // no overrides provided, use default
