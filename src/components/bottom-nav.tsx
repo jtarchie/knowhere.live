@@ -3,7 +3,7 @@ import qs from "qs";
 import { Manager } from "../render/manager";
 
 function BottomNav({ manifestName }: { manifestName?: string }) {
-  const params = qs.parse(window.location.search);
+  const params = qs.parse(window.location.search.slice(1));
 
   const currentPath = window.location.pathname;
   const active = (path: string) => currentPath == path ? "active" : "";

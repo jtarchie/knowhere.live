@@ -12,7 +12,7 @@ class Manager {
       manifest = Object.assign({}, manifest, JSON.parse(manifestPayload));
     }
 
-    const params = qs.parse(window.location.search);
+    const params = qs.parse(window.location.search.slice(1));
     if (params.values) {
       manifest.filterValues = Object.assign(
         {},
