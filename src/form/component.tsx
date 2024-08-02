@@ -55,8 +55,6 @@ function Form(
     onReset(resetValues);
   }, [schema, onChange]);
 
-  console.log("values", values);
-
   return (
     <form
       className={className}

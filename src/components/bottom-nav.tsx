@@ -78,7 +78,6 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
         onClick={async () => {
           const manager = new Manager();
           const manifest = manager.load(manifestName);
-          console.log(manifest, { values: manifest.filterValues });
           const url =
             `${import.meta.env.VITE_WEB_ADDRESS}/beta/${manifestName}/map?${
               qs.stringify({ values: manifest.filterValues })
