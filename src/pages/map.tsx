@@ -42,8 +42,14 @@ function MapPage(
 
   useEffect(() => {
     const manager = new Manager();
-    const { source, filterValues } = manager.load(manifestName);
-    const params = filterValues;
+    const { source, filterValues, filter } = manager.load(manifestName);
+    const params = Object.assign(
+      {},
+      Object.fromEntries(
+        filter.map((entry) => [entry.name, entry.defaultValue]),
+      ),
+      filterValues,
+    );
 
     const fullSourceCode = `const params = ${
       JSON.stringify(params)
