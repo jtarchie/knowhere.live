@@ -43,7 +43,7 @@ function Form(
     const entries = Object.fromEntries(new FormData(formRef.current));
     onSubmit(entries);
     event.preventDefault();
-  }, [schema, onChange]);
+  }, [schema, onSubmit]);
 
   const onResetCallback = useCallback((event: Event) => {
     event.preventDefault();
@@ -53,7 +53,7 @@ function Form(
     }, {} as FormValues);
     setValues(resetValues);
     onReset(resetValues);
-  }, [schema, onChange]);
+  }, [schema, onReset]);
 
   return (
     <form
