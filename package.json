@@ -22,6 +22,7 @@
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@mapbox/search-js-react": "^1.0.0-beta.21",
+    "@modular-forms/preact": "^0.9.1",
     "@playwright/test": "^1.45.3",
     "@preact/preset-vite": "^2.9.0",
     "@preact/signals": "^1.3.0",

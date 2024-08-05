@@ -12,10 +12,11 @@ function FilterPage(
   const manager = new Manager();
   const [manifest, setManifest] = useState<Manifest>({
     source: "",
-    filter: [],
-    filterValues: {},
+    form: [],
     about: "",
   });
+  const [values, setValues] = useState<FormValues>({});
+
   const onSubmit = (values: FormValues) => {
     manager.persistFilterValues(values);
     route(`/beta/${manifestName}/map`);
@@ -26,8 +27,9 @@ function FilterPage(
   };
 
   useEffect(() => {
-    const manifest = manager.load(manifestName);
+    const { manifest, values } = manager.load(manifestName);
     setManifest(manifest);
+    setValues(values);
   }, []);
 
   return (
@@ -39,8 +41,8 @@ function FilterPage(
         </>
       )}
       <Form
-        schema={manifest.filter}
-        values={manifest.filterValues}
+        schema={manifest.form}
+        values={values}
         onSubmit={onSubmit}
         onReset={onReset}
         className="flex-1 h-full w-full p-4 overflow-y-auto"

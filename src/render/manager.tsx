@@ -3,7 +3,9 @@ import { FormValues } from "../form/types";
 import manifests, { Manifest } from "../manifests/index.ts";
 
 class Manager {
-  load(manifestName: string = "demo"): Manifest {
+  load(
+    manifestName: string = "demo",
+  ): { manifest: Manifest; values: FormValues } {
     let manifest = manifests[manifestName];
 
     // try local storage - overrides
@@ -12,21 +14,19 @@ class Manager {
       manifest = Object.assign({}, manifest, JSON.parse(manifestPayload));
     }
 
+    let values = JSON.parse(sessionStorage.getItem("values") || "{}");
+
+    // try loading values from query string (via share link)
     const params = qs.parse(window.location.search.slice(1));
     if (params.values) {
-      manifest.filterValues = Object.assign(
-        {},
-        manifest.filterValues,
-        params.values,
-      );
+      values = Object.assign({}, values, params.values);
     }
 
-    // no overrides provided, use default
-    return manifest;
+    return { manifest, values };
   }
 
   persistFilterValues(values: FormValues) {
-    this.persist((m) => m.filterValues = values);
+    sessionStorage.setItem("values", JSON.stringify(values));
   }
 
   persistSource(source: string) {

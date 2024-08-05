@@ -1018,6 +1018,13 @@
     rw "^1.3.3"
     sort-object "^3.0.3"
 
+"@modular-forms/preact@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@modular-forms/preact/-/preact-0.9.1.tgz#0c7a629296e4ae05d50e9550a948af5da8083cf8"
+  integrity sha512-iODEdiNC9WRFIfFMeMiSftEEbAWKd8NCbqhZdG598hOD739H6NYyTR50RI7h4pYIJlNcntFImWdKKgXZ8hHoeg==
+  dependencies:
+    valibot ">=0.33.0 <1"
+
 "@mswjs/interceptors@^0.29.0":
   version "0.29.1"
   resolved "https://registry.yarnpkg.com/@mswjs/interceptors/-/interceptors-0.29.1.tgz#e77fc58b5188569041d0440b25c9e9ebb1ccd60a"
@@ -7656,6 +7663,11 @@ util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
+
+"valibot@>=0.33.0 <1":
+  version "0.37.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.37.0.tgz#b71f597a581c716f6546a3b53cefd2829b559c55"
+  integrity sha512-FQz52I8RXgFgOHym3XHYSREbNtkgSjF9prvMFH1nBsRyfL6SfCzoT1GuSDTlbsuPubM7/6Kbw0ZMQb8A+V+VsQ==
 
 vite-node@2.0.5:
   version "2.0.5"

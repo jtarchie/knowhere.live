@@ -12,8 +12,9 @@ function String({ index, field, onChange, value }: Input) {
         name={field.name}
         onChange={onChange}
         placeholder={field.placeholder}
-        type="text"
+        type="search"
         value={value}
+        autoComplete="false"
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>

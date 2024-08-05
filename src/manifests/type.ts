@@ -1,9 +1,8 @@
-import { FormSchema, FormValues } from "../form/types";
+import { FormSchema } from "../form/types";
 
 interface Manifest {
   source: string;
-  filter: FormSchema;
-  filterValues: FormValues;
+  form: FormSchema;
   about: string;
 }
 

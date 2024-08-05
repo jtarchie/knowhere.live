@@ -19,7 +19,7 @@ function EditorPage(
   }, []);
 
   useEffect(() => {
-    const { source } = manager.load(manifestName);
+    const { manifest: { source } } = manager.load(manifestName);
     setSourceCode(source);
   }, []);
 

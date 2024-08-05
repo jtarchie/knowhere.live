@@ -42,18 +42,18 @@ function MapPage(
 
   useEffect(() => {
     const manager = new Manager();
-    const { source, filterValues, filter } = manager.load(manifestName);
+    const { manifest, values } = manager.load(manifestName);
     const params = Object.assign(
       {},
       Object.fromEntries(
-        filter.map((entry) => [entry.name, entry.defaultValue]),
+        manifest.form.map((entry) => [entry.name, entry.defaultValue]),
       ),
-      filterValues,
+      values,
     );
 
     const fullSourceCode = `const params = ${
       JSON.stringify(params)
-    }; ${source}`;
+    }; ${manifest.source}`;
 
     fetch(`/proxy/api/runtime`, {
       method: "PUT",

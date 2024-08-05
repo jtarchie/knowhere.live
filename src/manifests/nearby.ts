@@ -106,7 +106,7 @@ const source = `
 
 const manifest: Manifest = {
   source: source,
-  filter: [
+  form: [
     {
       type: "address",
       label: "Address",
@@ -117,11 +117,10 @@ const manifest: Manifest = {
     },
   ],
   about: "Given an address see what is near by in entertainment, schools, etc.",
-  filterValues: {},
 };
 
 Object.keys(filters).forEach((key) => {
-  manifest.filter.push({
+  manifest.form.push({
     type: "checkbox",
     label: changeCase.capitalCase(key),
     name: key,

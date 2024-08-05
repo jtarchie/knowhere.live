@@ -22,7 +22,7 @@ return payload;
 
 const manifest: Manifest = {
   source: source,
-  filter: [{
+  form: [{
     type: "string",
     label: "Name",
     name: "keyword",
@@ -37,7 +37,6 @@ const manifest: Manifest = {
     hint: "Select the area to search within",
   }],
   about: "This is a demo manifest. You can search all names for a keyword.",
-  filterValues: {},
 };
 
 export { manifest };
