@@ -14,6 +14,7 @@ import { Manager } from "../render/manager";
 import { LngLatBoundsLike } from "mapbox-gl";
 import { fitBounds } from "../render/bounds";
 import { RefCallback } from "preact";
+import { Legend } from "../components/legend";
 
 const defaultBounds: LngLatBoundsLike = [
   [-124.7844079, 24.396308],
@@ -89,7 +90,7 @@ function MapPage(
   return (
     <>
       <div class="h-screen flex flex-col">
-        <div class="flex-1">
+        <div class="flex-1 relative">
           <Map
             ref={mapRef as unknown as RefCallback<MapRef>}
             style={{ width: "100%", height: "100%" }}
@@ -106,6 +107,9 @@ function MapPage(
               })}
             </Source>
           </Map>
+          <div class="absolute top-4 left-4">
+            <Legend geoJSON={geoJSON} />
+          </div>
         </div>
         <BottomNav manifestName={manifestName} />
       </div>
