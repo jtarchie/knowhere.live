@@ -6,6 +6,7 @@ import { Text } from "./inputs/text";
 import { Checkbox } from "./inputs/checkbox";
 import { Prefix } from "./inputs/prefix";
 import { Address } from "./inputs/address";
+import { Range } from "./inputs/range";
 
 interface FormProps {
   className: string;
@@ -21,6 +22,7 @@ const componentMap = {
   checkbox: Checkbox,
   prefix: Prefix,
   address: Address,
+  range: Range,
 };
 
 function Form({

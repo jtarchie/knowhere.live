@@ -69,7 +69,7 @@ const source = `
   ];
   const prefix = parsedAddress.state.toLowerCase();
   
-  const boundary = center.asBound().extend(10000); //meters
+  const boundary = center.asBound().extend(params.radius); //meters
   features.push(boundary.asFeature({
     "fill": colors.pick(0),
     "fill-opacity": 0,
@@ -113,6 +113,15 @@ const manifest: Manifest = {
       defaultValue:
         "200 E Colfax Ave, Denver, Colorado 80203|39.7401684|-104.9894902",
       hint: "Full address of location",
+    },
+    {
+      type: "range",
+      defaultValue: "2500",
+      min: 1000,
+      max: 5000,
+      step: 500,
+      label: "Radius",
+      name: "radius",
     },
   ],
   about: "Given an address see what is near by in entertainment, schools, etc.",

@@ -1,0 +1,26 @@
+import { InputProps } from "../types";
+
+function Range({ index, field, value }: InputProps) {
+  if (field.type !== "range") return null;
+  const defaultValue = field.defaultValue || "";
+  return (
+    <div key={index} className="form-control">
+      <label className="label" for={field.name}>
+        <span className="label-text text-lg">{field.label}</span>
+      </label>
+      <input
+        className="range range-primary"
+        id={field.name}
+        name={field.name}
+        type="range"
+        min={field.min}
+        max={field.max}
+        step={field.step}
+        value={value || defaultValue}
+      />
+      {field.hint && <span className="label-text-alt">{field.hint}</span>}
+    </div>
+  );
+}
+
+export { Range };

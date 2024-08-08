@@ -33,12 +33,21 @@ interface AddressField extends BaseField {
   defaultValue: string;
 }
 
+interface RangeField extends BaseField {
+  type: "range";
+  defaultValue: string;
+  min: number;
+  max: number;
+  step?: number;
+}
+
 type Field =
   | StringField
   | TextField
   | CheckboxField
   | PrefixField
-  | AddressField;
+  | AddressField
+  | RangeField;
 
 type FormSchema = Field[];
 
