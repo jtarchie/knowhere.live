@@ -29,6 +29,7 @@ const manifest: Manifest = {
     placeholder: "Costco",
     defaultValue: "Costco",
     hint: "Name of a place",
+    minLength: 3,
   }, {
     type: "prefix",
     label: "Area",

@@ -1,6 +1,7 @@
 import { InputProps } from "../types";
 
 function String({ index, field, value }: InputProps) {
+  if (field.type !== "string") return null;
   const defaultValue = field.defaultValue || "";
   return (
     <div key={index} className="form-control">
@@ -15,6 +16,9 @@ function String({ index, field, value }: InputProps) {
         type="search"
         value={value || defaultValue}
         autoComplete="false"
+        minLength={field.minLength}
+        maxLength={field.maxLength}
+        pattern={field.pattern}
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>
