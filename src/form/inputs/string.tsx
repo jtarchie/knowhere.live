@@ -1,6 +1,7 @@
-import { Input } from "../types";
+import { InputProps } from "../types";
 
-function String({ index, field, onChange, value }: Input) {
+function String({ index, field, value }: InputProps) {
+  const defaultValue = field.defaultValue || "";
   return (
     <div key={index} className="form-control">
       <label className="label" for={field.name}>
@@ -10,10 +11,9 @@ function String({ index, field, onChange, value }: Input) {
         className="input input-bordered input-lg"
         id={field.name}
         name={field.name}
-        onChange={onChange}
         placeholder={field.placeholder}
         type="search"
-        value={value}
+        value={value || defaultValue}
         autoComplete="false"
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { Input } from "../types";
+import { InputProps } from "../types";
 
 interface Prefix {
   name: string;
@@ -7,8 +7,10 @@ interface Prefix {
   bounds: number[][];
 }
 
-function Prefix({ index, field, onChange, value }: Input) {
+function Prefix({ index, field, value }: InputProps) {
   const [prefixes, setPrefixes] = useState<Prefix[]>([]);
+  const defaultValue = field.defaultValue || "";
+
   useEffect(() => {
     fetch("/proxy/api/prefixes", { method: "GET" })
       .then((response) => response.json())
@@ -25,13 +27,12 @@ function Prefix({ index, field, onChange, value }: Input) {
         className="select select-bordered select-lg w-full"
         name={field.name}
         id={field.name}
-        onChange={onChange}
       >
         {prefixes.map((prefix) => {
           return (
             <option
               value={prefix.slug}
-              selected={prefix.slug == value}
+              selected={prefix.slug == value || prefix.slug == defaultValue}
             >
               {prefix.name}
             </option>

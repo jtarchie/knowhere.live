@@ -1,35 +1,53 @@
 import { AddressAutofill } from "@mapbox/search-js-react";
-import { Input } from "../types";
 import mapboxgl from "mapbox-gl";
 import { useCallback, useEffect, useState } from "preact/hooks";
+import { InputProps } from "../types";
 
-function Address(
-  { index, field, onChange, address: value }: Input & {
-    address: {
-      full_address: string;
-      lat: number;
-      lon: number;
+interface AddressValue {
+  lat: number;
+  lon: number;
+  full_address: string;
+}
+
+function parseAddressValue(value: string): AddressValue {
+  if (!value) {
+    return {
+      lat: 0,
+      lon: 0,
+      full_address: "",
     };
-  },
-) {
-  const [lat, setLat] = useState<number>(value.lat);
-  const [lon, setLon] = useState<number>(value.lon);
-  const [address, setAddress] = useState<string>(value.full_address);
+  }
+
+  const [fullAddress, latitude, longitude] = value.split("|");
+  return {
+    lat: parseFloat(latitude),
+    lon: parseFloat(longitude),
+    full_address: fullAddress,
+  };
+}
+
+function Address({ index, field, value }: InputProps) {
+  const defaultValue = parseAddressValue(field.defaultValue);
+  const parsedValue = parseAddressValue(value);
+
+  const [visibleAddress, setVisibleAddress] = useState<string>(
+    parsedValue.full_address || defaultValue.full_address,
+  );
+
+  const [encodedAddress, setEncodedAddress] = useState<string>(
+    value || field.defaultValue,
+  );
 
   useEffect(() => {
-    setLat(value.lat);
-    setLon(value.lon);
-    setAddress(value.full_address);
-  }, [value]);
+    setVisibleAddress(parsedValue.full_address || defaultValue.full_address);
+  }, [value, defaultValue]);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
     const feature = response.features[0];
-    const [lon, lat] = (feature.geometry as GeoJSON.Point).coordinates;
-    setLon(lon);
-    setLat(lat);
-    setAddress(feature.properties?.full_address);
+    setVisibleAddress(feature.properties?.full_address);
 
-    onChange();
+    const [lon, lat] = (feature.geometry as GeoJSON.Point).coordinates;
+    setEncodedAddress([feature.properties?.full_address, lat, lon].join("|"));
   }, []);
 
   return (
@@ -45,19 +63,18 @@ function Address(
           name="address-1"
           className="input input-bordered input-lg w-full"
           id={field.name}
-          value={address}
+          value={visibleAddress}
         />
         <input
           type="hidden"
-          name={`${field.name}_full_address`}
-          value={address}
+          name={field.name}
+          value={encodedAddress}
         />
-        <input type="hidden" name={`${field.name}_lat`} value={lat} />
-        <input type="hidden" name={`${field.name}_lon`} value={lon} />
         {field.hint && <span className="label-text-alt">{field.hint}</span>}
       </AddressAutofill>
     </div>
   );
 }
 
+export type { AddressValue };
 export { Address };

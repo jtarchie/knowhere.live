@@ -9,23 +9,27 @@ import { Address } from "./inputs/address";
 
 interface FormProps {
   className: string;
-  onChange?: (values: FormValues) => void;
   onReset?: (values: FormValues) => void;
   onSubmit?: (values: FormValues) => void;
   schema: FormSchema;
   values: FormValues;
 }
 
-function Form(
-  {
-    className = "",
-    onChange = () => {},
-    onReset = () => {},
-    onSubmit = () => {},
-    schema = [],
-    values: initialValues = {},
-  }: FormProps,
-) {
+const componentMap = {
+  string: String,
+  text: Text,
+  checkbox: Checkbox,
+  prefix: Prefix,
+  address: Address,
+};
+
+function Form({
+  className = "",
+  onReset = () => {},
+  onSubmit = () => {},
+  schema = [],
+  values: initialValues = {},
+}: FormProps) {
   const formRef = useRef<HTMLFormElement>();
   const [values, setValues] = useState<FormValues>(initialValues);
 
@@ -33,26 +37,19 @@ function Form(
     setValues(initialValues);
   }, [initialValues]);
 
-  const onChangeCallback = useCallback(() => {
-    const entries = Object.fromEntries(new FormData(formRef.current));
-    onChange(entries);
-  }, [schema, onChange]);
-
   const onSubmitCallback = useCallback((event: SubmitEvent) => {
     event.stopPropagation();
-    const entries = Object.fromEntries(new FormData(formRef.current));
+    const entries = Object.fromEntries(
+      new FormData(formRef.current),
+    ) as FormValues;
     onSubmit(entries);
     event.preventDefault();
   }, [schema, onSubmit]);
 
   const onResetCallback = useCallback((event: Event) => {
     event.preventDefault();
-    const resetValues = schema.reduce((acc, field) => {
-      acc[field.name] = field.defaultValue || "";
-      return acc;
-    }, {} as FormValues);
-    setValues(resetValues);
-    onReset(resetValues);
+    setValues({});
+    onReset({});
   }, [schema, onReset]);
 
   return (
@@ -63,56 +60,15 @@ function Form(
       onReset={onResetCallback}
     >
       {schema.map((field, index) => {
-        const value = (values[field.name] || field.defaultValue || "")
-          .toString();
+        const Component = componentMap[field.type];
+        const value = values[field.name];
         return (
-          <>
-            {field.type === "string" && (
-              <String
-                index={index}
-                field={field}
-                onChange={onChangeCallback}
-                value={value}
-              />
-            )}
-            {field.type === "text" && (
-              <Text
-                index={index}
-                field={field}
-                onChange={onChangeCallback}
-                value={value}
-              />
-            )}
-            {field.type === "checkbox" && (
-              <Checkbox
-                index={index}
-                field={field}
-                onChange={onChangeCallback}
-                value={value}
-              />
-            )}
-            {field.type === "prefix" && (
-              <Prefix
-                index={index}
-                field={field}
-                onChange={onChangeCallback}
-                value={value}
-              />
-            )}
-            {field.type === "address" && (
-              <Address
-                index={index}
-                field={field}
-                onChange={onChangeCallback}
-                address={{
-                  full_address: (values[`${field.name}_full_address`] ||
-                    "200 E Colfax Ave, Denver, CO 80203").toString(),
-                  lat: Number(values[`${field.name}_lat`] || 39.7401684),
-                  lon: Number(values[`${field.name}_lon`] || -104.9894902),
-                }}
-              />
-            )}
-          </>
+          <Component
+            key={index}
+            index={index}
+            field={field}
+            value={value}
+          />
         );
       })}
       <div class="flex justify-center mt-4 space-x-4">

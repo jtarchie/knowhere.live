@@ -1,14 +1,7 @@
-interface Input {
-  index: number;
-  field: Field;
-  onChange: () => void;
-  value?: string;
-}
-
 type FieldType = "string" | "text" | "checkbox" | "prefix" | "address";
 
 interface Field {
-  defaultValue?: string;
+  defaultValue: string;
   hint?: string;
   label: string;
   name: string;
@@ -19,7 +12,13 @@ interface Field {
 type FormSchema = Field[];
 
 interface FormValues {
-  [key: string]: FormDataEntryValue;
+  [key: string]: string;
 }
 
-export type { Field, FormSchema, FormValues, Input };
+interface InputProps {
+  index: number;
+  field: Field;
+  value: string;
+}
+
+export type { Field, FormSchema, FormValues, InputProps };

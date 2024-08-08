@@ -55,15 +55,16 @@ const filters: { [key: string]: string[] } = /* @__PURE__ */ {
 /* @__PURE__ */
 const source = `
   const filters = ${JSON.stringify(filters)};
-  const center = geo.asPoint(params.address_lat || 39.7401684, params.address_lon || -104.9894902);
-  const [parsedAddress, found] = address.parse(params.address_full_address);
+  const [fullAddress, lat, lon] = params.address.split("|");
+  const center = geo.asPoint(lat || 39.7401684, lon || -104.9894902);
+  const [parsedAddress, found] = address.parse(fullAddress);
   if (!found) {
     throw new Error("could not parse address for state")
   }
   let features = [
     center.asFeature({
       "marker-color": colors.pick(0),
-      "title": params.address_full_address,
+      "title": fullAddress,
     }),
   ];
   const prefix = parsedAddress.state.toLowerCase();
@@ -112,7 +113,8 @@ const manifest: Manifest = {
       label: "Address",
       name: "address",
       placeholder: "742 Evergreen Terrace, Springfield ",
-      defaultValue: "",
+      defaultValue:
+        "200 E Colfax Ave, Denver, Colorado 80203|39.7401684|-104.9894902",
       hint: "Full address of location",
     },
   ],
@@ -124,6 +126,7 @@ Object.keys(filters).forEach((key) => {
     type: "checkbox",
     label: changeCase.capitalCase(key),
     name: key,
+    defaultValue: "0",
   });
 });
 

@@ -1,6 +1,7 @@
-import { Input } from "../types";
+import { InputProps } from "../types";
 
-function Text({ index, field, onChange, value }: Input) {
+function Text({ index, field, value }: InputProps) {
+  const defaultValue = field.defaultValue || "";
   return (
     <div key={index} className="form-control">
       <label className="label" for={field.name}>
@@ -10,9 +11,8 @@ function Text({ index, field, onChange, value }: Input) {
         className="textarea textarea-bordered textarea-lg"
         id={field.name}
         name={field.name}
-        onChange={onChange}
         placeholder={field.placeholder}
-        value={value}
+        value={value || defaultValue}
       >
       </textarea>
       {field.hint && <span className="label-text-alt">{field.hint}</span>}

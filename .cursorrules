@@ -1,0 +1,6 @@
+Help me write React components using TypeScript.
+
+- Prioritize simplicity and readability, even if it means writing more code.
+- Ensure that all types are explicitly defined and avoid using `any` for any type.
+- Use the latest version of React and TypeScript.
+- Use the latest version of Tailwind CSS and DaisyUI.
