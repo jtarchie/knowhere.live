@@ -54,35 +54,6 @@ function HomePage({}: { path?: string }) {
           </p>
         </div>
       </div>
-      <section
-        id="newsletter"
-        class="text-center bg-white p-8 rounded-lg shadow-lg mb-20"
-      >
-        <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
-        <p class="mb-4">
-          Enter your email to learn more and stay updated on Knowhere.
-        </p>
-        <form
-          action="https://buttondown.email/api/emails/embed-subscribe/knowhere?tag=landing_page"
-          method="post"
-          target="popupwindow"
-          onSubmit={() =>
-            globalThis.open(
-              "https://buttondown.email/knowhere?tag=landing_page",
-              "popupwindow",
-            )}
-          class="flex justify-center items-center gap-2"
-        >
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email Address"
-            class="input input-bordered text-white"
-            required
-          />
-          <button type="submit" class="btn btn-primary">Subscribe</button>
-        </form>
-      </section>
       <footer class="text-center text-white">
         <p>© 2024 Knowhere. All rights reserved.</p>
       </footer>
