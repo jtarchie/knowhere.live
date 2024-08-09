@@ -1,10 +1,14 @@
 import { InputProps } from "../types";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 function Range({ index, field, value }: InputProps) {
   if (field.type !== "range") return null;
   const defaultValue = field.defaultValue || "";
   const [currentValue, setCurrentValue] = useState(value || defaultValue);
+
+  useEffect(() => {
+    setCurrentValue(value || defaultValue);
+  }, [value, field]);
 
   const handleChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
