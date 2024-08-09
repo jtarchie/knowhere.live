@@ -1,12 +1,22 @@
 import { InputProps } from "../types";
+import { useState } from "preact/hooks";
 
 function Range({ index, field, value }: InputProps) {
   if (field.type !== "range") return null;
   const defaultValue = field.defaultValue || "";
+  const [currentValue, setCurrentValue] = useState(value || defaultValue);
+
+  const handleChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    setCurrentValue(target.value);
+  };
+
   return (
     <div key={index} className="form-control">
       <label className="label" for={field.name}>
-        <span className="label-text text-lg">{field.label}</span>
+        <span className="label-text text-lg">
+          {field.label}: {currentValue}
+        </span>
       </label>
       <input
         className="range range-primary"
@@ -16,7 +26,8 @@ function Range({ index, field, value }: InputProps) {
         min={field.min}
         max={field.max}
         step={field.step}
-        value={value || defaultValue}
+        value={currentValue}
+        onInput={handleChange}
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>
