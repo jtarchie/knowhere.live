@@ -1,10 +1,7 @@
-// deno-lint-ignore-file
-
 import { Manifest } from "./type";
 import * as changeCase from "change-case";
 
-/* @__PURE__ */
-const filters: { [key: string]: string[] } = /* @__PURE__ */ {
+const filters: { [key: string]: string[] } = {
   "schools": ["[amenity=school][name]"],
   "arts_and_entertainment": [
     "[amenity=arts_centre][name]",
@@ -86,7 +83,7 @@ const source = `
       features = features.concat(results.map((result) => {
         return result.asFeature({
           "marker-color": colors.pick(index),
-          "title": result.name,
+          "title": result.tags.name,
           "legend": key,
         });
       }));
