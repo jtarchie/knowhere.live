@@ -7,7 +7,7 @@ tasks:
       - deno lint src/ functions/
       - npx tsc
       - yarn run build
-      - yarn run docs:build
+      - mkdocs build
       # - task: test
   server: yarn run local
   build: yarn run build --watch

@@ -8,10 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "local": "wrangler pages dev dist/",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "local": "wrangler pages dev dist/"
   },
   "dependencies": {
     "preact": "^10.23.1",
