@@ -56,10 +56,11 @@ function MapPage(
       JSON.stringify(params)
     }; ${manifest.source}`;
 
-    fetch(`/proxy/api/runtime`, {
-      method: "PUT",
-      body: fullSourceCode,
-    })
+    fetch(
+      `/proxy/api/runtime?${
+        new URLSearchParams({ source: fullSourceCode }).toString()
+      }`,
+    )
       .then((response) => response.json())
       .then((payload) => {
         if (payload.error) {
