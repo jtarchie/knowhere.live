@@ -34,8 +34,8 @@ function Legend({ geoJSON }: LegendProps) {
   }
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
-      <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">
+    <div className="p-4 bg-base-100 shadow-lg rounded-lg">
+      <h3 className="text-lg font-bold mb-2 text-primary">
         Legend
       </h3>
       <ul>
@@ -45,7 +45,7 @@ function Legend({ geoJSON }: LegendProps) {
               className="w-4 h-4 mr-2 rounded-full border-2 border-white"
               style={{ backgroundColor: item.color }}
             />
-            <span className="text-gray-900 dark:text-white">
+            <span className="text-primary">
               {item.legend}
             </span>
           </li>
