@@ -35,10 +35,10 @@ function FilterPage(
   return (
     <div class="h-screen flex flex-col">
       {manifest.about != "" && (
-        <>
+        <div class="p-4">
           <h2 class="text-2xl">About</h2>
           <p class="text-base">{manifest.about}</p>
-        </>
+        </div>
       )}
       <Form
         schema={manifest.form}
