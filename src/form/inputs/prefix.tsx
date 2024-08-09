@@ -24,7 +24,7 @@ function Prefix({ index, field, value }: InputProps) {
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <select
-        className="select select-bordered select-lg w-full"
+        className="select select-bordered select-lg select-primary w-full"
         name={field.name}
         id={field.name}
       >

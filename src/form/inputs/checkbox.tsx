@@ -8,7 +8,7 @@ function Checkbox({ index, field, value }: InputProps) {
         <span className="label-text text-lg">{field.label}</span>
         <input
           checked={value == "1" || defaultValue == "1"}
-          className="checkbox checkbox-lg"
+          className="checkbox checkbox-lg checkbox-primary"
           id={field.name}
           name={field.name}
           type="checkbox"

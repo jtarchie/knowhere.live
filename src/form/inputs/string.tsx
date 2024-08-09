@@ -9,7 +9,7 @@ function String({ index, field, value }: InputProps) {
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <input
-        className="input input-bordered input-lg"
+        className="input input-bordered input-lg input-primary"
         id={field.name}
         name={field.name}
         placeholder={field.placeholder}

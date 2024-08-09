@@ -61,7 +61,7 @@ function Address({ index, field, value }: InputProps) {
       >
         <input
           name="address-1"
-          className="input input-bordered input-lg w-full"
+          className="input input-bordered input-lg input-primary w-full"
           id={field.name}
           value={visibleAddress}
         />

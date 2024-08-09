@@ -8,7 +8,7 @@ function Text({ index, field, value }: InputProps) {
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <textarea
-        className="textarea textarea-bordered textarea-lg"
+        className="textarea textarea-bordered textarea-lg textarea-primary"
         id={field.name}
         name={field.name}
         placeholder={field.placeholder}
