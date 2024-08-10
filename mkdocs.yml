@@ -6,5 +6,6 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
+  - pymdownx.snippets
 
 site_dir: dist/docs
