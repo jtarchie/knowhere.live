@@ -17,7 +17,7 @@ const payload = {
 };
 
 assert.geoJSON(payload);
-return payload;
+export { payload };
 `.trim();
 
 const manifest: Manifest = {

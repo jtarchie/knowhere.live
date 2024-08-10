@@ -96,7 +96,7 @@ const source = `
   };
 
   assert.geoJSON(payload);
-  return payload;
+  export { payload };
 `.trim();
 
 const manifest: Manifest = {
