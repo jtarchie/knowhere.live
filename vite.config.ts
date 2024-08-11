@@ -7,17 +7,5 @@ export default defineConfig({
   plugins: [preact()],
   build: {
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          "codemirror": [
-            "codemirror",
-            "@codemirror/view",
-            "@codemirror/commands",
-            "@codemirror/lang-javascript",
-          ],
-        },
-      },
-    },
   },
 });
