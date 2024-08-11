@@ -102,7 +102,7 @@ function MapPage(
               })}
             </Source>
           </Map>
-          <div class="absolute top-4 left-4">
+          <div class="absolute top-4 left-4 z-10">
             <Legend geoJSON={geoJSON} />
           </div>
         </div>

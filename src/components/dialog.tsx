@@ -1,21 +1,27 @@
 import { ReactNode, RefObject } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
-import { useDebouncedCallback } from 'use-debounce';
+import { useDebouncedCallback } from "use-debounce";
 
-function Dialog({ title, children, show }: { title: string, children: ReactNode, show: boolean}) {
+function Dialog(
+  { title, children, show }: {
+    title: string;
+    children: ReactNode;
+    show: boolean;
+  },
+) {
   const ref = useRef<HTMLDialogElement>();
   const debounced = useDebouncedCallback(
     (value) => {
       if (value) {
-        ref.current?.showModal()
+        ref.current?.showModal();
       }
     },
-    1000
+    1000,
   );
 
   useEffect(() => {
     debounced(show);
-  }, [show])
+  }, [show]);
 
   return (
     <dialog className="modal" ref={ref as RefObject<HTMLDialogElement>}>
@@ -34,4 +40,4 @@ function Dialog({ title, children, show }: { title: string, children: ReactNode,
   );
 }
 
-export { Dialog }
+export { Dialog };
