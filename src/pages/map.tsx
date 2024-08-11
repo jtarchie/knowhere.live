@@ -15,6 +15,7 @@ import { LngLatBoundsLike } from "mapbox-gl";
 import { fitBounds } from "../render/bounds";
 import { RefCallback } from "preact";
 import { Legend } from "../components/legend";
+import { Dialog } from "../components/dialog";
 
 const defaultBounds: LngLatBoundsLike = [
   [-124.7844079, 24.396308],
@@ -30,8 +31,6 @@ function MapPage(
   { manifestName }: { path?: string; manifestName?: string },
 ) {
   const mapRef = useRef<MapRef>();
-  const noResultsModalRef = useRef<HTMLDialogElement>();
-
   const [allData, setAllData] = useState<GeoJSON.FeatureCollection>(
     emptyFeatureCollection,
   );
@@ -66,11 +65,6 @@ function MapPage(
         if (payload.error) {
           console.error(`Could not run script: ${payload.error}`);
           payload = emptyFeatureCollection;
-        }
-
-        if (payload.features.length === 0) {
-          noResultsModalRef.current?.showModal();
-          return;
         }
 
         setAllData(payload as GeoJSON.FeatureCollection);
@@ -114,25 +108,14 @@ function MapPage(
         </div>
         <BottomNav manifestName={manifestName} />
       </div>
-      <dialog
-        ref={noResultsModalRef as unknown as RefCallback<HTMLDialogElement>}
-        class="modal"
-      >
-        <div class="modal-box">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <h3 class="text-lg font-bold">No results found!</h3>
-          <p class="py-4">
-            The search did not return any results. Please refine your{" "}
-            <a class="link link-primary" href={`/beta/${manifestName}/filter`}>
-              filter
-            </a>.
-          </p>
-        </div>
-      </dialog>
+      <Dialog title="No results found!" show={geoJSON.features.length === 0}>
+        <p class="py-4">
+          The search did not return any results. Please refine your{" "}
+          <a class="link link-primary" href={`/beta/${manifestName}/filter`}>
+            filter
+          </a>.
+        </p>
+      </Dialog>
     </>
   );
 }
