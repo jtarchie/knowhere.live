@@ -71,7 +71,7 @@ function Legend({ geoJSON }: LegendProps) {
               className="btn btn-sm btn-circle btn-ghost"
               aria-label="Close legend"
             >
-              ×
+              ✕
             </button>
           </div>
           <ul>
