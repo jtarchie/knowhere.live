@@ -34,6 +34,7 @@ function MapPage(
   const [allData, setAllData] = useState<GeoJSON.FeatureCollection>(
     emptyFeatureCollection,
   );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const geoJSON = useMemo(() => {
     return allData;
   }, [allData]);
@@ -55,6 +56,7 @@ function MapPage(
       JSON.stringify(params)
     }; ${manifest.source}`;
 
+    setIsLoading(true);
     fetch(
       `/proxy/api/runtime?${
         new URLSearchParams({ source: fullSourceCode }).toString()
@@ -77,8 +79,12 @@ function MapPage(
             setAllData(features);
           },
         );
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.error("Could not load data", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -108,7 +114,10 @@ function MapPage(
         </div>
         <BottomNav manifestName={manifestName} />
       </div>
-      <Dialog title="No results found!" show={geoJSON.features.length === 0}>
+      <Dialog
+        title="No results found!"
+        show={!isLoading && geoJSON.features.length === 0}
+      >
         <p class="py-4">
           The search did not return any results. Please refine your{" "}
           <a class="link link-primary" href={`/beta/${manifestName}/filter`}>
