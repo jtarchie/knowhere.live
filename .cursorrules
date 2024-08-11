@@ -4,3 +4,4 @@ Help me write React components using TypeScript.
 - Ensure that all types are explicitly defined and avoid using `any` for any type.
 - Use the latest version of React and TypeScript.
 - Use the latest version of Tailwind CSS and DaisyUI.
+- Keeps all React components as functions.
