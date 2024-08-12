@@ -99,7 +99,7 @@ function MapPage(
             initialViewState={{
               bounds: defaultBounds,
             }}
-            mapStyle={getMapStyle()}
+            mapStyle={"mapbox://styles/mapbox/streets-v12"}
           >
             <NavigationControl position="top-right" />
             <Source id={sourceName} type="geojson" data={geoJSON}>
@@ -127,17 +127,6 @@ function MapPage(
       </Dialog>
     </>
   );
-}
-
-function getMapStyle() {
-  if (
-    globalThis.matchMedia &&
-    globalThis.matchMedia("(prefers-color-scheme: dark)").matches
-  ) {
-    return "mapbox://styles/mapbox/dark-v11";
-  } else {
-    return "mapbox://styles/mapbox/streets-v12";
-  }
 }
 
 export { MapPage };

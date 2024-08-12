@@ -78,7 +78,7 @@ function Legend({ geoJSON }: LegendProps) {
             {legendItems.map((item, index) => (
               <li key={index} className="flex items-center mb-1">
                 <span
-                  className="w-4 h-4 mr-2 rounded-full border-2 border-white"
+                  className="w-4 h-4 mr-2 rounded-full border border-[#333]"
                   style={{ backgroundColor: item.color }}
                 />
                 <span className="text-secondary">{item.legend}</span>

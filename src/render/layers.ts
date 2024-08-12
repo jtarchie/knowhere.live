@@ -54,26 +54,67 @@ const circle: CircleLayerSpecification = {
       ["get", "marker-color"],
       defaultColor,
     ],
-    "circle-stroke-width": 2,
-    "circle-stroke-color": "#ffffff",
+    "circle-stroke-width": 1,
+    "circle-stroke-color": "#333",
   },
-  filter: ["==", ["geometry-type"], "Point"],
+  filter: ["all", ["==", ["geometry-type"], "Point"], ["!", [
+    "has",
+    "marker-symbol",
+  ]]],
 };
 
-const symbol: SymbolLayerSpecification = {
+const text: SymbolLayerSpecification = {
   id: `${sourceName}-marker-text`,
   type: "symbol",
   source: sourceName,
   layout: {
     "text-field": ["get", "title"],
-    "text-offset": [0, 1.5],
+    "text-offset": [0, 2],
   },
   "paint": {
-    "text-color": "#202",
-    "text-halo-color": "#fff",
-    "text-halo-width": 2,
+    "text-halo-color": [
+      "coalesce",
+      ["get", "marker-color"],
+      defaultColor,
+    ],
+    "text-color": "#333",
+    "text-halo-width": 1,
   },
-  filter: ["==", ["geometry-type"], "Point"],
+  filter: ["all", ["==", ["geometry-type"], "Point"], ["!", [
+    "has",
+    "marker-symbol",
+  ]]],
+};
+
+const symbol: SymbolLayerSpecification = {
+  id: `${sourceName}-marker-icon`,
+  type: "symbol",
+  source: sourceName,
+  layout: {
+    "text-field": ["get", "title"],
+    "text-offset": [0, 2],
+    "icon-image": ["get", "marker-symbol"],
+    "icon-size": [
+      "match",
+      ["get", "marker-size"],
+      "small",
+      1,
+      "large",
+      2,
+      1.5,
+    ],
+    "icon-allow-overlap": false,
+  },
+  "paint": {
+    "text-halo-color": [
+      "coalesce",
+      ["get", "marker-color"],
+      defaultColor,
+    ],
+    "text-color": "#333",
+    "text-halo-width": 1,
+  },
+  filter: ["all", ["==", ["geometry-type"], "Point"], ["has", "marker-symbol"]],
 };
 
 const line: LineLayerSpecification = {
@@ -130,7 +171,7 @@ function setupEvents(map: MapRef) {
   });
 }
 
-const layers = [circle, line, polygonFill, polygonOutlineFill, symbol];
+const layers = [circle, line, polygonFill, polygonOutlineFill, text, symbol];
 
 function applyTransformations(
   geoJSON: GeoJSON.FeatureCollection,
