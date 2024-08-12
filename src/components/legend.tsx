@@ -81,7 +81,7 @@ function Legend({ geoJSON }: LegendProps) {
                   className="w-4 h-4 mr-2 rounded-full border-2 border-white"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-primary">{item.legend}</span>
+                <span className="text-secondary">{item.legend}</span>
               </li>
             ))}
           </ul>
