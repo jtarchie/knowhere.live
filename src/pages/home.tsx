@@ -2,14 +2,15 @@ function HomePage({}: { path?: string }) {
   return (
     <div class="container mx-auto px-4 py-8 bg-gradient-to-r from-blue-500 to-teal-500 min-h-screen text-gray-800">
       <nav class="flex justify-between items-center mb-8">
-        <a href="/" class="text-white text-2xl font-bold">Knowhere</a>
+        <a href="/" class="text-white text-2xl font-bold">Knowhere to Live</a>
         <div>
-          <button class="btn btn-ghost btn-sm rounded-btn text-white line-through">
-            Features
-          </button>
-          <button class="btn btn-ghost btn-sm rounded-btn text-white line-through">
-            Pricing
-          </button>
+          <a
+            class="btn btn-ghost btn-sm rounded-btn text-white"
+            href="/docs"
+            data-native
+          >
+            Docs
+          </a>
           <a
             class="btn btn-ghost btn-sm rounded-btn text-white"
             href="mailto:hello@knowhere.live"
@@ -29,33 +30,24 @@ function HomePage({}: { path?: string }) {
               Discover Your Ideal Location
             </h1>
             <p class="text-xl font-semibold text-gray-200 mb-6">
-              Find your perfect location based on your criteria with Knowhere
+              Find your perfect location by searching Knowhere
             </p>
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20 mt-20">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          <h2 class="text-3xl font-bold mb-3">What We Are Building</h2>
-          <p>
-            An innovative application designed to help you discover geographical
-            areas that perfectly match your real estate criteria. Whether it's a
-            home near a school or a business location near a highway exit,
-            Knowhere guides you to your ideal destination.
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          <h2 class="text-3xl font-bold mb-3">Why We Are Building It</h2>
-          <p>
-            To simplify the process of finding the perfect location. We empower
-            our users with knowledge and tools to find places that meet their
-            specific needs and preferences, turning the concept of "knowing
-            where you want to be" into reality.
-          </p>
-        </div>
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-20 mt-20">
+        <h2 class="text-3xl font-bold mb-3">Currently in Beta</h2>
+        <p>
+          We are excited to announce that Knowhere is currently in an
+          invite-only open beta. Our innovative application is designed to help
+          you discover geographical areas that perfectly match your real estate
+          criteria. Whether it's a home near a school or a business location
+          near a highway exit, Knowhere guides you to your ideal destination.
+        </p>
       </div>
+
       <footer class="text-center text-white">
-        <p>© 2024 Knowhere. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Knowhere. All rights reserved.</p>
       </footer>
     </div>
   );
