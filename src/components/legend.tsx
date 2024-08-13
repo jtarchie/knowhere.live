@@ -36,9 +36,7 @@ function Legend({ geoJSON }: LegendProps) {
 
   return (
     <div
-      className={`transition-all duration-300 ease-in-out ${
-        isVisible ? "w-64" : "w-12"
-      }`}
+      className={`${isVisible ? "w-64" : "w-12"}`}
     >
       {!isVisible && (
         <button
