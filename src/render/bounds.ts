@@ -4,22 +4,30 @@ import bbox from "@turf/bbox";
 import buffer from "@turf/buffer";
 import { MapRef } from "react-map-gl";
 
-function fitBounds(map: Map | MapRef, defaultBounds: LngLatBoundsLike) {
+function fitBounds(
+  map: Map | MapRef,
+  defaultBounds: LngLatBoundsLike,
+  features?: GeoJSON.Feature[],
+) {
+  const featuresToUse = features || map.querySourceFeatures(sourceName);
+
   const bounding = bbox(
     buffer(
       {
         type: "FeatureCollection",
-        features: map.querySourceFeatures(sourceName),
+        features: featuresToUse,
       },
       500,
       { units: "meters" },
     ) as GeoJSON.FeatureCollection,
   );
 
+  console.log("features", featuresToUse);
+
   if (bounding && bounding.some((e) => !Number.isFinite(e))) {
     map.fitBounds(defaultBounds);
   } else {
-    map.fitBounds(bounding as mapboxgl.LngLatBoundsLike, { padding: 40 });
+    map.fitBounds(bounding as mapboxgl.LngLatBoundsLike, { padding: 20 });
   }
 }
 

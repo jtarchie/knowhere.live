@@ -9,7 +9,7 @@ import {
   setupEvents,
   sourceName,
 } from "../render/layers";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { Manager } from "../render/manager";
 import { LngLatBoundsLike } from "mapbox-gl";
 import { fitBounds } from "../render/bounds";
@@ -31,15 +31,10 @@ function MapPage(
   { manifestName }: { path?: string; manifestName?: string },
 ) {
   const mapRef = useRef<MapRef>();
-  const [allData, setAllData] = useState<GeoJSON.FeatureCollection>(
+  const [geoJSON, setGeoJSON] = useState<GeoJSON.FeatureCollection>(
     emptyFeatureCollection,
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const geoJSON = useMemo(() => {
-    return allData;
-  }, [allData]);
-
-  const resizeMap = () => fitBounds(mapRef.current as MapRef, defaultBounds);
 
   useEffect(() => {
     const manager = new Manager();
@@ -69,15 +64,22 @@ function MapPage(
           payload = emptyFeatureCollection;
         }
 
-        setAllData(payload as GeoJSON.FeatureCollection);
-        mapRef.current?.once("idle", () => resizeMap());
-
+        setGeoJSON(payload as GeoJSON.FeatureCollection);
         setupEvents(mapRef.current as MapRef);
         applyTransformations(
           payload,
           (features: GeoJSON.FeatureCollection) => {
-            setAllData(features);
+            setGeoJSON(features);
           },
+        );
+        mapRef.current?.once(
+          "idle",
+          () =>
+            fitBounds(
+              mapRef.current as MapRef,
+              defaultBounds,
+              payload.features,
+            ),
         );
       })
       .catch((err) => {
