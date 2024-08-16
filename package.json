@@ -15,7 +15,7 @@
     "string-width": "7.2.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240725.0",
+    "@cloudflare/workers-types": "^4.20240806.0",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@mapbox/search-js-react": "^1.0.0-beta.21",
