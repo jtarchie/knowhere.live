@@ -139,7 +139,7 @@ const manifest: Manifest = {
       min: 1000,
       max: 5000,
       step: 500,
-      label: "Radius",
+      label: "Radius (in meters)",
       name: "radius",
     },
   ],
