@@ -42,6 +42,7 @@ function Address({ index, field, value }: InputProps) {
     const defaultValue = parseAddressValue(field.defaultValue);
     const parsedValue = parseAddressValue(value);
     setVisibleAddress(parsedValue.full_address || defaultValue.full_address);
+    setEncodedAddress(value || field.defaultValue);
   }, [value]);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
