@@ -20,6 +20,8 @@ class Manager {
     const params = qs.parse(window.location.search.slice(1));
     if (params.values) {
       values = Object.assign({}, values, params.values);
+      // save the url parameters so different tabs get the state
+      this.persistFilterValues(values);
     }
 
     return { manifest, values };
