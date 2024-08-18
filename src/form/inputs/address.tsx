@@ -39,8 +39,10 @@ function Address({ index, field, value }: InputProps) {
   );
 
   useEffect(() => {
+    const defaultValue = parseAddressValue(field.defaultValue);
+    const parsedValue = parseAddressValue(value);
     setVisibleAddress(parsedValue.full_address || defaultValue.full_address);
-  }, [value, defaultValue]);
+  }, [value]);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
     const feature = response.features[0];
