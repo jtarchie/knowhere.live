@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { String } from "./inputs/string";
 import { Text } from "./inputs/text";
 import { Checkbox } from "./inputs/checkbox";
-import { Prefix } from "./inputs/prefix";
+import { Area } from "./inputs/area";
 import { Address } from "./inputs/address";
 import { Range } from "./inputs/range";
 
@@ -20,7 +20,7 @@ const componentMap = {
   string: String,
   text: Text,
   checkbox: Checkbox,
-  prefix: Prefix,
+  area: Area,
   address: Address,
   range: Range,
 };

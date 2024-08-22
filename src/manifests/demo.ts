@@ -2,7 +2,7 @@ import { Manifest } from "./type";
 
 const source = `
 const all = query.execute(
-  \`nwr[name=~"\${params.keyword}"](prefix="\${params.prefix || "colorado"}")\`,
+  \`nwr[name=~"\${params.keyword}"](area="\${params.area || "colorado"}")\`,
 );
 const entries = all.cluster(params.closeby || 2000); //meters
 assert.eq(all.length >= entries.length, "expected fewer entries");
@@ -31,9 +31,9 @@ const manifest: Manifest = {
     hint: "Name of a place",
     minLength: 3,
   }, {
-    type: "prefix",
+    type: "area",
     label: "Area",
-    name: "prefix",
+    name: "area",
     defaultValue: "colorado",
     hint: "Select the area to search within",
   }],

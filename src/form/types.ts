@@ -24,7 +24,7 @@ interface CheckboxField extends BaseField {
 }
 
 interface PrefixField extends BaseField {
-  type: "prefix";
+  type: "area";
   defaultValue: string;
 }
 

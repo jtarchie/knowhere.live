@@ -2,73 +2,73 @@ import { Manifest } from "./type";
 import * as changeCase from "change-case";
 
 const filters: { [key: string]: { queries: string[]; markerSymbol: string } } =
-  {
-    "schools": {
-      queries: ["[amenity=school][name]"],
-      markerSymbol: "school",
-    },
-    "arts_and_entertainment": {
-      queries: [
-        "[amenity=arts_centre][name]",
-        "[leisure=theatre][name]",
-        "[tourism=gallery][name]",
-      ],
-      markerSymbol: "art-gallery",
-    },
-    "banking": {
-      queries: ["[amenity=bank,atm][name]"],
-      markerSymbol: "bank",
-    },
-    "education": {
-      queries: ["[amenity=school,college,university][name]"],
-      markerSymbol: "college",
-    },
-    "fire_and_police": {
-      queries: ["[amenity=fire_station,police][name]"],
-      markerSymbol: "police",
-    },
-    "food_and_dining": {
-      queries: ["[amenity=restaurant,cafe,fast_food][name]"],
-      markerSymbol: "restaurant",
-    },
-    "gas_stations": {
-      queries: ["[amenity=fuel][name]"],
-      markerSymbol: "fuel",
-    },
-    "health_care": {
-      queries: ["[amenity=hospital,clinic,doctors,dentist,pharmacy][name]"],
-      markerSymbol: "hospital",
-    },
-    "libraries": {
-      queries: ["[amenity=library][name]"],
-      markerSymbol: "library",
-    },
-    "post_offices": {
-      queries: ["[amenity=post_office][name]"],
-      markerSymbol: "post",
-    },
-    "religious_organizations": {
-      queries: ["[amenity=place_of_worship][name]"],
-      markerSymbol: "place-of-worship",
-    },
-    "shopping": {
-      queries: ["[shop][name]"],
-      markerSymbol: "shop",
-    },
-    "sports": {
-      queries: ["[leisure=sports_centre,pitch,stadium][name]"],
-      markerSymbol: "stadium",
-    },
-    "transportation": {
-      queries: [
-        "[amenity=bus_station,taxi][name]",
-        "[public_transport=stop_position][name]",
-        "[amenity=taxi][name]",
-        "[railway=station][name]",
-      ],
-      markerSymbol: "bus",
-    },
-  };
+{
+  "schools": {
+    queries: ["[amenity=school][name]"],
+    markerSymbol: "school",
+  },
+  "arts_and_entertainment": {
+    queries: [
+      "[amenity=arts_centre][name]",
+      "[leisure=theatre][name]",
+      "[tourism=gallery][name]",
+    ],
+    markerSymbol: "art-gallery",
+  },
+  "banking": {
+    queries: ["[amenity=bank,atm][name]"],
+    markerSymbol: "bank",
+  },
+  "education": {
+    queries: ["[amenity=school,college,university][name]"],
+    markerSymbol: "college",
+  },
+  "fire_and_police": {
+    queries: ["[amenity=fire_station,police][name]"],
+    markerSymbol: "police",
+  },
+  "food_and_dining": {
+    queries: ["[amenity=restaurant,cafe,fast_food][name]"],
+    markerSymbol: "restaurant",
+  },
+  "gas_stations": {
+    queries: ["[amenity=fuel][name]"],
+    markerSymbol: "fuel",
+  },
+  "health_care": {
+    queries: ["[amenity=hospital,clinic,doctors,dentist,pharmacy][name]"],
+    markerSymbol: "hospital",
+  },
+  "libraries": {
+    queries: ["[amenity=library][name]"],
+    markerSymbol: "library",
+  },
+  "post_offices": {
+    queries: ["[amenity=post_office][name]"],
+    markerSymbol: "post",
+  },
+  "religious_organizations": {
+    queries: ["[amenity=place_of_worship][name]"],
+    markerSymbol: "place-of-worship",
+  },
+  "shopping": {
+    queries: ["[shop][name]"],
+    markerSymbol: "shop",
+  },
+  "sports": {
+    queries: ["[leisure=sports_centre,pitch,stadium][name]"],
+    markerSymbol: "stadium",
+  },
+  "transportation": {
+    queries: [
+      "[amenity=bus_station,taxi][name]",
+      "[public_transport=stop_position][name]",
+      "[amenity=taxi][name]",
+      "[railway=station][name]",
+    ],
+    markerSymbol: "bus",
+  },
+};
 
 /* @__PURE__ */
 const source = `
@@ -85,7 +85,7 @@ const source = `
       "title": fullAddress,
     }),
   ];
-  const prefix = parsedAddress.state.toLowerCase();
+  const area = parsedAddress.state.toLowerCase();
   
   const boundary = center.asBound().extend(params.radius); //meters
   features.push(boundary.asFeature({
@@ -97,7 +97,7 @@ const source = `
   Object.keys(params).forEach((key, index) => {
     if (filters[key] && params[key] == "1") {
       const asQueries = filters[key].queries.map((query) =>
-        \`nwr\${query}(prefix=\${prefix})(bb=\${boundary.min()[0]},\${boundary.min()[1]},\${boundary.max()[0]},\${boundary.max()[1]})\`
+        \`nwr\${query}(area=\${area})(bb=\${boundary.min()[0]},\${boundary.min()[1]},\${boundary.max()[0]},\${boundary.max()[1]})\`
       );
       const results = query.union(...asQueries);
 

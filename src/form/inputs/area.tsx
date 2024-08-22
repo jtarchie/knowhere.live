@@ -1,21 +1,21 @@
 import { useEffect, useState } from "preact/hooks";
 import { InputProps } from "../types";
 
-interface Prefix {
+interface AreaPayload {
   name: string;
   slug: string;
   bounds: number[][];
 }
 
-function Prefix({ index, field, value }: InputProps) {
-  const [prefixes, setPrefixes] = useState<Prefix[]>([]);
+function Area({ index, field, value }: InputProps) {
+  const [areas, setAreas] = useState<AreaPayload[]>([]);
   const defaultValue = field.defaultValue || "";
 
   useEffect(() => {
-    fetch("/proxy/api/prefixes", { method: "GET" })
+    fetch("/proxy/api/areas", { method: "GET" })
       .then((response) => response.json())
-      .then((payload) => setPrefixes(payload.prefixes))
-      .catch((err) => console.log("could not load prefixes", err));
+      .then((payload) => setAreas(payload.areas))
+      .catch((err) => console.log("could not load areas", err));
   }, []);
 
   return (
@@ -28,13 +28,13 @@ function Prefix({ index, field, value }: InputProps) {
         name={field.name}
         id={field.name}
       >
-        {prefixes.map((prefix) => {
+        {areas.map((area) => {
           return (
             <option
-              value={prefix.slug}
-              selected={prefix.slug == value || prefix.slug == defaultValue}
+              value={area.slug}
+              selected={area.slug == value || area.slug == defaultValue}
             >
-              {prefix.name}
+              {area.name}
             </option>
           );
         })}
@@ -44,4 +44,4 @@ function Prefix({ index, field, value }: InputProps) {
   );
 }
 
-export { Prefix };
+export { Area };
