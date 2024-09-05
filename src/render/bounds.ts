@@ -22,8 +22,6 @@ function fitBounds(
     ) as GeoJSON.FeatureCollection,
   );
 
-  console.log("features", featuresToUse);
-
   if (bounding && bounding.some((e) => !Number.isFinite(e))) {
     map.fitBounds(defaultBounds);
   } else {
