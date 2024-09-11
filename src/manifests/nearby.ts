@@ -68,6 +68,10 @@ const filters: { [key: string]: { queries: string[]; markerSymbol: string } } =
     ],
     markerSymbol: "bus",
   },
+  "fitness_and_recreation": {
+    queries: ["[leisure=gym,fitness_centre][name]"],
+    markerSymbol: "gym",
+  },
 };
 
 /* @__PURE__ */
