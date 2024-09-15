@@ -149,7 +149,8 @@ const source = `
           "marker-color": colors.pick(index),
           "title": result.tags.name,
           "legend": key,
-          "marker-symbol": filters[key].markerSymbol
+          // HINT: adds icons instead of circles of the color
+          // "marker-symbol": filters[key].markerSymbol
         });
       }));
     }
