@@ -16,6 +16,8 @@ interface StringField extends BaseField {
 interface TextField extends BaseField {
   type: "text";
   defaultValue: string;
+  minLength?: number;
+  maxLength?: number;
 }
 
 interface CheckboxField extends BaseField {
@@ -41,9 +43,17 @@ interface RangeField extends BaseField {
   step?: number;
 }
 
+interface PromptField extends BaseField {
+  type: "prompt";
+  defaultValue: string;
+  minLength?: number;
+  maxLength?: number;
+}
+
 type Field =
   | StringField
   | TextField
+  | PromptField
   | CheckboxField
   | PrefixField
   | AddressField

@@ -1,12 +1,14 @@
 import { FormSchema, FormValues } from "./types";
 import { RefCallback } from "preact";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+
+import { Address } from "./inputs/address";
+import { Area } from "./inputs/area";
+import { Checkbox } from "./inputs/checkbox";
+import { Prompt } from "./inputs/prompt";
+import { Range } from "./inputs/range";
 import { String } from "./inputs/string";
 import { Text } from "./inputs/text";
-import { Checkbox } from "./inputs/checkbox";
-import { Area } from "./inputs/area";
-import { Address } from "./inputs/address";
-import { Range } from "./inputs/range";
 
 interface FormProps {
   className: string;
@@ -17,12 +19,13 @@ interface FormProps {
 }
 
 const componentMap = {
+  address: Address,
+  area: Area,
+  checkbox: Checkbox,
+  prompt: Prompt,
+  range: Range,
   string: String,
   text: Text,
-  checkbox: Checkbox,
-  area: Area,
-  address: Address,
-  range: Range,
 };
 
 function Form({

@@ -11,3 +11,4 @@ tasks:
   server: yarn run local
   build: yarn run build --watch
   test: yarn run test
+  prompt: node -e "console.log(JSON.stringify(require('fs').readFileSync('prompt/prompt.md', 'utf8')))"

@@ -1,7 +1,8 @@
 import { InputProps } from "../types";
 
-function Text({ index, field, value }: InputProps) {
-  if (field.type !== "text") return null;
+function Prompt({ index, field, value }: InputProps) {
+  if (field.type !== "prompt") return null;
+
   const defaultValue = field.defaultValue || "";
   return (
     <div key={index} className="form-control">
@@ -24,4 +25,4 @@ function Text({ index, field, value }: InputProps) {
   );
 }
 
-export { Text };
+export { Prompt };
