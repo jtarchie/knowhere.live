@@ -109,9 +109,7 @@ const source = `
     const values = distances.filter(distance => distance <= limit);
     if (values.length === 0) return 0;
 
-    assert.stab(JSON.stringify(values));
     const scores = values.map( distance => walkScore(distance, limit) );
-    assert.stab(JSON.stringify(scores));
     return median(scores);
   }
 
