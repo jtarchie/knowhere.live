@@ -61,14 +61,20 @@ type Field =
 
 type FormSchema = Field[];
 
-interface FormValues {
-  [key: string]: string;
+type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+
+interface JsonObject {
+  [key: string]: JsonValue;
 }
+
+interface JsonArray extends Array<JsonValue> {}
+
+type FormValues = JsonObject;
 
 interface InputProps {
   index: number;
   field: Field;
-  value: string;
+  values: FormValues;
 }
 
 export type { Field, FormSchema, FormValues, InputProps };

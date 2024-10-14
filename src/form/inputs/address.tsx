@@ -9,7 +9,7 @@ interface AddressValue {
   full_address: string;
 }
 
-function parseAddressValue(value: string): AddressValue {
+function parseAddressValue(value: string | null): AddressValue {
   if (!value) {
     return {
       lat: 0,
@@ -26,7 +26,8 @@ function parseAddressValue(value: string): AddressValue {
   };
 }
 
-function Address({ index, field, value }: InputProps) {
+function Address({ index, field, values = {} }: InputProps) {
+  const value = values[field.name] as string;
   const defaultValue = parseAddressValue(field.defaultValue);
   const parsedValue = parseAddressValue(value);
 

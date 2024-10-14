@@ -1,8 +1,9 @@
 import { InputProps } from "../types";
 import { useEffect, useState } from "preact/hooks";
 
-function Range({ index, field, value }: InputProps) {
+function Range({ index, field, values }: InputProps) {
   if (field.type !== "range") return null;
+  const value = values[field.name] as string;
   const defaultValue = field.defaultValue || "";
   const [currentValue, setCurrentValue] = useState(value || defaultValue);
 

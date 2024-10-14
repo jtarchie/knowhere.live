@@ -1,6 +1,7 @@
 import { InputProps } from "../types";
 
-function Checkbox({ index, field, value }: InputProps) {
+function Checkbox({ index, field, values }: InputProps) {
+  const value = values[field.name];
   const defaultValue = field.defaultValue || "0";
   return (
     <div key={index} className="form-control">

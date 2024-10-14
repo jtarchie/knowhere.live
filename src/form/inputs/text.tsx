@@ -1,7 +1,8 @@
 import { InputProps } from "../types";
 
-function Text({ index, field, value }: InputProps) {
+function Text({ index, field, values }: InputProps) {
   if (field.type !== "text") return null;
+  const value = values[field.name] as string;
   const defaultValue = field.defaultValue || "";
   return (
     <div key={index} className="form-control">

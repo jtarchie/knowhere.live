@@ -7,9 +7,9 @@ interface AreaPayload {
   bounds: number[][];
 }
 
-function Area({ index, field, value }: InputProps) {
+function Area({ index, field, values }: InputProps) {
+  let value: string = values[field.name] as string || field.defaultValue || "";
   const [areas, setAreas] = useState<AreaPayload[]>([]);
-  const defaultValue = field.defaultValue || "";
 
   useEffect(() => {
     fetch("/proxy/api/areas", { method: "GET" })
@@ -17,6 +17,10 @@ function Area({ index, field, value }: InputProps) {
       .then((payload) => setAreas(payload.areas))
       .catch((err) => console.log("could not load areas", err));
   }, []);
+
+  useEffect(() => {
+    value = values[field.name] as string;
+  }, [values]);
 
   return (
     <div key={index} className="form-control">
@@ -32,7 +36,7 @@ function Area({ index, field, value }: InputProps) {
           return (
             <option
               value={area.slug}
-              selected={area.slug == value || area.slug == defaultValue}
+              selected={area.slug === value}
             >
               {area.name}
             </option>

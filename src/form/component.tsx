@@ -66,13 +66,12 @@ function Form({
     >
       {schema.map((field, index) => {
         const Component = componentMap[field.type];
-        const value = values[field.name];
         return (
           <Component
             key={index}
             index={index}
             field={field}
-            value={value}
+            values={values}
           />
         );
       })}

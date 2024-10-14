@@ -1,7 +1,8 @@
 import { InputProps } from "../types";
 
-function Prompt({ index, field, value }: InputProps) {
+function Prompt({ index, field, values }: InputProps) {
   if (field.type !== "prompt") return null;
+  const value = values[field.name] as string;
 
   const defaultValue = field.defaultValue || "";
   return (
