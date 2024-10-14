@@ -39,4 +39,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: 945954ae6af55e6e4af004fb7772fdc5
-          command: pages deploy --project-name=knowhere-live --env=production dist/
+          command: pages deploy --project-name=knowhere-live dist/
