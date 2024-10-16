@@ -1,7 +1,5 @@
 import { FormSchema, FormValues } from "./types";
-import { RefCallback } from "preact";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-
+import { FormProvider, useForm } from "react-hook-form";
 import { Address } from "./inputs/address";
 import { Area } from "./inputs/area";
 import { Checkbox } from "./inputs/checkbox";
@@ -33,57 +31,50 @@ function Form({
   onReset = () => {},
   onSubmit = () => {},
   schema = [],
-  values: initialValues = {},
+  values = {},
 }: FormProps) {
-  const formRef = useRef<HTMLFormElement>();
-  const [values, setValues] = useState<FormValues>(initialValues);
+  // Initialize react-hook-form with default values
+  const defaultValues = schema.reduce((acc, field) => {
+    if (field.defaultValue !== undefined) {
+      acc[field.name] = field.defaultValue;
+    }
 
-  useEffect(() => {
-    setValues(initialValues);
-  }, [initialValues]);
+    return acc;
+  }, {} as FormValues);
+  const methods = useForm({ defaultValues: defaultValues, values: values });
+  const { handleSubmit, reset } = methods;
 
-  const onSubmitCallback = useCallback((event: SubmitEvent) => {
-    event.stopPropagation();
-    const entries = Object.fromEntries(
-      new FormData(formRef.current),
-    ) as FormValues;
-    onSubmit(entries);
-    event.preventDefault();
-  }, [schema, onSubmit]);
+  const onSubmitCallback = (data: FormValues) => {
+    onSubmit(data);
+  };
 
-  const onResetCallback = useCallback((event: Event) => {
-    event.preventDefault();
-    setValues({});
+  const onResetCallback = () => {
+    reset();
     onReset({});
-  }, [schema, onReset]);
+  };
 
   return (
-    <form
-      className={className}
-      ref={formRef as unknown as RefCallback<HTMLFormElement>}
-      onSubmit={onSubmitCallback}
-      onReset={onResetCallback}
-    >
-      {schema.map((field, index) => {
-        const Component = componentMap[field.type];
-        return (
-          <Component
-            key={index}
-            index={index}
-            field={field}
-            values={values}
-          />
-        );
-      })}
-      <div class="flex justify-center mt-4 space-x-4">
-        <button type="submit" class="btn btn-primary btn-lg">
-          Apply
-        </button>
-        <button type="reset" class="btn btn-secondary btn-lg">
-          Reset
-        </button>
-      </div>
-    </form>
+    <FormProvider {...methods}>
+      <form
+        className={className}
+        onSubmit={handleSubmit(onSubmitCallback)}
+        onReset={onResetCallback}
+      >
+        {schema.map((field, index) => {
+          const Component = componentMap[field.type];
+          return <Component key={index} index={index} field={field} />;
+        })}
+
+        <div className="flex justify-center mt-4 space-x-4">
+          <button type="submit" className="btn btn-primary btn-lg">
+            Apply
+          </button>
+          <button type="reset" className="btn btn-secondary btn-lg">
+            Reset
+          </button>
+        </div>
+      </form>
+    </FormProvider>
   );
 }
 

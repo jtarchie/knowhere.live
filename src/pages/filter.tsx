@@ -30,11 +30,11 @@ function FilterPage(
     const { manifest, values } = manager.load(manifestName);
     setManifest(manifest);
     setValues(values);
-  }, []);
+  }, [manifestName]);
 
   return (
     <div class="h-screen flex flex-col">
-      {manifest.about != "" && (
+      {manifest.about && (
         <div class="p-4">
           <h2 class="text-2xl">About</h2>
           <p class="text-base">{manifest.about}</p>

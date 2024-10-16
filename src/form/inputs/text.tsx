@@ -1,9 +1,11 @@
+import { useFormContext } from "react-hook-form";
 import { InputProps } from "../types";
 
-function Text({ index, field, values }: InputProps) {
+function Text({ index, field }: InputProps) {
   if (field.type !== "text") return null;
-  const value = values[field.name] as string;
-  const defaultValue = field.defaultValue || "";
+
+  const { register } = useFormContext(); // Access the form methods
+
   return (
     <div key={index} className="form-control">
       <label className="label" for={field.name}>
@@ -12,12 +14,12 @@ function Text({ index, field, values }: InputProps) {
       <textarea
         className="textarea textarea-bordered textarea-lg textarea-primary"
         id={field.name}
-        name={field.name}
+        autoComplete="off"
         placeholder={field.placeholder}
-        autoComplete="false"
-        minLength={field.minLength}
-        maxLength={field.maxLength}
-        value={value || defaultValue}
+        {...register(field.name, {
+          minLength: field.minLength || 0,
+          maxLength: field.maxLength,
+        })}
       >
       </textarea>
       {field.hint && <span className="label-text-alt">{field.hint}</span>}

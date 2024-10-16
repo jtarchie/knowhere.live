@@ -1,25 +1,27 @@
+import { useFormContext } from "react-hook-form";
 import { InputProps } from "../types";
 
-function String({ index, field, values }: InputProps) {
+function String({ index, field }: InputProps) {
   if (field.type !== "string") return null;
-  const value = values[field.name] as string;
-  const defaultValue = field.defaultValue || "";
+
+  const { register } = useFormContext(); // Access the form methods
+
   return (
     <div key={index} className="form-control">
-      <label className="label" for={field.name}>
+      <label className="label" htmlFor={field.name}>
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <input
         className="input input-bordered input-lg input-primary"
         id={field.name}
-        name={field.name}
         placeholder={field.placeholder}
-        type="search"
-        value={value || defaultValue}
-        autoComplete="false"
-        minLength={field.minLength}
-        maxLength={field.maxLength}
-        pattern={field.pattern}
+        type="text"
+        autoComplete="off"
+        {...register(field.name, {
+          minLength: field.minLength || 0,
+          maxLength: field.maxLength,
+          pattern: field.pattern ? new RegExp(field.pattern) : undefined,
+        })}
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>

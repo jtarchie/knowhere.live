@@ -1,20 +1,11 @@
 import { InputProps } from "../types";
-import { useEffect, useState } from "preact/hooks";
+import { useFormContext } from "react-hook-form";
 
-function Range({ index, field, values }: InputProps) {
+function Range({ index, field }: InputProps) {
   if (field.type !== "range") return null;
-  const value = values[field.name] as string;
-  const defaultValue = field.defaultValue || "";
-  const [currentValue, setCurrentValue] = useState(value || defaultValue);
 
-  useEffect(() => {
-    setCurrentValue(value || defaultValue);
-  }, [value, field]);
-
-  const handleChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    setCurrentValue(target.value);
-  };
+  const { register, watch } = useFormContext();
+  const currentValue = watch(field.name);
 
   return (
     <div key={index} className="form-control">
@@ -25,14 +16,12 @@ function Range({ index, field, values }: InputProps) {
       </label>
       <input
         className="range range-primary"
-        id={field.name}
-        name={field.name}
         type="range"
+        id={field.name}
         min={field.min}
         max={field.max}
         step={field.step}
-        value={currentValue}
-        onInput={handleChange}
+        {...register(field.name)}
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>

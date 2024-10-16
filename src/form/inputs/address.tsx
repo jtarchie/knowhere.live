@@ -2,6 +2,7 @@ import { AddressAutofill } from "@mapbox/search-js-react";
 import mapboxgl from "mapbox-gl";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import { InputProps } from "../types";
+import { useFormContext } from "react-hook-form";
 
 interface AddressValue {
   lat: number;
@@ -26,32 +27,30 @@ function parseAddressValue(value: string | null): AddressValue {
   };
 }
 
-function Address({ index, field, values = {} }: InputProps) {
-  const value = values[field.name] as string;
-  const defaultValue = parseAddressValue(field.defaultValue);
+function Address({ index, field }: InputProps) {
+  if (field.type !== "address") return null;
+
+  const { register, getValues, setValue } = useFormContext(); // Access the form methods
+
+  const value = getValues(field.name);
   const parsedValue = parseAddressValue(value);
-
   const [visibleAddress, setVisibleAddress] = useState<string>(
-    parsedValue.full_address || defaultValue.full_address,
-  );
-
-  const [encodedAddress, setEncodedAddress] = useState<string>(
-    value || field.defaultValue,
+    parsedValue.full_address,
   );
 
   useEffect(() => {
-    const defaultValue = parseAddressValue(field.defaultValue);
-    const parsedValue = parseAddressValue(value);
-    setVisibleAddress(parsedValue.full_address || defaultValue.full_address);
-    setEncodedAddress(value || field.defaultValue);
-  }, [value]);
+    setVisibleAddress(parsedValue.full_address);
+  }, [parsedValue.full_address]);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
     const feature = response.features[0];
     setVisibleAddress(feature.properties?.full_address);
 
     const [lon, lat] = (feature.geometry as GeoJSON.Point).coordinates;
-    setEncodedAddress([feature.properties?.full_address, lat, lon].join("|"));
+    setValue(
+      field.name,
+      [feature.properties?.full_address, lat, lon].join("|"),
+    );
   }, []);
 
   return (
@@ -71,8 +70,7 @@ function Address({ index, field, values = {} }: InputProps) {
         />
         <input
           type="hidden"
-          name={field.name}
-          value={encodedAddress}
+          {...register(field.name)}
         />
         {field.hint && <span className="label-text-alt">{field.hint}</span>}
       </AddressAutofill>

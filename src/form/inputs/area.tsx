@@ -1,4 +1,5 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { InputProps } from "../types";
 
 interface AreaPayload {
@@ -7,8 +8,8 @@ interface AreaPayload {
   bounds: number[][];
 }
 
-function Area({ index, field, values }: InputProps) {
-  let value: string = values[field.name] as string || field.defaultValue || "";
+function Area({ index, field }: InputProps) {
+  const { register, setValue, getValues } = useFormContext(); // UseFormContext to access form methods
   const [areas, setAreas] = useState<AreaPayload[]>([]);
 
   useEffect(() => {
@@ -19,29 +20,24 @@ function Area({ index, field, values }: InputProps) {
   }, []);
 
   useEffect(() => {
-    value = values[field.name] as string;
-  }, [values]);
+    setValue(field.name, getValues(field.name) || field.defaultValue);
+  }, [areas]);
 
   return (
     <div key={index} className="form-control">
-      <label className="label" for={field.name}>
+      <label className="label" htmlFor={field.name}>
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <select
+        {...register(field.name)}
         className="select select-bordered select-lg select-primary w-full"
-        name={field.name}
         id={field.name}
       >
-        {areas.map((area) => {
-          return (
-            <option
-              value={area.slug}
-              selected={area.slug === value}
-            >
-              {area.name}
-            </option>
-          );
-        })}
+        {areas.map((area) => (
+          <option key={area.slug} value={area.slug}>
+            {area.name}
+          </option>
+        ))}
       </select>
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>

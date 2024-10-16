@@ -22,7 +22,7 @@ interface TextField extends BaseField {
 
 interface CheckboxField extends BaseField {
   type: "checkbox";
-  defaultValue: "0" | "1";
+  defaultValue: boolean;
 }
 
 interface PrefixField extends BaseField {
@@ -74,7 +74,6 @@ type FormValues = JsonObject;
 interface InputProps {
   index: number;
   field: Field;
-  values: FormValues;
 }
 
 export type { Field, FormSchema, FormValues, InputProps };

@@ -210,7 +210,7 @@ Object.keys(filters).forEach((key) => {
     type: "checkbox",
     label: changeCase.capitalCase(key),
     name: key,
-    defaultValue: "0",
+    defaultValue: false,
   });
 });
 
