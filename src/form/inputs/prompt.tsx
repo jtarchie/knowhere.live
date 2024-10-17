@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { InputProps } from "../types";
+import { FormValues, InputProps, Field } from "../types";
 
 function Prompt({ index, field }: InputProps) {
   if (field.type !== "prompt") return null;
@@ -26,5 +26,9 @@ function Prompt({ index, field }: InputProps) {
     </div>
   );
 }
+
+Prompt.onSubmit = (field: Field, data: FormValues) => {
+  console.log(`Prompt.onSubmit: ${field.name} => ${data[field.name]}`);
+};
 
 export { Prompt };

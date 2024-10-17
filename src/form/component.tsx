@@ -1,4 +1,4 @@
-import { FormSchema, FormValues } from "./types";
+import { Field, FormSchema, FormValues, InputProps } from "./types";
 import { FormProvider, useForm } from "react-hook-form";
 import { Address } from "./inputs/address";
 import { Area } from "./inputs/area";
@@ -16,7 +16,11 @@ interface FormProps {
   values: FormValues;
 }
 
-const componentMap = {
+const componentMap: {
+  [key: string]: ((props: InputProps) => JSX.Element | null) & {
+    onSubmit?: (field: Field, data: FormValues) => void;
+  };
+} = {
   address: Address,
   area: Area,
   checkbox: Checkbox,
@@ -45,6 +49,12 @@ function Form({
   const { handleSubmit, reset } = methods;
 
   const onSubmitCallback = (data: FormValues) => {
+    schema.forEach((field) => {
+      const component = componentMap[field.type];
+      if (component?.onSubmit) {
+        component.onSubmit(field, data);
+      }
+    });
     onSubmit(data);
   };
 
