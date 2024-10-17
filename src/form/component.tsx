@@ -1,4 +1,4 @@
-import { Field, FormSchema, FormValues, InputProps } from "./types";
+import { Field, FormValues, InputProps } from "./types";
 import { FormProvider, useForm } from "react-hook-form";
 import { Address } from "./inputs/address";
 import { Area } from "./inputs/area";
@@ -7,13 +7,13 @@ import { Prompt } from "./inputs/prompt";
 import { Range } from "./inputs/range";
 import { String } from "./inputs/string";
 import { Text } from "./inputs/text";
+import { Runtime } from "../render/manager";
 
 interface FormProps {
   className: string;
   onReset?: (values: FormValues) => void;
   onSubmit?: (values: FormValues) => void;
-  schema: FormSchema;
-  values: FormValues;
+  runtime: Runtime;
 }
 
 const componentMap: {
@@ -34,27 +34,27 @@ function Form({
   className = "",
   onReset = () => {},
   onSubmit = () => {},
-  schema = [],
-  values = {},
+  runtime: { manifest: { form: schema }, values },
 }: FormProps) {
   // Initialize react-hook-form with default values
   const defaultValues = schema.reduce((acc, field) => {
     if (field.defaultValue !== undefined) {
       acc[field.name] = field.defaultValue;
     }
-
     return acc;
   }, {} as FormValues);
   const methods = useForm({ defaultValues: defaultValues, values: values });
   const { handleSubmit, reset } = methods;
 
-  const onSubmitCallback = (data: FormValues) => {
-    schema.forEach((field) => {
-      const component = componentMap[field.type];
-      if (component?.onSubmit) {
-        component.onSubmit(field, data);
-      }
-    });
+  const onSubmitCallback = async (data: FormValues) => {
+    await Promise.all(
+      schema.map(async (field) => {
+        const component = componentMap[field.type];
+        if (component?.onSubmit) {
+          await component.onSubmit(field, data);
+        }
+      }),
+    );
     onSubmit(data);
   };
 

@@ -2,10 +2,15 @@ import qs from "qs";
 import { FormValues } from "../form/types";
 import manifests, { Manifest } from "../manifests/index.ts";
 
+export type Runtime = {
+  manifest: Manifest;
+  values: FormValues;
+};
+
 class Manager {
   load(
     manifestName: string = "demo",
-  ): { manifest: Manifest; values: FormValues } {
+  ): Runtime {
     let manifest = manifests[manifestName];
 
     // try local storage - overrides

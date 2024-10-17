@@ -1,21 +1,15 @@
 import { FormValues } from "../form/types";
 import { BottomNav } from "../components/bottom-nav";
-import { Manager } from "../render/manager";
+import { Manager, Runtime } from "../render/manager";
 import { Form } from "../form/component";
 import { useEffect, useState } from "preact/hooks";
-import { Manifest } from "../manifests/type";
 import { route } from "preact-router";
 
 function FilterPage(
   { manifestName }: { path?: string; manifestName?: string },
 ) {
   const manager = new Manager();
-  const [manifest, setManifest] = useState<Manifest>({
-    source: "",
-    form: [],
-    about: "",
-  });
-  const [values, setValues] = useState<FormValues>({});
+  const [runtime, setRuntime] = useState<Runtime>();
 
   const onSubmit = (values: FormValues) => {
     manager.persistFilterValues(values);
@@ -27,11 +21,19 @@ function FilterPage(
   };
 
   useEffect(() => {
-    const { manifest, values } = manager.load(manifestName);
-    setManifest(manifest);
-    setValues(values);
+    const runtime = manager.load(manifestName);
+    setRuntime(runtime);
   }, [manifestName]);
 
+  if (!runtime) {
+    return (
+      <div class="h-screen flex flex-col">
+        <span class="loading loading-dots loading-lg"></span>
+      </div>
+    );
+  }
+
+  const manifest = runtime.manifest;
   return (
     <div class="h-screen flex flex-col">
       {manifest.about && (
@@ -41,8 +43,7 @@ function FilterPage(
         </div>
       )}
       <Form
-        schema={manifest.form}
-        values={values}
+        runtime={runtime}
         onSubmit={onSubmit}
         onReset={onReset}
         className="flex-1 h-full w-full p-4 overflow-y-auto"

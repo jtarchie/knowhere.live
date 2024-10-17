@@ -1,6 +1,13 @@
 export async function onRequest(context) {
   const { searchParams } = new URL(context.request.url);
-  const query = searchParams.get("query") || "";
+  const query = searchParams.get("query");
+  if (!query) {
+    return new Response(`{"error": "Please provide a 'query' param"}`, {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const maxLength = 150; // Define your max length
   const modelName = "ft:gpt-4o-2024-08-06:personal:knowhere:9yrVPlYV";
   const prompt =

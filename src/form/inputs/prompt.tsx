@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { FormValues, InputProps, Field } from "../types";
+import { Field, FormValues, InputProps } from "../types";
 
 function Prompt({ index, field }: InputProps) {
   if (field.type !== "prompt") return null;
@@ -27,8 +27,14 @@ function Prompt({ index, field }: InputProps) {
   );
 }
 
-Prompt.onSubmit = (field: Field, data: FormValues) => {
-  console.log(`Prompt.onSubmit: ${field.name} => ${data[field.name]}`);
+Prompt.onSubmit = async (field: Field, data: FormValues) => {
+  // perform a `fetch` to the `/prompt` endpoint
+  // on success, set data[`prompt-${field.name}`] = response
+  const params = new URLSearchParams({ query: data[field.name] as string })
+    .toString();
+  const response = await fetch("/prompt?" + params);
+  const json = await response.json();
+  data[`${field.name}_query`] = json;
 };
 
 export { Prompt };
