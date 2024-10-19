@@ -28,17 +28,21 @@ function Area({ index, field }: InputProps) {
       <label className="label" htmlFor={field.name}>
         <span className="label-text text-lg">{field.label}</span>
       </label>
-      <select
-        {...register(field.name)}
-        className="select select-bordered select-lg select-primary w-full"
-        id={field.name}
-      >
-        {areas.map((area) => (
-          <option key={area.slug} value={area.slug}>
-            {area.name}
-          </option>
-        ))}
-      </select>
+      {areas.length === 0
+        ? <div className="skeleton h-16 w-full"></div>
+        : (
+          <select
+            {...register(field.name)}
+            className="select select-bordered select-lg select-primary w-full"
+            id={field.name}
+          >
+            {areas.map((area) => (
+              <option key={area.slug} value={area.slug}>
+                {area.name}
+              </option>
+            ))}
+          </select>
+        )}
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>
   );

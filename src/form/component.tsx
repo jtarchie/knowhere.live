@@ -8,6 +8,7 @@ import { Range } from "./inputs/range";
 import { String } from "./inputs/string";
 import { Text } from "./inputs/text";
 import { Runtime } from "../render/manager";
+import { useRef } from "preact/hooks";
 
 interface FormProps {
   className: string;
@@ -36,6 +37,7 @@ function Form({
   onSubmit = () => {},
   runtime: { manifest: { form: schema }, values },
 }: FormProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
   // Initialize react-hook-form with default values
   const defaultValues = schema.reduce((acc, field) => {
     if (field.defaultValue !== undefined) {
@@ -47,6 +49,7 @@ function Form({
   const { handleSubmit, reset } = methods;
 
   const onSubmitCallback = async (data: FormValues) => {
+    dialogRef.current?.showModal();
     await Promise.all(
       schema.map(async (field) => {
         const component = componentMap[field.type];
@@ -56,6 +59,7 @@ function Form({
       }),
     );
     onSubmit(data);
+    dialogRef.current?.close();
   };
 
   const onResetCallback = () => {
@@ -64,27 +68,40 @@ function Form({
   };
 
   return (
-    <FormProvider {...methods}>
-      <form
-        className={className}
-        onSubmit={handleSubmit(onSubmitCallback)}
-        onReset={onResetCallback}
-      >
-        {schema.map((field, index) => {
-          const Component = componentMap[field.type];
-          return <Component key={index} index={index} field={field} />;
-        })}
+    <>
+      <FormProvider {...methods}>
+        <form
+          className={className}
+          onSubmit={handleSubmit(onSubmitCallback)}
+          onReset={onResetCallback}
+        >
+          {schema.map((field, index) => {
+            const Component = componentMap[field.type];
+            return <Component key={index} index={index} field={field} />;
+          })}
 
-        <div className="flex justify-center mt-4 space-x-4">
-          <button type="submit" className="btn btn-primary btn-lg">
-            Apply
-          </button>
-          <button type="reset" className="btn btn-secondary btn-lg">
-            Reset
-          </button>
+          <div className="flex justify-center mt-4 space-x-4">
+            <button type="submit" className="btn btn-primary btn-lg">
+              Apply
+            </button>
+            <button type="reset" className="btn btn-secondary btn-lg">
+              Reset
+            </button>
+          </div>
+        </form>
+      </FormProvider>
+      <dialog class="modal" ref={dialogRef}>
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">Loading</h3>
+          <p class="py-4">
+            <span class="loading loading-ball loading-xs"></span>
+            <span class="loading loading-ball loading-sm"></span>
+            <span class="loading loading-ball loading-md"></span>
+            <span class="loading loading-ball loading-lg"></span>
+          </p>
         </div>
-      </form>
-    </FormProvider>
+      </dialog>
+    </>
   );
 }
 
