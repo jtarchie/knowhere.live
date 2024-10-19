@@ -27,4 +27,4 @@ dist-ssr
 .wrangler
 
 docs/.vitepress/dist
-.dev.vars
+/.dev.vars
