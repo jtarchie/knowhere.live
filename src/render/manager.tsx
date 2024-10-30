@@ -22,7 +22,7 @@ class Manager {
     let values = JSON.parse(sessionStorage.getItem("values") || "{}");
 
     // try loading values from query string (via share link)
-    const params = qs.parse(window.location.search.slice(1));
+    const params = qs.parse(globalThis.location.search.slice(1));
     if (params.values) {
       values = Object.assign({}, values, params.values);
       // save the url parameters so different tabs get the state
