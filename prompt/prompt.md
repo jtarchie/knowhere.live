@@ -66,6 +66,11 @@ route
 shop
 tourism
 waterway
+# sports
+sport
+# skiing -- https://wiki.openstreetmap.org/wiki/Pistes
+piste:type
+piste:grooming
 # fuel types -- https://wiki.openstreetmap.org/wiki/Key:fuel
 fuel
 fuel:diesel
@@ -97,12 +102,29 @@ railway
 # other
 name
 website
+phone
+email
+wikipedia
+place
+type
+wikidata
 # address
 addr:housenumber
 addr:street
 addr:city
 addr:postcode
 postal_code
+# religion
+religion
+denomination
+parish
+operator
+church:type
+place_of_worship
+# population -- https://wiki.openstreetmap.org/wiki/Key:population
+population
+population:date
+source:population
 ```
 
 ## JSON payload Schema

@@ -324,6 +324,26 @@ const examples = [
         "radius": 1000
       }
     ]
+  },
+  {
+    "prompt": "I want to live near a skatepark.",
+    // https://wiki.openstreetmap.org/wiki/Tag:sport%3Dskateboard
+    "completion": [
+      {
+        "query": "nwr[leisure=pitch][sport=skateboard]",
+        "radius": 1000
+      }
+    ]
+  },
+  {
+    "prompt": "I want to be near a ski resort.",
+    // https://wiki.openstreetmap.org/wiki/Tag:landuse%3Dwinter_sports
+    "completion": [
+      {
+        "query": "nwr[landuse=winter_sports]",
+        "radius": 10000
+      }
+    ]
   }
 ];
 
