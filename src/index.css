@@ -2,12 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* #map {
-  min-width: 100%;
-  min-height: 100%;
-} */
+.success {
+  animation: success-animation 0.5s ease-in-out;
+}
 
-/* .cm-editor {
-  width: 100%;
-  height: 100%;
-} */
+@keyframes success-animation {
+  0% {
+    /* transform: scale(1); */
+    background-color: transparent;
+  }
+  50% {
+    /* transform: scale(1.1); */
+    background-color: oklch(var(--su)); /* Green color for success */
+  }
+  100% {
+    /* transform: scale(1); */
+    background-color: transparent;
+  }
+}

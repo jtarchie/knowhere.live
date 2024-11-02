@@ -1,13 +1,37 @@
 import { route } from "preact-router";
 import qs from "qs";
 import { Manager } from "../render/manager";
+import { useState } from "preact/hooks";
 
 function BottomNav({ manifestName }: { manifestName?: string }) {
   const params = qs.parse(globalThis.location.search.slice(1));
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const currentPath = globalThis.location.pathname;
   const active = (path: string) => currentPath == path ? "active" : "";
   const redirect = (path: string) => () => route(path);
+
+  const handleShare = async () => {
+    const manager = new Manager();
+    const { values } = manager.load(manifestName);
+    const url = `${import.meta.env.VITE_WEB_ADDRESS}/beta/${manifestName}/map?${
+      qs.stringify({ values: values })
+    }`;
+
+    try {
+      await navigator.share({
+        title: "Knowhere to Live",
+        url: url,
+      });
+      setIsSuccess(true);
+    } catch (err) {
+      console.log("Native share not supported", err);
+      await navigator.clipboard.writeText(url);
+      setIsSuccess(true);
+    }
+
+    setTimeout(() => setIsSuccess(false), 2000); // Reset success state after 2 seconds
+  };
 
   return (
     <div class="btm-nav bg-base-100 relative">
@@ -76,25 +100,8 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
         <span class="btm-nav-label">Filter</span>
       </button>
       <button
-        onClick={async () => {
-          const manager = new Manager();
-          const { values } = manager.load(manifestName);
-          const url =
-            `${import.meta.env.VITE_WEB_ADDRESS}/beta/${manifestName}/map?${
-              qs.stringify({ values: values })
-            }`;
-
-          try {
-            await navigator.share({
-              title: "Knowhere to Live",
-              url: url,
-            });
-          } catch (err) {
-            console.log("Native share not supported", err);
-            await navigator.clipboard.writeText(url);
-          }
-        }}
-        class="text-primary"
+        onClick={handleShare}
+        class={`text-primary ${isSuccess ? "success" : ""}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
