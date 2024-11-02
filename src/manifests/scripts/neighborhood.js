@@ -28,36 +28,47 @@ const keywords = params.prompt_query.map((match) => {
 
 keywords.sort((a, b) => a.results.length - b.results.length);
 
-const neighbors = new Map();
-const cluster = keywords[0].results.cluster(500);
-cluster.forEach((entry) => {
-  neighbors.set(entry.id, new Map());
-});
+let entries = [];
 
-const expectedNeighbors = 2;
-
-keywords.slice(1).forEach((keyword) => {
-  const grouped = cluster.overlap(
-    keyword.results,
-    keywords[0].radius,
-    keyword.radius,
-    expectedNeighbors - 1,
-  );
-  grouped.forEach((values) => {
-    values.forEach((value) => neighbors.get(values[0].id).set(value.id, value));
+if (keywords.length == 1) {
+  entries = keywords[0].results.cluster(500).map((entry) => [entry]);
+} else {
+  const neighbors = new Map();
+  const cluster = keywords[0].results.cluster(500);
+  cluster.forEach((entry) => {
+    neighbors.set(entry.id, new Map());
   });
-});
+
+  const expectedNeighbors = 2;
+
+  keywords.slice(1).forEach((keyword) => {
+    const grouped = cluster.overlap(
+      keyword.results,
+      keywords[0].radius,
+      keyword.radius,
+      expectedNeighbors - 1,
+    );
+    grouped.forEach((values) => {
+      values.forEach((value) =>
+        neighbors.get(values[0].id).set(value.id, value)
+      );
+    });
+  });
+
+  entries = [...neighbors.values()].map((set) => {
+    const values = [...set.values()];
+    if (values.length !== keywords.length) {
+      return [];
+    }
+
+    return values;
+  }).filter((entry) => entry.length > 0);
+}
 
 const payload = {
   type: "FeatureCollection",
-  features: [...neighbors.values()].flatMap((set, index) => {
-    const entries = [...set.values()];
-
-    if (entries.length !== keywords.length) {
-      return;
-    }
-
-    const features = entries.flatMap((entry, index) => {
+  features: entries.flatMap((neighborhood, index) => {
+    const features = neighborhood.map((entry, index) => {
       const color = colors.pick(index);
 
       const feature = entry.asFeature({
@@ -68,11 +79,12 @@ const payload = {
       return feature;
     });
 
-    const bounds = geo.asBounds(
-      ...entries.map((entry, index) =>
-        entry.bound().extend(keywords[index].radius)
-      ),
+    const entriesWithSpecifiedRadius = neighborhood.map((entry, index) =>
+      entry.bound().extend(keywords[index].radius)
     );
+
+    // create into combined bounds object
+    const bounds = geo.asBounds(...entriesWithSpecifiedRadius);
 
     return features.concat(
       [
@@ -83,7 +95,7 @@ const payload = {
         }),
       ],
     );
-  }).filter(Boolean),
+  }),
 };
 
 assert.geoJSON(payload);
