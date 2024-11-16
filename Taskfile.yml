@@ -3,8 +3,8 @@ version: 3
 tasks:
   default:
     cmds:
-      - deno fmt src/ functions/ k6/
-      - deno lint src/ functions/ k6/ --fix
+      - deno fmt src/ functions/ k6/ test/
+      - deno lint src/ functions/ k6/ test/ --fix
       - npx tsc
       - yarn run build
       - cd docs && mkdocs build
