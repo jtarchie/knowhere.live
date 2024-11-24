@@ -213,14 +213,14 @@ and time actions. For example:
    ```javascript
    [
      {
-      "query": "nwr[name=Costco]",
-      "radius": 5000,
-      "legend": "Costco"
+       "query": "nwr[name=Costco]",
+       "radius": 5000,
+       "legend": "Costco",
      },
      {
-      "query": "nwr[amenity=cafe][name!=Starbucks]",
-      "radius": 1000,
-      "legend": "Cafes (not Starbucks)"
+       "query": "nwr[amenity=cafe][name!=Starbucks]",
+       "radius": 1000,
+       "legend": "Cafes (not Starbucks)",
      },
    ];
    ```
@@ -229,9 +229,9 @@ and time actions. For example:
    ```javascript
    [
      {
-      "query": "nwr[amenity=university][name]",
-      "radius": 5000,
-      "legend": "Colleges"
+       "query": "nwr[amenity=university][name]",
+       "radius": 5000,
+       "legend": "Colleges",
      },
    ];
    ```
@@ -239,8 +239,16 @@ and time actions. For example:
 3. **User Query**: Find high schools within 1km of a grocery store.
    ```javascript
    [
-     { "query": `nwr[amenity=school][name="High School"]`, "radius": 1000, "legend": "High Schools" },
-     { "query": "nwr[shop=grocery,supermarket,convenience]", "radius": 1000, "legend": "Grocery Stores" },
+     {
+       "query": `nwr[amenity=school][name="High School"]`,
+       "radius": 1000,
+       "legend": "High Schools",
+     },
+     {
+       "query": "nwr[shop=grocery,supermarket,convenience]",
+       "radius": 1000,
+       "legend": "Grocery Stores",
+     },
    ];
    ```
 
@@ -251,9 +259,17 @@ containing the word "Cat".
 
 ```javascript
 [
-  { "query": "nwr[amenity=university]", "radius": 5000, "legend": "Universities" },
+  {
+    "query": "nwr[amenity=university]",
+    "radius": 5000,
+    "legend": "Universities",
+  },
   { "query": "nwr[shop=books]", "radius": 1000, "legend": "Book Shops" },
-  { "query": "nwr[amenity=cafe][name=~Cat]", "radius": 1000, "legend": "Cafes with 'Cat' in the name" },
+  {
+    "query": "nwr[amenity=cafe][name=~Cat]",
+    "radius": 1000,
+    "legend": "Cafes with 'Cat' in the name",
+  },
 ];
 ```
 

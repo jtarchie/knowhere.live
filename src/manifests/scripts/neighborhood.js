@@ -23,7 +23,7 @@ const keywords = params.prompt_query.map((match) => {
     query: match.query,
     results: query.execute(match.query + `[name](area=${params.area})`),
     radius: match.radius,
-    legend: match.legend
+    legend: match.legend,
   };
 });
 
