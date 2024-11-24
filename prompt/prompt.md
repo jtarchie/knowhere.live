@@ -51,6 +51,7 @@ This is a list of supported Open Street Map tags for the query language:
 
 ```
 # general descriptors for areas and types
+# general descriptors for areas and types
 place
 landuse
 building
@@ -187,10 +188,14 @@ park
 ## JSON payload Schema
 
 ```javascript
-  [
-    { query: <string representing a query syntax>, radius: <distance in meters>}
-    # .... more values
-  ]
+[
+  {
+    "query": <string representing a query syntax>,
+    "radius": <distance in meters>,
+    "legend": <string of human readable short title>
+  }
+  # .... more values
+]
 ```
 
 ### Distances
@@ -201,31 +206,42 @@ and time actions. For example:
 - "a short walk" ≈ 2 kilometers
 - "a short drive" ≈ 20 kilometers
 
-
 ### Examples
 
 1. **User Query**: Find all the Costcos with a coffee shop not named Starbucks
    nearby.
    ```javascript
    [
-     { "query": "nwr[name=Costco]", "radius": 5000 },
-     { "query": "nwr[amenity=cafe][name!=Starbucks]", "radius": 1000 }
-   ]
+     {
+      "query": "nwr[name=Costco]",
+      "radius": 5000,
+      "legend": "Costco"
+     },
+     {
+      "query": "nwr[amenity=cafe][name!=Starbucks]",
+      "radius": 1000,
+      "legend": "Cafes (not Starbucks)"
+     },
+   ];
    ```
 
 2. **User Query**: Find all colleges.
    ```javascript
    [
-     { "query": "nwr[amenity=university][name]", "radius": 5000 }
-   ]
+     {
+      "query": "nwr[amenity=university][name]",
+      "radius": 5000,
+      "legend": "Colleges"
+     },
+   ];
    ```
 
 3. **User Query**: Find high schools within 1km of a grocery store.
    ```javascript
    [
-     { "query": `nwr[amenity=school][name="High School"]`, "radius": 1000 },
-     { "query": "nwr[shop=grocery,supermarket,convenience]", "radius": 1000 }
-   ]
+     { "query": `nwr[amenity=school][name="High School"]`, "radius": 1000, "legend": "High Schools" },
+     { "query": "nwr[shop=grocery,supermarket,convenience]", "radius": 1000, "legend": "Grocery Stores" },
+   ];
    ```
 
 ### Complex Example
@@ -235,13 +251,14 @@ containing the word "Cat".
 
 ```javascript
 [
-  { "query": "nwr[amenity=university]", "radius": 5000 },
-  { "query": "nwr[shop=books]", "radius": 1000 },
-  { "query": "nwr[amenity=cafe][name=~Cat]", "radius": 1000 }
-]
+  { "query": "nwr[amenity=university]", "radius": 5000, "legend": "Universities" },
+  { "query": "nwr[shop=books]", "radius": 1000, "legend": "Book Shops" },
+  { "query": "nwr[amenity=cafe][name=~Cat]", "radius": 1000, "legend": "Cafes with 'Cat' in the name" },
+];
 ```
 
-Please feel free to convert generic names to more specific tags, as everything might not fit in `name` tag.
+Please feel free to convert generic names to more specific tags, as everything
+might not fit in `name` tag.
 
 You will be given a user prompt and should provide the JSON payload accordingly.
 Do not include any programming code, extraneous explanation, prose, etc.

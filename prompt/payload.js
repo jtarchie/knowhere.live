@@ -5,10 +5,12 @@ const examples = [
       {
         "query": "nwr[amenity=fuel]",
         "radius": 1000,
+        "legend": "Gas Stations",
       },
       {
         "query": "nwr[amenity=fast_food]",
         "radius": 1000,
+        "legend": "Fast Food Restaurants",
       },
     ],
   },
@@ -18,10 +20,12 @@ const examples = [
       {
         "query": "nwr[leisure=park]",
         "radius": 1000,
+        "legend": "Parks",
       },
       {
         "query": "nwr[waterway=river]",
         "radius": 1000,
+        "legend": "Rivers",
       },
     ],
   },
@@ -31,10 +35,12 @@ const examples = [
       {
         "query": "nwr[amenity=school]",
         "radius": 2000,
+        "legend": "Schools",
       },
       {
         "query": "nwr[public_transport=bus_stop]",
         "radius": 500,
+        "legend": "Bus Stops",
       },
     ],
   },
@@ -44,23 +50,27 @@ const examples = [
       {
         "query": "nwr[amenity=hospital]",
         "radius": 1000,
+        "legend": "Hospitals",
       },
       {
         "query": "nwr[amenity=cafe][name!~Starbucks]",
         "radius": 1000,
+        "legend": "Coffee Shops not Starbucks",
       },
     ],
   },
   {
-    "prompt": "Find universities with cycleways nearby.",
+    "prompt": "Find universities with bike paths nearby.",
     "completion": [
       {
         "query": "nwr[amenity=university]",
         "radius": 2000,
+        "legend": "Universities",
       },
       {
         "query": "nwr[highway=cycleway]",
         "radius": 1000,
+        "legend": "Bike Paths",
       },
     ],
   },
@@ -70,10 +80,12 @@ const examples = [
       {
         "query": "nwr[shop=supermarket]",
         "radius": 20000,
+        "legend": "Supermarkets",
       },
       {
         "query": "nwr[leisure=park]",
         "radius": 1000,
+        "legend": "Parks",
       },
     ],
   },
@@ -83,10 +95,12 @@ const examples = [
       {
         "query": "nwr[amenity=cafe]",
         "radius": 1000,
+        "legend": "Cafes",
       },
       {
         "query": "nwr[shop=books]",
         "radius": 1000,
+        "legend": "Bookstores",
       },
     ],
   },
@@ -96,10 +110,12 @@ const examples = [
       {
         "query": "nwr[amenity=school][isced:level=2,3]",
         "radius": 5000,
+        "legend": "High Schools",
       },
       {
         "query": "nwr[shop=mall]",
         "radius": 5000,
+        "legend": "Shopping Malls",
       },
     ],
   },
@@ -109,10 +125,12 @@ const examples = [
       {
         "query": "nwr[leisure=fitness_centre]",
         "radius": 5000,
+        "legend": "Gyms",
       },
       {
         "query": "nwr[amenity=fast_food]",
         "radius": 1000,
+        "legend": "Fast Food Restaurants",
       },
     ],
   },
@@ -122,6 +140,7 @@ const examples = [
       {
         "query": "nwr[amenity=cafe][internet_access=wlan]",
         "radius": 1000,
+        "legend": "Coffee Shops with Free Wi-Fi",
       },
     ],
   },
@@ -132,14 +151,17 @@ const examples = [
       {
         "query": "nwr[amenity=university]",
         "radius": 5000,
+        "legend": "Universities",
       },
       {
         "query": "nwr[shop=grocery,supermarket,convenience]",
         "radius": 2000,
+        "legend": "Grocery Stores",
       },
       {
         "query": "nwr[leisure=fitness_centre]",
         "radius": 2000,
+        "legend": "Gyms",
       },
     ],
   },
@@ -149,14 +171,17 @@ const examples = [
       {
         "query": "nwr[amenity=hospital]",
         "radius": 5000,
+        "legend": "Hospitals",
       },
       {
         "query": "nwr[amenity=pharmacy]",
         "radius": 1000,
+        "legend": "Pharmacies",
       },
       {
         "query": "nwr[leisure=park]",
         "radius": 1000,
+        "legend": "Parks",
       },
     ],
   },
@@ -166,14 +191,17 @@ const examples = [
       {
         "query": "nwr[railway=station]",
         "radius": 5000,
+        "legend": "Train Stations",
       },
       {
         "query": "nwr[amenity=bicycle_rental]",
         "radius": 1000,
+        "legend": "Bike Rental Services",
       },
       {
         "query": "nwr[amenity=cafe]",
         "radius": 1000,
+        "legend": "Cafes",
       },
     ],
   },
@@ -183,14 +211,17 @@ const examples = [
       {
         "query": "nwr[amenity=school][isced:level=2,3]",
         "radius": 2000,
+        "legend": "High Schools",
       },
       {
         "query": "nwr[amenity=library]",
         "radius": 1000,
+        "legend": "Libraries",
       },
       {
         "query": "nwr[public_transport=bus_stop]",
         "radius": 500,
+        "legend": "Bus Stops",
       },
     ],
   },
@@ -200,14 +231,17 @@ const examples = [
       {
         "query": "nwr[leisure=park]",
         "radius": 5000,
+        "legend": "Parks",
       },
       {
         "query": "nwr[waterway=lake]",
         "radius": 2000,
+        "legend": "Lakes",
       },
       {
         "query": "nwr[amenity=fast_food]",
         "radius": 1000,
+        "legend": "Fast Food Restaurants",
       },
     ],
   },
@@ -217,14 +251,17 @@ const examples = [
       {
         "query": "nwr[shop=mall]",
         "radius": 5000,
+        "legend": "Shopping Malls",
       },
       {
         "query": "nwr[amenity=parking]",
         "radius": 1000,
+        "legend": "Parking Lots",
       },
       {
         "query": "nwr[tourism=hotel]",
         "radius": 1000,
+        "legend": "Hotels",
       },
     ],
   },
@@ -235,14 +272,17 @@ const examples = [
       {
         "query": "nwr[amenity=fuel]",
         "radius": 5000,
+        "legend": "Gas Stations",
       },
       {
         "query": "nwr[amenity=car_wash]",
         "radius": 1000,
+        "legend": "Car Washes",
       },
       {
         "query": "nwr[shop=convenience]",
         "radius": 1000,
+        "legend": "Convenience Stores",
       },
     ],
   },
@@ -253,14 +293,17 @@ const examples = [
       {
         "query": "nwr[amenity=cinema]",
         "radius": 5000,
+        "legend": "Cinemas",
       },
       {
         "query": "nwr[amenity=restaurant]",
         "radius": 1000,
+        "legend": "Restaurants",
       },
       {
         "query": "nwr[public_transport=station]",
         "radius": 1000,
+        "legend": "Public Transit Stations",
       },
     ],
   },
@@ -271,14 +314,17 @@ const examples = [
       {
         "query": "nwr[amenity=university]",
         "radius": 5000,
+        "legend": "Universities",
       },
       {
         "query": "nwr[shop=books]",
         "radius": 1000,
+        "legend": "Bookstores",
       },
       {
         "query": "nwr[amenity=cafe][name=~Cat]",
         "radius": 1000,
+        "legend": "Coffee Shops with 'Cat' in their name",
       },
     ],
   },
@@ -289,41 +335,61 @@ const examples = [
       {
         "query": "nwr[tourism=attraction]",
         "radius": 5000,
+        "legend": "Tourist Attractions",
       },
       {
         "query": "nwr[tourism=hotel]",
         "radius": 1000,
+        "legend": "Hotels",
       },
       {
         "query": "nwr[public_transport=stop]",
         "radius": 1000,
+        "legend": "Public Transport Stops",
       },
     ],
   },
   {
-    "prompt": "Locate business parks that are near a diesel gas station, which is adjacent to a highway exit.",
+    "prompt":
+      "Locate business parks that are near a diesel gas station, which is adjacent to a highway exit.",
     "completion": [
-      { "query": "nwr[landuse=industrial]", "radius": 5000 },
-      { "query": "nwr[amenity=fuel][fuel:diesel=yes]", "radius": 1000 },
-      { "query": "nwr[highway=motorway_junction,services]", "radius": 500 }
-    ]
+      {
+        "query": "nwr[landuse=industrial]",
+        "radius": 5000,
+        "legend": "Business Parks",
+      },
+      {
+        "query": "nwr[amenity=fuel][fuel:diesel=yes]",
+        "radius": 1000,
+        "legend": "Diesel Gas Stations",
+      },
+      {
+        "query": "nwr[highway=motorway_junction,services]",
+        "radius": 500,
+        "legend": "Highway Exits",
+      },
+    ],
   },
   {
-    "prompt": "I want to find a neighborhood within driving distance of a Costco, which has a walkable coffee shop, that is next to a library.",
+    "prompt":
+      "I want to find a neighborhood within driving distance of a Costco, which has a walkable coffee shop, that is next to a library.",
     "completion": [
       {
         "query": "nwr[shop=warehouse][name=~Costco]",
-        "radius": 2000
+        "radius": 2000,
+        "legend": "Costco",
       },
       {
         "query": "nwr[amenity=cafe]",
-        "radius": 2000
+        "radius": 2000,
+        "legend": "Cafes",
       },
       {
         "query": "nwr[amenity=library]",
-        "radius": 1000
-      }
-    ]
+        "radius": 1000,
+        "legend": "Libraries",
+      },
+    ],
   },
   {
     "prompt": "I want to live near a skatepark.",
@@ -331,9 +397,10 @@ const examples = [
     "completion": [
       {
         "query": "nwr[leisure=pitch][sport=skateboard]",
-        "radius": 1000
-      }
-    ]
+        "radius": 1000,
+        "legend": "Skateparks",
+      },
+    ],
   },
   {
     "prompt": "I want to be near a ski resort.",
@@ -341,10 +408,11 @@ const examples = [
     "completion": [
       {
         "query": "nwr[landuse=winter_sports]",
-        "radius": 10000
-      }
-    ]
-  }
+        "radius": 10000,
+        "legend": "Ski Resorts",
+      },
+    ],
+  },
 ];
 
 import fs from "fs";
@@ -354,24 +422,26 @@ const payloadContent = fs.readFileSync(
   "utf8",
 );
 
-const writeStream = fs.createWriteStream('payload.jsonl');
+const writeStream = fs.createWriteStream("payload.jsonl");
 
 examples.forEach((example) => {
-  writeStream.write(JSON.stringify({
-    messages: [
-      {
-        role: "system",
-        content: payloadContent,
-      },
-      {
-        role: "user",
-        content: example.prompt,
-      },
-      {
-        role: "assistant",
-        content: JSON.stringify(example.completion),
-      },
-    ],
-  }) + "\n");
+  writeStream.write(
+    JSON.stringify({
+      messages: [
+        {
+          role: "system",
+          content: payloadContent,
+        },
+        {
+          role: "user",
+          content: example.prompt,
+        },
+        {
+          role: "assistant",
+          content: JSON.stringify(example.completion),
+        },
+      ],
+    }) + "\n",
+  );
 });
 writeStream.end();
