@@ -23,6 +23,7 @@ const keywords = params.prompt_query.map((match) => {
     query: match.query,
     results: query.execute(match.query + `[name](area=${params.area})`),
     radius: match.radius,
+    legend: match.legend
   };
 });
 
@@ -74,6 +75,7 @@ const payload = {
       const feature = entry.asFeature({
         "marker-color": color,
         index: index,
+        "legend": keywords[index].legend,
       });
 
       return feature;
