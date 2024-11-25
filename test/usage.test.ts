@@ -5,7 +5,7 @@ import { expect } from "@playwright/test";
 import { ChildProcess, spawn } from "child_process";
 import { setTimeout } from "timers/promises";
 
-describe("create and use a retro", () => {
+describe("navigate the site", () => {
   let serverProcess: ChildProcess;
   let browser: Browser;
   let leader: Page;
@@ -35,7 +35,6 @@ describe("create and use a retro", () => {
     await leader.getByRole("button", { name: "Filter" }).click();
     expect(leader.url()).toContain("/beta/demo/filter");
 
-    await leader.screenshot({ path: "screenshot.png" });
     await leader.getByLabel("Name").fill("Starbucks");
     await leader.getByLabel("Area").selectOption("new_york");
     await leader.getByRole("button", { name: "Apply" }).click();
