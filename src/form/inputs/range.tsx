@@ -18,10 +18,10 @@ function Range({ index, field }: InputProps) {
         className="range range-primary"
         type="range"
         id={field.name}
-        min={field.min}
-        max={field.max}
+        min={field.min.toString()}
+        max={field.max.toString()}
         step={field.step}
-        {...register(field.name)}
+        {...register(field.name) as React.InputHTMLAttributes<HTMLInputElement>}
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>

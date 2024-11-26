@@ -70,7 +70,9 @@ function Address({ index, field }: InputProps) {
         />
         <input
           type="hidden"
-          {...register(field.name)}
+          {...(register(field.name) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >)}
         />
         {field.hint && <span className="label-text-alt">{field.hint}</span>}
       </AddressAutofill>

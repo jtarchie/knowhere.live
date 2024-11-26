@@ -12,7 +12,9 @@ function Checkbox({ index, field }: InputProps) {
           className="checkbox checkbox-lg checkbox-primary"
           id={field.name}
           type="checkbox"
-          {...register(field.name)}
+          {...register(field.name) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
         />
       </label>
       {field.hint && <span className="label-text-alt">{field.hint}</span>}

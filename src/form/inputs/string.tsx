@@ -21,7 +21,7 @@ function String({ index, field }: InputProps) {
           minLength: field.minLength || 0,
           maxLength: field.maxLength,
           pattern: field.pattern ? new RegExp(field.pattern) : undefined,
-        })}
+        }) as React.InputHTMLAttributes<HTMLInputElement>}
       />
       {field.hint && <span className="label-text-alt">{field.hint}</span>}
     </div>
