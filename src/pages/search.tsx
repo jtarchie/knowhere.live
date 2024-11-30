@@ -5,7 +5,7 @@ import { Form } from "../form/component";
 import { useEffect, useState } from "preact/hooks";
 import { route } from "preact-router";
 
-function FilterPage(
+function SearchPage(
   { manifestName }: { path?: string; manifestName?: string },
 ) {
   const manager = new Manager();
@@ -53,4 +53,4 @@ function FilterPage(
   );
 }
 
-export { FilterPage };
+export { SearchPage };

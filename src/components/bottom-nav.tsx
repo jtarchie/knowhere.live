@@ -79,8 +79,8 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
         </button>
       )}
       <button
-        class={active(`/beta/${manifestName}/filter`) + " text-primary"}
-        onClick={redirect(`/beta/${manifestName}/filter`)}
+        class={active(`/beta/${manifestName}/search`) + " text-primary"}
+        onClick={redirect(`/beta/${manifestName}/search`)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
           />
         </svg>
 
-        <span class="btm-nav-label">Filter</span>
+        <span class="btm-nav-label">Search</span>
       </button>
       <button
         onClick={handleShare}

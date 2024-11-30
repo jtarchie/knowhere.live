@@ -136,9 +136,9 @@ function MapPage(
         show={!isLoading && geoJSON.features.length === 0}
       >
         <p class="py-4">
-          The search did not return any results. Please refine your{" "}
-          <a class="link link-primary" href={`/beta/${manifestName}/filter`}>
-            filter
+          The search did not return any results. Please refine your
+          <a class="link link-primary" href={`/beta/${manifestName}/search`}>
+            search criteria
           </a>.
         </p>
       </Dialog>

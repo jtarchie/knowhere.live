@@ -1,5 +1,5 @@
 import mapboxgl from "mapbox-gl";
-import { FilterPage } from "./pages/filter";
+import { SearchPage } from "./pages/search";
 import { HomePage } from "./pages/home";
 import { MapPage } from "./pages/map";
 import { render } from "preact";
@@ -18,7 +18,7 @@ function App() {
         getComponent={() =>
           import("./pages/editor").then((module) => module.EditorPage)}
       />
-      <FilterPage path="/beta/:manifestName/filter" />
+      <SearchPage path="/beta/:manifestName/search" />
       <HomePage path="/" />
     </Router>
   );
