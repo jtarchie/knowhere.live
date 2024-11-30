@@ -129,7 +129,7 @@ const line: LineLayerSpecification = {
   filter: ["==", ["geometry-type"], "LineString"],
 };
 
-function setupEvents(map: MapRef) {
+function setupEvents(map: MapRef): mapboxgl.Layer[] {
   const urlLayers = [
     `${sourceName}-fill`,
     `${sourceName}-fill-outline`,
@@ -169,9 +169,9 @@ function setupEvents(map: MapRef) {
   map.on("mouseleave", urlLayers, (_) => {
     map.getCanvas().style.cursor = "default";
   });
-}
 
-const layers = [circle, line, polygonFill, polygonOutlineFill, text, symbol];
+  return [circle, line, polygonFill, polygonOutlineFill, text, symbol];
+}
 
 function applyTransformations(
   geoJSON: GeoJSON.FeatureCollection,
@@ -250,4 +250,4 @@ function generateLighterColors(hex: string, steps: number) {
   return colors;
 }
 
-export { applyTransformations, layers, setupEvents, sourceName };
+export { applyTransformations, setupEvents, sourceName };

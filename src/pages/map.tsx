@@ -1,11 +1,16 @@
-import Map, { Layer, MapRef, NavigationControl, Source } from "react-map-gl";
+import Map, {
+  Layer,
+  LayerProps,
+  MapRef,
+  NavigationControl,
+  Source,
+} from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import "../index.css";
 import { BottomNav } from "../components/bottom-nav";
 import {
   applyTransformations,
-  layers,
   setupEvents,
   sourceName,
 } from "../render/layers";
@@ -35,6 +40,7 @@ function MapPage(
     emptyFeatureCollection,
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [layers, setLayers] = useState<mapboxgl.Layer[]>([]);
 
   useEffect(() => {
     const manager = new Manager();
@@ -65,7 +71,7 @@ function MapPage(
         }
 
         setGeoJSON(payload as GeoJSON.FeatureCollection);
-        setupEvents(mapRef.current as MapRef);
+        setLayers(setupEvents(mapRef.current as MapRef));
         applyTransformations(
           payload,
           (features: GeoJSON.FeatureCollection) => {
@@ -106,7 +112,7 @@ function MapPage(
             <NavigationControl position="top-right" />
             <Source id={sourceName} type="geojson" data={geoJSON}>
               {layers.map((layer) => {
-                return <Layer {...layer} />;
+                return <Layer {...layer as LayerProps} />;
               })}
             </Source>
           </Map>
