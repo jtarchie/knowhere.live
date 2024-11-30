@@ -94,6 +94,7 @@ const payload = {
           "fill": colors.pick(index),
           "fill-opacity": 0.5,
           "url": zillowURL(bounds.asBound()),
+          "legend": "Neighborhood",
         }),
       ],
     );
