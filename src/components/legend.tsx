@@ -2,14 +2,19 @@ import { useEffect, useState } from "preact/hooks";
 
 interface LegendProps {
   geoJSON: GeoJSON.FeatureCollection;
+  onLegendChange?: (legendState: { [legend: string]: boolean }) => void;
 }
 
 interface LegendItem {
   color: string;
   legend: string;
+  checked: boolean;
 }
 
-function Legend({ geoJSON }: LegendProps) {
+function Legend(
+  { geoJSON, onLegendChange = (legendState) => console.log(legendState) }:
+    LegendProps,
+) {
   const [legendItems, setLegendItems] = useState<LegendItem[]>([]);
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -22,7 +27,7 @@ function Legend({ geoJSON }: LegendProps) {
       const color = feature.properties?.["marker-color"] || "#555";
 
       if (legend && !seen.has(legend)) {
-        items.push({ color, legend });
+        items.push({ color, legend, checked: true }); // Default all to checked initially
         seen.add(legend);
       }
     });
@@ -30,14 +35,29 @@ function Legend({ geoJSON }: LegendProps) {
     setLegendItems(items);
   }, [geoJSON]);
 
+  const handleCheckboxChange = (index: number) => {
+    setLegendItems((prevItems) => {
+      const newItems = [...prevItems];
+      newItems[index].checked = !newItems[index].checked;
+
+      // Trigger the callback with the updated legend state
+      const legendState = newItems.reduce((state, item) => {
+        state[item.legend] = item.checked;
+        return state;
+      }, {} as { [legend: string]: boolean });
+
+      onLegendChange?.(legendState);
+
+      return newItems;
+    });
+  };
+
   if (legendItems.length === 0) {
     return null;
   }
 
   return (
-    <div
-      className={`${isVisible ? "w-64" : "w-12"}`}
-    >
+    <div className={`${isVisible ? "w-64" : "w-12"}`}>
       {!isVisible && (
         <button
           onClick={() => setIsVisible(true)}
@@ -50,7 +70,7 @@ function Legend({ geoJSON }: LegendProps) {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6"
+            className="size-6"
           >
             <path
               stroke-linecap="round"
@@ -75,11 +95,25 @@ function Legend({ geoJSON }: LegendProps) {
           <ul>
             {legendItems.map((item, index) => (
               <li key={index} className="flex items-center mb-1">
-                <span
-                  className="w-4 h-4 mr-2 rounded-full border border-[#333]"
-                  style={{ backgroundColor: item.color }}
+                <label
+                  htmlFor={`legend-${index}`}
+                  className="flex items-center flex-1 cursor-pointer"
+                >
+                  <span
+                    className="w-4 h-4 mr-2 rounded-full border border-[#333]"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="text-secondary">{item.legend}</span>
+                </label>
+                <input
+                  id={`legend-${index}`}
+                  type="checkbox"
+                  className="checkbox ml-2 checkbox-primary"
+                  checked={item.checked}
+                  onChange={() =>
+                    handleCheckboxChange(index)}
+                  aria-label={`Toggle ${item.legend}`}
                 />
-                <span className="text-secondary">{item.legend}</span>
               </li>
             ))}
           </ul>

@@ -111,7 +111,22 @@ function MapPage(
             </Source>
           </Map>
           <div class="absolute top-4 left-4 z-10">
-            <Legend geoJSON={geoJSON} />
+            <Legend
+              geoJSON={geoJSON}
+              onLegendChange={(legendState) => {
+                Object.entries(legendState).forEach(([prefix, checked]) => {
+                  layers.forEach((layer) => {
+                    if (layer.id.startsWith(prefix)) {
+                      mapRef.current?.getMap().setLayoutProperty(
+                        layer.id,
+                        "visibility",
+                        checked ? "visible" : "none",
+                      );
+                    }
+                  });
+                });
+              }}
+            />
           </div>
         </div>
         <BottomNav manifestName={manifestName} />
