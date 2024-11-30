@@ -9,11 +9,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import "../index.css";
 import { BottomNav } from "../components/bottom-nav";
-import {
-  applyTransformations,
-  setupEvents,
-  sourceName,
-} from "../render/layers";
+import { setupMapWithGeoJSON, sourceName } from "../render/layers";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { Manager } from "../render/manager";
 import { LngLatBoundsLike } from "mapbox-gl";
@@ -70,13 +66,11 @@ function MapPage(
           payload = emptyFeatureCollection;
         }
 
-        setGeoJSON(payload as GeoJSON.FeatureCollection);
-        setLayers(setupEvents(mapRef.current as MapRef));
-        applyTransformations(
-          payload,
-          (features: GeoJSON.FeatureCollection) => {
-            setGeoJSON(features);
-          },
+        setupMapWithGeoJSON(
+          mapRef.current as MapRef,
+          payload as GeoJSON.FeatureCollection,
+          setGeoJSON,
+          setLayers,
         );
         mapRef.current?.once(
           "idle",

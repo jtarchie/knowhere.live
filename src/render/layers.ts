@@ -250,4 +250,16 @@ function generateLighterColors(hex: string, steps: number) {
   return colors;
 }
 
-export { applyTransformations, setupEvents, sourceName };
+function setupMapWithGeoJSON(
+  map: MapRef,
+  geoJSON: GeoJSON.FeatureCollection,
+  setGeoJSON: (geoJSON: GeoJSON.FeatureCollection) => void,
+  setLayers: (layers: mapboxgl.Layer[]) => void,
+) {
+  setGeoJSON(geoJSON);
+  const layers = setupEvents(map);
+  setLayers(layers);
+  applyTransformations(geoJSON, setGeoJSON);
+}
+
+export { setupMapWithGeoJSON, sourceName };
