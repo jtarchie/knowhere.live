@@ -88,15 +88,15 @@ const payload = {
     // create into combined bounds object
     const bounds = geo.asBounds(...entriesWithSpecifiedRadius);
 
-    return features.concat(
-      [
-        bounds.asFeature({
-          "fill": colors.pick(index),
-          "fill-opacity": 0.5,
-          "url": zillowURL(bounds.asBound()),
-          "legend": "Neighborhood",
-        }),
-      ],
+    return [
+      bounds.asFeature({
+        "fill": colors.pick(index),
+        "fill-opacity": 0.5,
+        "url": zillowURL(bounds.asBound()),
+        "legend": "Neighborhood",
+      }),
+    ].concat(
+      features,
     );
   }),
 };
