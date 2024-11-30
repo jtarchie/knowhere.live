@@ -10,135 +10,153 @@ import tinycolor from "tinycolor2";
 const defaultColor = "#555";
 const sourceName = "geojson";
 
-const polygonFill: FillLayerSpecification = {
-  id: `${sourceName}-fill`,
-  type: "fill",
-  source: sourceName,
-  paint: {
-    "fill-color": ["coalesce", ["get", "fill"], defaultColor],
-    "fill-opacity": ["coalesce", ["get", "fill-opacity"], 0.3],
-  },
-  filter: ["==", ["geometry-type"], "Polygon"],
-};
+function createLayerDefinitions(legendValue?: string) {
+  const prefix = legendValue ? `${legendValue}-` : "";
+  const legendFilter = legendValue
+    ? ["==", ["get", "legend"], legendValue]
+    : ["!", ["has", "legend"]];
 
-const polygonOutlineFill: LineLayerSpecification = {
-  id: `${sourceName}-fill-outline`,
-  type: "line",
-  source: sourceName,
-  paint: {
-    "line-color": ["coalesce", ["get", "stroke"], defaultColor],
-    "line-width": ["coalesce", ["get", "stroke-width"], 2],
-    "line-opacity": ["coalesce", ["get", "stroke-opacity"], 1],
-  },
-  filter: ["==", ["geometry-type"], "Polygon"],
-};
+  const polygonFill: FillLayerSpecification = {
+    id: `${prefix}-${sourceName}-fill`,
+    type: "fill",
+    source: sourceName,
+    paint: {
+      "fill-color": ["coalesce", ["get", "fill"], defaultColor],
+      "fill-opacity": ["coalesce", ["get", "fill-opacity"], 0.3],
+    },
+    filter: ["all", legendFilter, ["==", ["geometry-type"], "Polygon"]],
+  };
 
-const circle: CircleLayerSpecification = {
-  id: `${sourceName}-marker`,
-  type: "circle",
-  source: sourceName,
-  paint: {
-    "circle-radius": [
-      "match",
-      ["get", "marker-size"],
-      "small",
-      4,
-      "medium",
-      8,
-      "large",
-      12,
-      8,
-    ],
-    "circle-color": [
-      "coalesce",
-      ["get", "marker-color"],
-      defaultColor,
-    ],
-    "circle-stroke-width": 1,
-    "circle-stroke-color": "#333",
-  },
-  filter: ["all", ["==", ["geometry-type"], "Point"], ["!", [
-    "has",
-    "marker-symbol",
-  ]]],
-};
+  const polygonOutlineFill: LineLayerSpecification = {
+    id: `${prefix}-${sourceName}-fill-outline`,
+    type: "line",
+    source: sourceName,
+    paint: {
+      "line-color": ["coalesce", ["get", "stroke"], defaultColor],
+      "line-width": ["coalesce", ["get", "stroke-width"], 2],
+      "line-opacity": ["coalesce", ["get", "stroke-opacity"], 1],
+    },
+    filter: ["all", legendFilter, ["==", ["geometry-type"], "Polygon"]],
+  };
 
-const text: SymbolLayerSpecification = {
-  id: `${sourceName}-marker-text`,
-  type: "symbol",
-  source: sourceName,
-  layout: {
-    "text-field": ["get", "title"],
-    "text-offset": [0, 2],
-  },
-  "paint": {
-    "text-halo-color": [
-      "coalesce",
-      ["get", "marker-color"],
-      defaultColor,
-    ],
-    "text-color": "#333",
-    "text-halo-width": 1,
-  },
-  filter: ["all", ["==", ["geometry-type"], "Point"], ["!", [
-    "has",
-    "marker-symbol",
-  ]]],
-};
+  const circle: CircleLayerSpecification = {
+    id: `${prefix}-${sourceName}-marker`,
+    type: "circle",
+    source: sourceName,
+    paint: {
+      "circle-radius": [
+        "match",
+        ["get", "marker-size"],
+        "small",
+        4,
+        "medium",
+        8,
+        "large",
+        12,
+        8,
+      ],
+      "circle-color": [
+        "coalesce",
+        ["get", "marker-color"],
+        defaultColor,
+      ],
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#333",
+    },
+    filter: ["all", legendFilter, ["==", ["geometry-type"], "Point"], ["!", [
+      "has",
+      "marker-symbol",
+    ]]],
+  };
 
-const symbol: SymbolLayerSpecification = {
-  id: `${sourceName}-marker-icon`,
-  type: "symbol",
-  source: sourceName,
-  layout: {
-    "text-field": ["get", "title"],
-    "text-offset": [0, 2],
-    "icon-image": ["get", "marker-symbol"],
-    "icon-size": [
-      "match",
-      ["get", "marker-size"],
-      "small",
-      1,
-      "large",
-      2,
-      1.5,
-    ],
-    "icon-allow-overlap": false,
-  },
-  "paint": {
-    "text-halo-color": [
-      "coalesce",
-      ["get", "marker-color"],
-      defaultColor,
-    ],
-    "text-color": "#333",
-    "text-halo-width": 1,
-  },
-  filter: ["all", ["==", ["geometry-type"], "Point"], ["has", "marker-symbol"]],
-};
+  const text: SymbolLayerSpecification = {
+    id: `${prefix}-${sourceName}-marker-text`,
+    type: "symbol",
+    source: sourceName,
+    layout: {
+      "text-field": ["get", "title"],
+      "text-offset": [0, 2],
+    },
+    "paint": {
+      "text-halo-color": [
+        "coalesce",
+        ["get", "marker-color"],
+        defaultColor,
+      ],
+      "text-color": "#333",
+      "text-halo-width": 1,
+    },
+    filter: ["all", legendFilter, ["==", ["geometry-type"], "Point"], ["!", [
+      "has",
+      "marker-symbol",
+    ]]],
+  };
 
-const line: LineLayerSpecification = {
-  id: `${sourceName}-line`,
-  type: "line",
-  source: sourceName,
-  paint: {
-    "line-color": ["coalesce", ["get", "stroke"], defaultColor],
-    "line-width": ["coalesce", ["get", "stroke-width"], 2],
-    "line-opacity": ["coalesce", ["get", "stroke-opacity"], 1],
-  },
-  filter: ["==", ["geometry-type"], "LineString"],
-};
+  const symbol: SymbolLayerSpecification = {
+    id: `${prefix}-${sourceName}-marker-icon`,
+    type: "symbol",
+    source: sourceName,
+    layout: {
+      "text-field": ["get", "title"],
+      "text-offset": [0, 2],
+      "icon-image": ["get", "marker-symbol"],
+      "icon-size": [
+        "match",
+        ["get", "marker-size"],
+        "small",
+        1,
+        "large",
+        2,
+        1.5,
+      ],
+      "icon-allow-overlap": false,
+    },
+    "paint": {
+      "text-halo-color": [
+        "coalesce",
+        ["get", "marker-color"],
+        defaultColor,
+      ],
+      "text-color": "#333",
+      "text-halo-width": 1,
+    },
+    filter: ["all", legendFilter, ["==", ["geometry-type"], "Point"], [
+      "has",
+      "marker-symbol",
+    ]],
+  };
 
-function setupEvents(map: MapRef): mapboxgl.Layer[] {
-  const urlLayers = [
-    `${sourceName}-fill`,
-    `${sourceName}-fill-outline`,
-    `${sourceName}-marker`,
-    `${sourceName}-marker-text`,
-    `${sourceName}-line`,
+  const line: LineLayerSpecification = {
+    id: `${prefix}-${sourceName}-line`,
+    type: "line",
+    source: sourceName,
+    paint: {
+      "line-color": ["coalesce", ["get", "stroke"], defaultColor],
+      "line-width": ["coalesce", ["get", "stroke-width"], 2],
+      "line-opacity": ["coalesce", ["get", "stroke-opacity"], 1],
+    },
+    filter: ["all", legendFilter, ["==", ["geometry-type"], "LineString"]],
+  };
+
+  return [circle, line, polygonFill, polygonOutlineFill, text, symbol];
+}
+
+function setupLayersAndEvents(
+  map: MapRef,
+  geoJSON: GeoJSON.FeatureCollection,
+): mapboxgl.Layer[] {
+  const legendValues = [
+    null,
+    ...new Set(
+      geoJSON.features.map((f) => f.properties?.legend).filter(Boolean),
+    ),
   ];
+  const layers = legendValues.flatMap((legendValue) =>
+    createLayerDefinitions(legendValue)
+  );
+  const layerIDs = layers.map((layer) => layer.id);
 
-  map.on("click", urlLayers, (event) => {
+  map.on("click", layerIDs, (event) => {
     if (!event) return;
 
     const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
@@ -152,7 +170,7 @@ function setupEvents(map: MapRef): mapboxgl.Layer[] {
     }
   });
 
-  map.on("mouseover", urlLayers, (event) => {
+  map.on("mouseover", layerIDs, (event) => {
     if (!event) return;
 
     const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
@@ -166,11 +184,11 @@ function setupEvents(map: MapRef): mapboxgl.Layer[] {
     }
   });
 
-  map.on("mouseleave", urlLayers, (_) => {
+  map.on("mouseleave", layerIDs, (_) => {
     map.getCanvas().style.cursor = "default";
   });
 
-  return [circle, line, polygonFill, polygonOutlineFill, text, symbol];
+  return layers;
 }
 
 function applyTransformations(
@@ -257,8 +275,10 @@ function setupMapWithGeoJSON(
   setLayers: (layers: mapboxgl.Layer[]) => void,
 ) {
   setGeoJSON(geoJSON);
-  const layers = setupEvents(map);
+
+  const layers = setupLayersAndEvents(map, geoJSON);
   setLayers(layers);
+
   applyTransformations(geoJSON, setGeoJSON);
 }
 
