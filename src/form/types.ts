@@ -30,9 +30,34 @@ interface PrefixField extends BaseField {
   defaultValue: string;
 }
 
+// taken from Mapbox Address Autocomplete response
+export interface AddressValue {
+  full_address: string;
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+  address_level1?: string;
+  address_level2?: string;
+  address_level3?: string;
+  address_line1?: string;
+  address_line2?: string;
+  address_line3?: string;
+  country?: string;
+  country_code?: string;
+  description?: string;
+  feature_name?: string;
+  language?: string;
+  maki?: string;
+  mapbox_id?: string;
+  matching_name?: string;
+  place_name?: string;
+  place_type?: string;
+  postcode?: string;
+}
+
 interface AddressField extends BaseField {
   type: "address";
-  defaultValue: string;
+  defaultValue: AddressValue;
 }
 
 interface RangeField extends BaseField {

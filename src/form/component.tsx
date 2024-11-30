@@ -40,8 +40,13 @@ function Form({
   const dialogRef = useRef<HTMLDialogElement>(null);
   // Initialize react-hook-form with default values
   const defaultValues = schema.reduce((acc, field) => {
-    if (field.defaultValue !== undefined) {
+    if (typeof field.defaultValue === "string") {
       acc[field.name] = field.defaultValue;
+    }
+    if (typeof field.defaultValue === "object") {
+      Object.entries(field.defaultValue).forEach(([key, value]) => {
+        acc[`${field.name}.${key}`] = value;
+      });
     }
     return acc;
   }, {} as FormValues);

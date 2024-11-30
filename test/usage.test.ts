@@ -39,6 +39,23 @@ describe("navigate the site", () => {
     await leader.getByLabel("Area").selectOption("new_york");
     await leader.getByRole("button", { name: "Apply" }).click();
 
+    await expect(leader.locator("#app")).not.toContainText("No results found");
     expect(leader.url()).toContain("/beta/demo/map");
-  }, 10_000);
+  });
+
+  test.only("searching nearby", async () => {
+    await leader.goto("http://localhost:8788/beta/nearby/map");
+    await leader.getByRole("button", { name: "Filter" }).click();
+    expect(leader.url()).toContain("/beta/nearby/filter");
+
+    await leader.getByLabel("Address").fill(
+      "42 grand street new york ny 10013",
+    );
+    await leader.getByRole("option", { name: /New York, New York/ }).click();
+    await leader.getByLabel("Banking").click();
+    await leader.getByRole("button", { name: "Apply" }).click();
+
+    await expect(leader.locator("#app")).not.toContainText("No results found");
+    expect(leader.url()).toContain("/beta/nearby/map");
+  });
 });

@@ -1,61 +1,59 @@
+import React, { useCallback, useEffect, useState } from "react";
 import { AddressAutofill } from "@mapbox/search-js-react";
 import mapboxgl from "mapbox-gl";
-import { useCallback, useEffect, useState } from "preact/hooks";
-import { InputProps } from "../types";
 import { useFormContext } from "react-hook-form";
-
-interface AddressValue {
-  lat: number;
-  lon: number;
-  full_address: string;
-}
-
-function parseAddressValue(value: string | null): AddressValue {
-  if (!value) {
-    return {
-      lat: 0,
-      lon: 0,
-      full_address: "",
-    };
-  }
-
-  const [fullAddress, latitude, longitude] = value.split("|");
-  return {
-    lat: parseFloat(latitude),
-    lon: parseFloat(longitude),
-    full_address: fullAddress,
-  };
-}
+import { InputProps } from "../types";
 
 function Address({ index, field }: InputProps) {
   if (field.type !== "address") return null;
 
   const { register, getValues, setValue } = useFormContext(); // Access the form methods
 
-  const value = getValues(field.name);
-  const parsedValue = parseAddressValue(value);
+  const fullAddress = getValues(`${field.name}.full_address`);
   const [visibleAddress, setVisibleAddress] = useState<string>(
-    parsedValue.full_address,
+    fullAddress,
   );
 
   useEffect(() => {
-    setVisibleAddress(parsedValue.full_address);
-  }, [parsedValue.full_address]);
+    setVisibleAddress(fullAddress);
+  }, []);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
     const feature = response.features[0];
-    setVisibleAddress(feature.properties?.full_address);
+    const properties = feature.properties || {};
+    const geometry = feature.geometry as GeoJSON.Point;
+    const [lon, lat] = geometry.coordinates;
 
-    const [lon, lat] = (feature.geometry as GeoJSON.Point).coordinates;
-    setValue(
-      field.name,
-      [feature.properties?.full_address, lat, lon].join("|"),
-    );
+    setVisibleAddress(properties.full_address);
+    console.log("here");
+
+    setValue(`${field.name}.full_address`, properties.full_address);
+    setValue(`${field.name}.latitude`, lat);
+    setValue(`${field.name}.longitude`, lon);
+    setValue(`${field.name}.accuracy`, properties.accuracy);
+    setValue(`${field.name}.address_level1`, properties.address_level1);
+    setValue(`${field.name}.address_level2`, properties.address_level2);
+    setValue(`${field.name}.address_level3`, properties.address_level3);
+    setValue(`${field.name}.address_line1`, properties.address_line1);
+    setValue(`${field.name}.address_line2`, properties.address_line2);
+    setValue(`${field.name}.address_line3`, properties.address_line3);
+    setValue(`${field.name}.country`, properties.country);
+    setValue(`${field.name}.country_code`, properties.country_code);
+    setValue(`${field.name}.description`, properties.description);
+    setValue(`${field.name}.feature_name`, properties.feature_name);
+    setValue(`${field.name}.language`, properties.language);
+    setValue(`${field.name}.maki`, properties.maki);
+    setValue(`${field.name}.mapbox_id`, properties.mapbox_id);
+    setValue(`${field.name}.matching_name`, properties.matching_name);
+    setValue(`${field.name}.metadata`, properties.metadata);
+    setValue(`${field.name}.place_name`, properties.place_name);
+    setValue(`${field.name}.place_type`, properties.place_type);
+    setValue(`${field.name}.postcode`, properties.postcode);
   }, []);
 
   return (
     <div key={index} className="form-control">
-      <label className="label" for={field.name}>
+      <label className="label" htmlFor={field.name}>
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <AddressAutofill
@@ -70,9 +68,157 @@ function Address({ index, field }: InputProps) {
         />
         <input
           type="hidden"
-          {...(register(field.name) as React.InputHTMLAttributes<
+          {...register(
+            `${field.name}.full_address`,
+          ) as React.InputHTMLAttributes<
             HTMLInputElement
-          >)}
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.latitude`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.longitude`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.accuracy`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.address_level1`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.address_level2`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.address_level3`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.address_line1`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.address_line2`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.address_line3`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.country`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.country_code`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.description`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.feature_name`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.language`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.maki`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.mapbox_id`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(
+            `${field.name}.matching_name`,
+          ) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.metadata`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.place_name`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.place_type`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
+        />
+        <input
+          type="hidden"
+          {...register(`${field.name}.postcode`) as React.InputHTMLAttributes<
+            HTMLInputElement
+          >}
         />
         {field.hint && <span className="label-text-alt">{field.hint}</span>}
       </AddressAutofill>
@@ -80,5 +226,4 @@ function Address({ index, field }: InputProps) {
   );
 }
 
-export type { AddressValue };
 export { Address };

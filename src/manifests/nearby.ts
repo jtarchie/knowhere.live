@@ -98,9 +98,12 @@ const manifest: Manifest = {
       type: "address",
       label: "Address",
       name: "address",
-      placeholder: "742 Evergreen Terrace, Springfield ",
-      defaultValue:
-        "200 E Colfax Ave, Denver, Colorado 80203|39.7401684|-104.9894902",
+      placeholder: "742 Evergreen Terrace, Springfield, USA",
+      defaultValue: {
+        full_address: "200 E Colfax Ave, Denver, Colorado 80203",
+        latitude: 39.7401684,
+        longitude: -104.9894902,
+      },
       hint: "Full address of location",
     },
     {

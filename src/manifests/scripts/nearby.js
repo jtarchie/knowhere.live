@@ -1,3 +1,71 @@
+const stateMapping = {
+  "ca-ab": "alberta",
+  "ca-bc": "british_columbia",
+  "ca-mb": "manitoba",
+  "ca-nb": "new_brunswick",
+  "ca-nl": "newfoundland_and_labrador",
+  "ca-nt": "northwest_territories",
+  "ca-ns": "nova_scotia",
+  "ca-nu": "nunavut",
+  "ca-on": "ontario",
+  "ca-pe": "prince_edward_island",
+  "ca-qc": "quebec",
+  "ca-sk": "saskatchewan",
+  "ca-yt": "yukon",
+  "us-al": "alabama",
+  "us-ak": "alaska",
+  "us-az": "arizona",
+  "us-ar": "arkansas",
+  "us-ca": "california",
+  "us-co": "colorado",
+  "us-ct": "connecticut",
+  "us-de": "delaware",
+  "us-dc": "district_of_columbia",
+  "us-fl": "florida",
+  "us-ga": "georgia",
+  "us-hi": "hawaii",
+  "us-id": "idaho",
+  "us-il": "illinois",
+  "us-in": "indiana",
+  "us-ia": "iowa",
+  "us-ks": "kansas",
+  "us-ky": "kentucky",
+  "us-la": "louisiana",
+  "us-me": "maine",
+  "us-md": "maryland",
+  "us-ma": "massachusetts",
+  "us-mi": "michigan",
+  "us-mn": "minnesota",
+  "us-ms": "mississippi",
+  "us-mo": "missouri",
+  "us-mt": "montana",
+  "us-ne": "nebraska",
+  "us-nv": "nevada",
+  "us-nh": "new_hampshire",
+  "us-nj": "new_jersey",
+  "us-nm": "new_mexico",
+  "us-ny": "new_york",
+  "us-nc": "north_carolina",
+  "us-nd": "north_dakota",
+  "us-oh": "ohio",
+  "us-ok": "oklahoma",
+  "us-or": "oregon",
+  "us-pa": "pennsylvania",
+  "us-pr": "puerto_rico",
+  "us-ri": "rhode_island",
+  "us-sc": "south_carolina",
+  "us-sd": "south_dakota",
+  "us-tn": "tennessee",
+  "us-tx": "texas",
+  "us-ut": "utah",
+  "us-vt": "vermont",
+  "us-va": "virginia",
+  "us-wa": "washington",
+  "us-wv": "west_virginia",
+  "us-wi": "wisconsin",
+  "us-wy": "wyoming",
+};
+
 const walkScore = (distance, limit) => {
   // return 100 * Math.max(0, 1 - (distance / limit));
   return 100 * Math.exp(-0.5 * (distance / limit));
@@ -14,20 +82,6 @@ const median = (values) => {
   return (values[mid - 1] + values[mid]) / 2;
 };
 
-// const harmonicMean = (values) => {
-//   // Calculate the sum of reciprocals (1/value) for each value in the array
-//   const reciprocalSum = values.reduce((sum, value) => sum + (1 / value), 0);
-
-//   // The harmonic mean is the number of values divided by the reciprocal sum
-//   return values.length / reciprocalSum;
-// };
-
-// const average = (values) => {
-//   const sum = values.reduce((sum, value) => sum + value, 0);
-
-//   return sum / values.length;
-// };
-
 const overallScore = (distances, limit) => {
   const values = distances.filter((distance) => distance <= limit);
   if (values.length === 0) return 0;
@@ -36,14 +90,12 @@ const overallScore = (distances, limit) => {
   return median(scores);
 };
 
-const [fullAddress, lat, lon] = params.address.split("|");
-const center = geo.asPoint(lat || 39.7401684, lon || -104.9894902);
-const [parsedAddress, found] = address.parse(fullAddress);
-if (!found) {
-  throw new Error("could not parse address for state");
-}
+const { full_address, latitude, longitude, address_level1: state } =
+  params.address;
+const center = geo.asPoint(latitude, longitude);
 
-const area = parsedAddress.state.toLowerCase();
+const area = stateMapping[`ca-${state.toLowerCase()}`] ||
+  stateMapping[`us-${state.toLowerCase()}`];
 const boundary = center.asBound().extend(params.radius);
 let features = [];
 
@@ -71,8 +123,6 @@ Object.keys(params).forEach((key, index) => {
         "marker-color": colors.pick(index),
         "title": result.tags.name,
         "legend": key,
-        // HINT: adds icons instead of circles of the color
-        // "marker-symbol": filters[key].markerSymbol
       });
     }));
   }
@@ -86,12 +136,12 @@ const scores = [
 
 const score = scores.map(([type, limit]) => {
   return type + ": " + (overallScore(distances, limit) | 0) + "%";
-}).join("\\n");
+}).join("\n");
 
 features.push(
   center.asFeature({
     "marker-color": colors.pick(0),
-    "title": fullAddress + "\\n" + score,
+    "title": full_address + "\n" + score,
   }),
 );
 
