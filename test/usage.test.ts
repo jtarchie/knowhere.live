@@ -43,7 +43,8 @@ describe("navigate the site", () => {
     expect(leader.url()).toContain("/beta/demo/map");
   });
 
-  test.only("searching nearby", async () => {
+  // does not work at the moment
+  test("searching nearby", async () => {
     await leader.goto("http://localhost:8788/beta/nearby/map");
     await leader.getByRole("button", { name: "Filter" }).click();
     expect(leader.url()).toContain("/beta/nearby/filter");
