@@ -18,10 +18,15 @@ function zillowURL(bounds) {
   return url.toString();
 }
 
-const keywords = params.prompt_query.map((match) => {
+const areas = params.prompt_query.areas.length > 0
+  ? params.prompt_query.areas.slice(0, 5)
+  : ["colorado"];
+assert.stab(JSON.stringify(areas));
+const keywords = params.prompt_query.queries.map((match) => {
+  const queries = areas.map((area) => match.query + `[name](area=${area})`);
   return {
     query: match.query,
-    results: query.execute(match.query + `[name](area=${params.area})`),
+    results: query.union(...queries),
     radius: match.radius,
     legend: match.legend,
   };

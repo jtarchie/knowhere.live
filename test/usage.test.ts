@@ -40,7 +40,7 @@ describe("navigate the site", () => {
     await leader.getByRole("button", { name: "Apply" }).click();
 
     expect(leader.url()).toContain("/beta/demo/map");
-    const dialog = leader.getByRole("dialog");
+    const dialog = await leader.getByRole("dialog");
     expect(await dialog.getAttribute("open")).toBe(null);
   });
 
@@ -57,7 +57,7 @@ describe("navigate the site", () => {
     await leader.getByRole("button", { name: "Apply" }).click();
 
     expect(leader.url()).toContain("/beta/nearby/map");
-    const dialog = leader.getByRole("dialog");
+    const dialog = await leader.getByRole("dialog");
     expect(await dialog.getAttribute("open")).toBe(null);
   });
 });

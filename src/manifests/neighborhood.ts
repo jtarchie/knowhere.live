@@ -11,17 +11,18 @@ const manifest: Manifest = {
       type: "prompt",
       label: "What are you looking for in your neighborhood?",
       name: "prompt",
-      placeholder: "I want to live near a park",
-      defaultValue: "I want to live near a park",
-      hint: "Describe your ideal neighborhood location.",
+      placeholder: "I want to live near a park in Colorado.",
+      defaultValue: "I want to live near a park in Colorado.",
+      hint:
+        "Describe your ideal neighborhood location. If no location is specified, the search will default to Colorado.",
     },
-    {
-      type: "area",
-      label: "Area",
-      name: "area",
-      defaultValue: "colorado",
-      hint: "Select the state to search within",
-    },
+    // {
+    //   type: "area",
+    //   label: "Area",
+    //   name: "area",
+    //   defaultValue: "colorado",
+    //   hint: "Select the state to search within",
+    // },
   ],
   about: "Describe your ideal neighborhood location.",
 };
