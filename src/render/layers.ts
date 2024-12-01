@@ -189,15 +189,15 @@ function setupLayersAndEvents(
     }
   });
 
-  map.on("mouseenter", layerIDs, (event) => {
+  map.on("mousemove", layerIDs, (event) => {
     if (!event) return;
 
     const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
 
     if (features && features.length > 0) {
       const feature = features[0];
-
       const description = feature.properties?.description;
+
       if (description) {
         popup
           .setLngLat(event.lngLat)
