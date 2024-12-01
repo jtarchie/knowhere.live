@@ -156,6 +156,11 @@ function setupLayersAndEvents(
   );
   const layerIDs = layers.map((layer) => layer.id);
 
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+  });
+
   map.on("click", layerIDs, (event) => {
     if (!event) return;
 
@@ -184,8 +189,27 @@ function setupLayersAndEvents(
     }
   });
 
+  map.on("mouseenter", layerIDs, (event) => {
+    if (!event) return;
+
+    const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
+
+    if (features && features.length > 0) {
+      const feature = features[0];
+
+      const description = feature.properties?.description;
+      if (description) {
+        popup
+          .setLngLat(event.lngLat)
+          .setHTML(description)
+          .addTo(map.getMap());
+      }
+    }
+  });
+
   map.on("mouseleave", layerIDs, (_) => {
     map.getCanvas().style.cursor = "default";
+    popup.remove();
   });
 
   return layers;
