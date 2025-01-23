@@ -57,7 +57,7 @@ function Address({ index, field }: InputProps) {
         <span className="label-text text-lg">{field.label}</span>
       </label>
       <AddressAutofill
-        accessToken={mapboxgl.accessToken}
+        accessToken={mapboxgl.accessToken as string}
         onRetrieve={onRetrieve}
       >
         <input

@@ -239,7 +239,7 @@ function applyTransformations(
       );
       url.searchParams.append("polygons", "true");
       url.searchParams.append("denoise", "1");
-      url.searchParams.append("access_token", mapboxgl.accessToken);
+      url.searchParams.append("access_token", mapboxgl.accessToken as string);
 
       fetch(url.toString()).then(async (response) => {
         const featureCollection = await response

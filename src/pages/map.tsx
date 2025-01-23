@@ -97,7 +97,7 @@ function MapPage(
           <Map
             ref={mapRef as unknown as RefCallback<MapRef>}
             style={{ width: "100%", height: "100%" }}
-            mapboxAccessToken={mapboxgl.accessToken}
+            mapboxAccessToken={mapboxgl.accessToken as string}
             initialViewState={{
               bounds: defaultBounds,
             }}
