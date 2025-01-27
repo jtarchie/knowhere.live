@@ -8,9 +8,7 @@ function Prompt({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="label" for={field.name}>
-        <span className="label-text text-lg">{field.label}</span>
-      </label>
+      <label className="fieldset-label" htmlFor={field.name}>{field.label}</label>
       <textarea
         className="textarea textarea-bordered textarea-lg textarea-primary"
         id={field.name}
@@ -22,7 +20,7 @@ function Prompt({ index, field }: InputProps) {
         })}
       >
       </textarea>
-      {field.hint && <span className="label-text-alt">{field.hint}</span>}
+      {field.hint && <p className="label-text-alt">{field.hint}</p>}
     </div>
   );
 }

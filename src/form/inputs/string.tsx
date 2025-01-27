@@ -8,9 +8,7 @@ function String({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="label" htmlFor={field.name}>
-        <span className="label-text text-lg">{field.label}</span>
-      </label>
+      <label className="fieldset-label" htmlFor={field.name}>{field.label}</label>
       <input
         className="input input-bordered input-lg input-primary"
         id={field.name}
@@ -23,7 +21,7 @@ function String({ index, field }: InputProps) {
           pattern: field.pattern ? new RegExp(field.pattern) : undefined,
         }) as React.InputHTMLAttributes<HTMLInputElement>}
       />
-      {field.hint && <span className="label-text-alt">{field.hint}</span>}
+      {field.hint && <p className="label-text-alt">{field.hint}</p>}
     </div>
   );
 }

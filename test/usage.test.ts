@@ -41,7 +41,7 @@ describe("navigate the site", () => {
 
     expect(leader.url()).toContain("/beta/demo/map");
     const dialog = await leader.getByRole("dialog");
-    expect(await dialog.getAttribute("open")).toBe(null);
+    expect(await dialog.all()).toHaveLength(0);
   });
 
   test("searching nearby", async () => {
@@ -58,6 +58,6 @@ describe("navigate the site", () => {
 
     expect(leader.url()).toContain("/beta/nearby/map");
     const dialog = await leader.getByRole("dialog");
-    expect(await dialog.getAttribute("open")).toBe(null);
+    expect(await dialog.all()).toHaveLength(0);
   });
 });

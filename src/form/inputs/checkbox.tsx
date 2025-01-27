@@ -6,8 +6,7 @@ function Checkbox({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="label cursor-pointer" htmlFor={field.name}>
-        <span className="label-text text-lg">{field.label}</span>
+      <label className="fieldset-label cursor-pointer text-lg" htmlFor={field.name}>
         <input
           className="checkbox checkbox-lg checkbox-primary"
           id={field.name}
@@ -16,8 +15,9 @@ function Checkbox({ index, field }: InputProps) {
             HTMLInputElement
           >}
         />
+        {field.label}
       </label>
-      {field.hint && <span className="label-text-alt">{field.hint}</span>}
+      {field.hint && <p className="label-text-alt">{field.hint}</p>}
     </div>
   );
 }

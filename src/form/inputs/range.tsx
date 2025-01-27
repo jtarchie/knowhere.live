@@ -9,11 +9,7 @@ function Range({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="label" for={field.name}>
-        <span className="label-text text-lg">
-          {field.label}: {currentValue}
-        </span>
-      </label>
+      <label className="fieldset-label" htmlFor={field.name}>{field.label}: {currentValue}</label>
       <input
         className="range range-primary"
         type="range"
@@ -23,7 +19,7 @@ function Range({ index, field }: InputProps) {
         step={field.step}
         {...register(field.name) as React.InputHTMLAttributes<HTMLInputElement>}
       />
-      {field.hint && <span className="label-text-alt">{field.hint}</span>}
+      {field.hint && <p className="label-text-alt">{field.hint}</p>}
     </div>
   );
 }

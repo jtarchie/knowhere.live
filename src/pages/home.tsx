@@ -1,6 +1,6 @@
 function HomePage({}: { path?: string }) {
   return (
-    <div class="container mx-auto px-4 py-8 bg-gradient-to-r from-blue-500 to-teal-500 min-h-screen text-gray-800">
+    <div class="container mx-auto px-4 py-8 bg-linear-to-r from-blue-500 to-teal-500 min-h-screen text-gray-800">
       <nav class="flex justify-between items-center mb-8">
         <a href="/" class="text-white text-2xl font-bold">Knowhere to Live</a>
         <div>

@@ -4,6 +4,7 @@ export async function onRequest(context) {
     const query = searchParams.get("query");
 
     if (!query) {
+      console.log("No query provided");
       return new Response(
         JSON.stringify({ error: "Please provide a 'query' param" }),
         {

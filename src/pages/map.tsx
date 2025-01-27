@@ -138,7 +138,7 @@ function MapPage(
         <p class="py-4">
           The search did not return any results. Please refine your
           <a class="link link-primary" href={`/beta/${manifestName}/search`}>
-            search criteria
+            &nbsp;search criteria
           </a>.
         </p>
       </Dialog>

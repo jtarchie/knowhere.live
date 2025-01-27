@@ -25,9 +25,7 @@ function Area({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="label" htmlFor={field.name}>
-        <span className="label-text text-lg">{field.label}</span>
-      </label>
+      <label className="fieldset-label" htmlFor={field.name}>{field.label}</label>
       {areas.length === 0
         ? <div className="skeleton h-16 w-full"></div>
         : (
@@ -43,7 +41,7 @@ function Area({ index, field }: InputProps) {
             ))}
           </select>
         )}
-      {field.hint && <span className="label-text-alt">{field.hint}</span>}
+      {field.hint && <p className="label-text-alt">{field.hint}</p>}
     </div>
   );
 }

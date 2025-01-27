@@ -25,7 +25,6 @@ function Address({ index, field }: InputProps) {
     const [lon, lat] = geometry.coordinates;
 
     setVisibleAddress(properties.full_address);
-    console.log("here");
 
     setValue(`${field.name}.full_address`, properties.full_address);
     setValue(`${field.name}.latitude`, lat);
@@ -53,9 +52,7 @@ function Address({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="label" htmlFor={field.name}>
-        <span className="label-text text-lg">{field.label}</span>
-      </label>
+      <label className="fieldset-label" htmlFor={field.name}>{field.label}</label>
       <AddressAutofill
         accessToken={mapboxgl.accessToken as string}
         onRetrieve={onRetrieve}
@@ -220,7 +217,7 @@ function Address({ index, field }: InputProps) {
             HTMLInputElement
           >}
         />
-        {field.hint && <span className="label-text-alt">{field.hint}</span>}
+        {field.hint && <p className="label-text-alt">{field.hint}</p>}
       </AddressAutofill>
     </div>
   );
