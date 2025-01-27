@@ -6,7 +6,10 @@ function Checkbox({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="fieldset-label cursor-pointer text-lg" htmlFor={field.name}>
+      <label
+        className="fieldset-label cursor-pointer text-lg"
+        htmlFor={field.name}
+      >
         <input
           className="checkbox checkbox-lg checkbox-primary"
           id={field.name}

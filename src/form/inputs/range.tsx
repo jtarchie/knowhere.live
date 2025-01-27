@@ -9,7 +9,9 @@ function Range({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="fieldset-label" htmlFor={field.name}>{field.label}: {currentValue}</label>
+      <label className="fieldset-label" htmlFor={field.name}>
+        {field.label}: {currentValue}
+      </label>
       <input
         className="range range-primary"
         type="range"

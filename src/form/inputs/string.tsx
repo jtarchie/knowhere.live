@@ -8,7 +8,9 @@ function String({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="fieldset-label" htmlFor={field.name}>{field.label}</label>
+      <label className="fieldset-label" htmlFor={field.name}>
+        {field.label}
+      </label>
       <input
         className="input input-bordered input-lg input-primary"
         id={field.name}

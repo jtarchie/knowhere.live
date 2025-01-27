@@ -52,7 +52,9 @@ function Address({ index, field }: InputProps) {
 
   return (
     <div key={index} className="form-control">
-      <label className="fieldset-label" htmlFor={field.name}>{field.label}</label>
+      <label className="fieldset-label" htmlFor={field.name}>
+        {field.label}
+      </label>
       <AddressAutofill
         accessToken={mapboxgl.accessToken as string}
         onRetrieve={onRetrieve}
