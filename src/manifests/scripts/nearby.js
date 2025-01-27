@@ -1,3 +1,5 @@
+/// <reference path="../../../docs/src/global.d.ts" />
+
 const stateMapping = {
   "ca-ab": "alberta",
   "ca-bc": "british_columbia",

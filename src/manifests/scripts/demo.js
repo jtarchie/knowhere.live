@@ -1,3 +1,5 @@
+/// <reference path="../../../docs/src/global.d.ts" />
+
 const all = query.execute(
   `nwr[name=~"${params.keyword}"](area="${params.area || "colorado"}")`,
 );

@@ -1,3 +1,5 @@
+/// <reference path="../../../docs/src/global.d.ts" />
+
 function zillowURL(bounds) {
   // https://www.zillow.com/homes/for_sale/?searchQueryState={%22isMapVisible%22%3Atrue%2C%22mapBounds%22%3A{%22west%22%3A-105.91190088989258%2C%22east%22%3A-105.64513911010742%2C%22south%22%3A39.88949772255962%2C%22north%22%3A39.967295787905705}%2C%22filterState%22%3A{%22sort%22%3A{%22value%22%3A%22globalrelevanceex%22}}}
 
@@ -21,9 +23,21 @@ function zillowURL(bounds) {
 const areas = params.prompt_query.areas.length > 0
   ? params.prompt_query.areas.slice(0, 5)
   : ["colorado"];
-assert.stab(JSON.stringify(areas));
+
+let bounds = "";
+if (params.prompt_query.bounds.query !== "") {
+  const boundQuery = query.execute(
+    params.prompt_query.bounds.query + `(area=${areas[0]})`,
+  );
+  if (boundQuery.length > 0) {
+    bounds = "(bb=" + boundQuery[0].bound().asBB() + ")";
+  }
+}
+
 const keywords = params.prompt_query.queries.map((match) => {
-  const queries = areas.map((area) => match.query + `[name](area=${area})`);
+  const queries = areas.map((area) =>
+    match.query + `[name](area=${area})${bounds}`
+  );
   return {
     query: match.query,
     results: query.union(...queries),
