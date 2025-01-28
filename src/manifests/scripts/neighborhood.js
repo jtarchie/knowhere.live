@@ -25,7 +25,7 @@ const areas = params.prompt_query.areas.length > 0
   : ["colorado"];
 
 let bounds = "";
-if (params.prompt_query.bounds.query !== "") {
+if (params.prompt_query.bounds.query) {
   const boundQuery = query.execute(
     params.prompt_query.bounds.query + `(area=${areas[0]})`,
   );
