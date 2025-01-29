@@ -12,7 +12,7 @@ function Prompt({ index, field }: InputProps) {
         {field.label}
       </label>
       <textarea
-        className="textarea textarea-bordered textarea-lg textarea-primary"
+        className="textarea w-full textarea-bordered textarea-lg textarea-primary"
         id={field.name}
         placeholder={field.placeholder}
         autoComplete="off"

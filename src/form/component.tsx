@@ -80,7 +80,7 @@ function Form({
           onSubmit={handleSubmit(onSubmitCallback)}
           onReset={onResetCallback}
         >
-          <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+          <fieldset className="fieldset bg-base-200 border border-base-300 p-4 rounded-box">
             <legend class="fieldset-legend">Search Criteria</legend>
             {schema.map((field, index) => {
               const Component = componentMap[field.type];

@@ -12,7 +12,7 @@ function Text({ index, field }: InputProps) {
         {field.label}
       </label>
       <textarea
-        className="textarea textarea-bordered textarea-lg textarea-primary"
+        className="w-full textarea textarea-bordered textarea-lg textarea-primary"
         id={field.name}
         autoComplete="off"
         placeholder={field.placeholder}

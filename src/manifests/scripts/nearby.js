@@ -126,7 +126,7 @@ Object.keys(params).forEach((key, index) => {
       return result.asFeature({
         "marker-color": colors.pick(index),
         "title": result.tags.name,
-        "legend": key,
+        "legend": filters[key].label,
       });
     }));
   }
