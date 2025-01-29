@@ -35,7 +35,10 @@ const filters: {
     label: "Food and Dining",
   },
   "gas_stations": {
-    queries: ["[amenity=fuel][name]"],
+    queries: [
+      "[amenity=fuel][name]",
+      "[shop=convenience][name]",
+    ],
     markerSymbol: "fuel",
     label: "Gas Stations",
   },
