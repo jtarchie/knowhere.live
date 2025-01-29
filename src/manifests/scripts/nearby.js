@@ -96,6 +96,8 @@ const { full_address, latitude, longitude, address_level1: state } =
   params.address;
 const center = geo.asPoint(latitude, longitude);
 
+assert.stab(JSON.stringify(params.address));
+
 const area = stateMapping[`ca-${state.toLowerCase()}`] ||
   stateMapping[`us-${state.toLowerCase()}`];
 const boundary = center.asBound().extend(params.radius);

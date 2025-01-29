@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AddressAutofill } from "@mapbox/search-js-react";
 import mapboxgl from "mapbox-gl";
 import { useFormContext } from "react-hook-form";
@@ -10,13 +10,11 @@ function Address({ index, field }: InputProps) {
   const { register, getValues, setValue } = useFormContext(); // Access the form methods
 
   const fullAddress = getValues(`${field.name}.full_address`);
-  const [visibleAddress, setVisibleAddress] = useState<string>(
-    fullAddress,
-  );
+  const [visibleAddress, setVisibleAddress] = useState<string>(fullAddress);
 
   useEffect(() => {
     setVisibleAddress(fullAddress);
-  }, []);
+  }, [fullAddress]);
 
   const onRetrieve = useCallback((response: GeoJSON.FeatureCollection) => {
     const feature = response.features[0];
@@ -48,7 +46,7 @@ function Address({ index, field }: InputProps) {
     setValue(`${field.name}.place_name`, properties.place_name);
     setValue(`${field.name}.place_type`, properties.place_type);
     setValue(`${field.name}.postcode`, properties.postcode);
-  }, []);
+  }, [setValue, field.name]);
 
   return (
     <div key={index} className="form-control">
@@ -64,160 +62,96 @@ function Address({ index, field }: InputProps) {
           className="input input-bordered input-lg input-primary w-full"
           id={field.name}
           value={visibleAddress}
+          onChange={(e) =>
+            setVisibleAddress((e.target as HTMLInputElement).value)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.full_address`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.full_address`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.latitude`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.latitude`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.longitude`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.longitude`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.accuracy`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.accuracy`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.address_level1`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.address_level1`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.address_level2`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.address_level2`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.address_level3`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.address_level3`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.address_line1`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.address_line1`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.address_line2`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.address_line2`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.address_line3`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.address_line3`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.country`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.country`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.country_code`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.country_code`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.description`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.description`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.feature_name`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.feature_name`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.language`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.language`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.maki`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.maki`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.mapbox_id`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.mapbox_id`)}
         />
         <input
           type="hidden"
-          {...register(
-            `${field.name}.matching_name`,
-          ) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.matching_name`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.metadata`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.metadata`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.place_name`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.place_name`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.place_type`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.place_type`)}
         />
         <input
           type="hidden"
-          {...register(`${field.name}.postcode`) as React.InputHTMLAttributes<
-            HTMLInputElement
-          >}
+          {...register(`${field.name}.postcode`)}
         />
         {field.hint && <p className="label-text-alt">{field.hint}</p>}
       </AddressAutofill>

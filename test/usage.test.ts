@@ -4,7 +4,6 @@ import type { Browser, Page } from "playwright";
 import { expect } from "@playwright/test";
 import { ChildProcess, spawn } from "child_process";
 import { setTimeout } from "timers/promises";
-import getPort from "get-port";
 
 describe("navigate the site", () => {
   let serverProcess: ChildProcess;
@@ -13,7 +12,7 @@ describe("navigate the site", () => {
   let port: number;
 
   beforeAll(async () => {
-    port = await getPort();
+    port = 8788; //await getPort();
 
     serverProcess = spawn("yarn", [
       "run",
@@ -55,15 +54,17 @@ describe("navigate the site", () => {
     expect(await dialog.all()).toHaveLength(0);
   });
 
-  // TODO: fix, i believe it has to do with the address autocomplete allow list of ip addresses
-  test.skip("searching nearby", async () => {
+  test("searching nearby", async () => {
     await leader.goto(`http://localhost:${port}/beta/nearby/map`);
+
     await leader.getByRole("button", { name: "Search" }).click();
     expect(leader.url()).toContain("/beta/nearby/search");
 
     await leader.getByLabel("Address").fill(
       "42 grand street new york ny 10013",
     );
+
+    await leader.screenshot({ path: "screenshot.png", fullPage: true });
     await leader.getByRole("option", { name: /New York, New York/ }).click();
     await leader.getByLabel("Banking").click();
     await leader.getByRole("button", { name: "Apply" }).click();
