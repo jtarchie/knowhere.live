@@ -4,7 +4,7 @@ import mapboxgl, {
   LineLayerSpecification,
   SymbolLayerSpecification,
 } from "mapbox-gl";
-import { MapRef } from "react-map-gl";
+import { MapRef } from "react-map-gl/mapbox";
 import tinycolor from "tinycolor2";
 
 const defaultColor = "#555";

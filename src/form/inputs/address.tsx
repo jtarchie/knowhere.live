@@ -13,6 +13,7 @@ function Address({ index, field }: InputProps) {
   const [visibleAddress, setVisibleAddress] = useState<string>(fullAddress);
 
   useEffect(() => {
+    console.log("fullAddress", fullAddress);
     setVisibleAddress(fullAddress);
   }, [fullAddress]);
 
@@ -21,6 +22,8 @@ function Address({ index, field }: InputProps) {
     const properties = feature.properties || {};
     const geometry = feature.geometry as GeoJSON.Point;
     const [lon, lat] = geometry.coordinates;
+
+    console.log(properties.full_address);
 
     setVisibleAddress(properties.full_address);
 
@@ -62,8 +65,6 @@ function Address({ index, field }: InputProps) {
           className="input input-bordered input-lg input-primary w-full"
           id={field.name}
           value={visibleAddress}
-          onChange={(e) =>
-            setVisibleAddress((e.target as HTMLInputElement).value)}
         />
         <input
           type="hidden"

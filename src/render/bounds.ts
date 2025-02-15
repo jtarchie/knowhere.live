@@ -2,7 +2,7 @@ import { LngLatBoundsLike, Map } from "mapbox-gl";
 import { sourceName } from "./layers";
 import bbox from "@turf/bbox";
 import buffer from "@turf/buffer";
-import { MapRef } from "react-map-gl";
+import { MapRef } from "react-map-gl/mapbox";
 
 function fitBounds(
   map: Map | MapRef,

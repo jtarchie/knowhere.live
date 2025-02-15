@@ -4,7 +4,7 @@ import Map, {
   MapRef,
   NavigationControl,
   Source,
-} from "react-map-gl";
+} from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import "../index.css";
