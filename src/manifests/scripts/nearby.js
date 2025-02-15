@@ -98,8 +98,8 @@ const center = geo.asPoint(latitude, longitude);
 
 assert.stab(JSON.stringify(params.address));
 
-const area = stateMapping[`ca-${state.toLowerCase()}`] ||
-  stateMapping[`us-${state.toLowerCase()}`];
+const formattedState = state.toLowerCase().replace(/\s+/g, '_');
+const area = stateMapping[`ca-${formattedState}`] || stateMapping[`us-${formattedState}`] || formattedState;
 const boundary = center.asBound().extend(params.radius);
 let features = [];
 
@@ -112,7 +112,7 @@ features.push(boundary.asFeature({
 const distances = [];
 
 Object.keys(params).forEach((key, index) => {
-  if (filters[key] && params[key] == "1") {
+  if (filters[key] && !!params[key]) {
     const asQueries = filters[key].queries.map((query) =>
       `nwr${query}(area=${area})(bb=${boundary.min()[0]},${boundary.min()[1]},${
         boundary.max()[0]
