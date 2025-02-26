@@ -60,6 +60,7 @@ function Legend(
     <div className={`${isVisible ? "w-64" : "w-12"}`}>
       {!isVisible && (
         <button
+          type="button"
           onClick={() => setIsVisible(true)}
           className="btn btn-circle btn-primary"
           aria-label="Show legend"
@@ -85,6 +86,7 @@ function Legend(
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-lg font-bold text-primary">Legend</h3>
             <button
+              type="button"
               onClick={() => setIsVisible(false)}
               className="btn btn-sm btn-circle btn-ghost"
               aria-label="Close legend"

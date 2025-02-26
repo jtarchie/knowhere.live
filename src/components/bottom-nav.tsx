@@ -36,6 +36,7 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
   return (
     <div class="dock dock-lg bg-base-100 relative">
       <button
+        type="button"
         class={active(`/beta/${manifestName}/map`) +
           " text-primary"}
         onClick={redirect(`/beta/${manifestName}/map`)}
@@ -58,6 +59,7 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
       </button>
       {params.editor && (
         <button
+          type="button"
           class={active("/beta/editor")}
           onClick={redirect("/beta/editor")}
         >
@@ -79,6 +81,7 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
         </button>
       )}
       <button
+        type="button"
         class={active(`/beta/${manifestName}/search`) + " text-primary"}
         onClick={redirect(`/beta/${manifestName}/search`)}
       >
@@ -100,6 +103,7 @@ function BottomNav({ manifestName }: { manifestName?: string }) {
         <span class="dock-label">Search</span>
       </button>
       <button
+        type="button"
         onClick={handleShare}
         class={`text-primary ${isSuccess ? "success" : ""}`}
       >

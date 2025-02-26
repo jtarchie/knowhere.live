@@ -101,12 +101,14 @@ function MapPage(
             initialViewState={{
               bounds: defaultBounds,
             }}
-            mapStyle={"mapbox://styles/mapbox/streets-v12"}
+            mapStyle="mapbox://styles/mapbox/streets-v12"
           >
             <NavigationControl position="top-right" />
             <Source id={sourceName} type="geojson" data={geoJSON}>
-              {layers.map((layer) => {
-                return <Layer {...layer as LayerProps} />;
+              {layers.map((layer, index) => {
+                return (
+                  <Layer key={`layer-${index}`} {...layer as LayerProps} />
+                );
               })}
             </Source>
           </Map>

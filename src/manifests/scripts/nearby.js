@@ -98,8 +98,9 @@ const center = geo.asPoint(latitude, longitude);
 
 assert.stab(JSON.stringify(params.address));
 
-const formattedState = state.toLowerCase().replace(/\s+/g, '_');
-const area = stateMapping[`ca-${formattedState}`] || stateMapping[`us-${formattedState}`] || formattedState;
+const formattedState = state.toLowerCase().replace(/\s+/g, "_");
+const area = stateMapping[`ca-${formattedState}`] ||
+  stateMapping[`us-${formattedState}`] || formattedState;
 const boundary = center.asBound().extend(params.radius);
 let features = [];
 

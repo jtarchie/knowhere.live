@@ -27,7 +27,10 @@ function Dialog(
     <dialog className="modal" ref={ref as RefObject<HTMLDialogElement>}>
       <div className="modal-box">
         <form method="dialog">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          <button
+            type="button"
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
             ✕
           </button>
         </form>
