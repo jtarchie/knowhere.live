@@ -20,6 +20,27 @@ function zillowURL(bounds) {
   return url.toString();
 }
 
+function overlappingBounds(bbs) {
+  const overlapping = [];
+  bbs.forEach((bounds) => {
+    let found = false;
+
+    for (let index = 0; index < overlapping.length; index++) {
+      if (overlapping[index].asBound().intersects(bounds.asBound())) {
+        overlapping[index] = geo.asBounds(...overlapping[index].concat(bounds));
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      overlapping.push(bounds);
+    }
+  });
+
+  return overlapping;
+}
+
 const areas = params.prompt_query.areas.length > 0
   ? params.prompt_query.areas.slice(0, 5)
   : ["colorado"];
@@ -35,8 +56,8 @@ if (params.prompt_query.bounds.query) {
 }
 
 const keywords = params.prompt_query.queries.map((match) => {
-  const queries = areas.map((area) =>
-    match.query + `[name](area=${area})${bounds}`
+  const queries = areas.map(
+    (area) => match.query + `[name](area=${area})${bounds}`,
   );
   return {
     query: match.query,
@@ -75,50 +96,69 @@ if (keywords.length == 1) {
     });
   });
 
-  entries = [...neighbors.values()].map((set) => {
-    const values = [...set.values()];
-    if (values.length !== keywords.length) {
-      return [];
-    }
+  entries = [...neighbors.values()]
+    .map((set) => {
+      const values = [...set.values()];
+      if (values.length !== keywords.length) {
+        return [];
+      }
 
-    return values;
-  }).filter((entry) => entry.length > 0);
+      return values;
+    })
+    .filter((entry) => entry.length > 0);
 }
+
+const neighborhoodBounds = [];
+let features = entries.flatMap((neighborhood, _) => {
+  const entries = neighborhood.map((entry, index) => {
+    const color = colors.pick(index);
+
+    const feature = entry.asFeature({
+      "marker-color": color,
+      index: index,
+      legend: keywords[index].legend,
+    });
+
+    return feature;
+  });
+
+  const entriesWithSpecifiedRadius = neighborhood.map((entry, index) =>
+    entry.bound().extend(keywords[index].radius)
+  );
+
+  // create into combined bounds object
+  const entriesBounds = geo.asBounds(...entriesWithSpecifiedRadius);
+  neighborhoodBounds.push(entriesBounds);
+
+  return entries;
+});
+
+let overlapping = neighborhoodBounds;
+
+for (let i = 0; i < 5; i++) {
+  const overlap = overlappingBounds(overlapping);
+  if (overlap.length === overlapping.length) {
+    break;
+  }
+
+  overlapping = overlap;
+}
+
+features = overlapping
+  .map((overlap, index) => {
+    return overlap.asBound().asFeature({
+      fill: colors.pick(index),
+      "fill-opacity": 0.5,
+      url: zillowURL(overlap.asBound()),
+      description: "See on Zillow",
+      legend: "Neighborhood",
+    });
+  })
+  .concat(features);
 
 const payload = {
   type: "FeatureCollection",
-  features: entries.flatMap((neighborhood, index) => {
-    const features = neighborhood.map((entry, index) => {
-      const color = colors.pick(index);
-
-      const feature = entry.asFeature({
-        "marker-color": color,
-        index: index,
-        "legend": keywords[index].legend,
-      });
-
-      return feature;
-    });
-
-    const entriesWithSpecifiedRadius = neighborhood.map((entry, index) =>
-      entry.bound().extend(keywords[index].radius)
-    );
-
-    // create into combined bounds object
-    const bounds = geo.asBounds(...entriesWithSpecifiedRadius);
-
-    return [
-      bounds.asFeature({
-        "fill": colors.pick(index),
-        "fill-opacity": 0.5,
-        "url": zillowURL(bounds.asBound()),
-        "description": "See on Zillow",
-        "legend": "Neighborhood",
-      }),
-    ].concat(
-      features,
-    );
-  }),
+  features: features,
 };
 
 assert.geoJSON(payload);
