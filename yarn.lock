@@ -6767,7 +6767,7 @@ possible-typed-array-names@^1.0.0:
   resolved "https://registry.yarnpkg.com/possible-typed-array-names/-/possible-typed-array-names-1.1.0.tgz#93e3582bc0e5426586d9d07b79ee40fc841de4ae"
   integrity sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==
 
-postcss@^8.4.41, postcss@^8.4.43, postcss@^8.4.48, postcss@^8.5.1, postcss@^8.5.2:
+postcss@^8.4.41, postcss@^8.4.43, postcss@^8.4.48, postcss@^8.5.2:
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.2.tgz#e7b99cb9d2ec3e8dd424002e7c16517cb2b846bd"
   integrity sha512-MjOadfU3Ys9KYoX0AdkBlFEF1Vx37uCCeN4ZHnmwm9FfpbsGWMZeBLMmmpY+6Ocqod7mkdZ0DT31OlbsFrLlkA==
@@ -8174,13 +8174,13 @@ vite-prerender-plugin@^0.5.3:
     source-map "^0.7.4"
     stack-trace "^1.0.0-pre2"
 
-"vite@^5.0.0 || ^6.0.0", vite@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-6.1.0.tgz#00a4e99a23751af98a2e4701c65ba89ce23858a6"
-  integrity sha512-RjjMipCKVoR4hVfPY6GQTgveinjNuyLw+qruksLDvA5ktI1150VmcMBKmQaEWJhg/j6Uaf6dNCNA0AfdzUb/hQ==
+"vite@^5.0.0 || ^6.0.0", vite@^6.1.6:
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-6.1.6.tgz#72c3171390aaa80f4a829ab45c21e61477cae5bd"
+  integrity sha512-u+jokLMwHVFUoUkfL+m/1hzucejL2639g9QXcrRdtN3WPHfW7imI83V96Oh1R0xVZqDjvcgp+7S8bSQpdVlmPA==
   dependencies:
     esbuild "^0.24.2"
-    postcss "^8.5.1"
+    postcss "^8.5.2"
     rollup "^4.30.1"
   optionalDependencies:
     fsevents "~2.3.3"
