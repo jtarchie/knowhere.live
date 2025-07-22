@@ -10,7 +10,7 @@ export async function onRequest(context) {
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -92,7 +92,7 @@ export async function onRequest(context) {
           Authorization: `Bearer ${context.env.OPENAI_API_KEY}`, // Ensure the API key is set in environment variables
         },
         body: JSON.stringify(requestBody),
-      }
+      },
     );
 
     if (!apiResponse.ok) {
@@ -106,7 +106,7 @@ export async function onRequest(context) {
         {
           status: apiResponse.status,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -123,7 +123,7 @@ export async function onRequest(context) {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -141,7 +141,7 @@ export async function onRequest(context) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
 }
