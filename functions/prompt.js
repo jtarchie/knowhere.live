@@ -10,7 +10,7 @@ export async function onRequest(context) {
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -29,22 +29,56 @@ export async function onRequest(context) {
         { role: "system", content: prompt },
         { role: "user", content: trimmedQuery },
       ],
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "query_response",
+          schema: {
+            type: "object",
+            properties: {
+              queries: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    query: { type: "string" },
+                    radius: { type: "number" },
+                    legend: { type: "string" },
+                  },
+                  required: ["query", "radius", "legend"],
+                },
+              },
+              areas: {
+                type: "array",
+                items: { type: "string" },
+              },
+              bounds: {
+                type: "object",
+                properties: {
+                  query: { type: "string" },
+                  legend: { type: "string" },
+                },
+              },
+            },
+            required: ["queries", "areas", "bounds"],
+          },
+        },
+      },
       prediction: {
         type: "content",
-        "content": JSON.stringify({
-          "queries": [
+        content: JSON.stringify({
+          queries: [
             {
-              "query": "nwr[name=~Starbucks]",
-              "radius": 1000,
-              "legend": "Starbucks",
+              query: "nwr[name=~Starbucks]",
+              radius: 1000,
+              legend: "Starbucks",
             },
           ],
-          "bounds": {
-            "query":
-              "nwr[boundary=administrative][admin_level=8][name=~Denver]",
-            "legend": "Denver, CO",
+          bounds: {
+            query: "nwr[boundary=administrative][admin_level=8][name=~Denver]",
+            legend: "Denver, CO",
           },
-          "areas": ["colorado"],
+          areas: ["colorado"],
         }),
       },
     };
@@ -55,10 +89,10 @@ export async function onRequest(context) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${context.env.OPENAI_API_KEY}`, // Ensure the API key is set in environment variables
+          Authorization: `Bearer ${context.env.OPENAI_API_KEY}`, // Ensure the API key is set in environment variables
         },
         body: JSON.stringify(requestBody),
-      },
+      }
     );
 
     if (!apiResponse.ok) {
@@ -72,7 +106,7 @@ export async function onRequest(context) {
         {
           status: apiResponse.status,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -89,7 +123,7 @@ export async function onRequest(context) {
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
     }
 
@@ -107,7 +141,7 @@ export async function onRequest(context) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 }
