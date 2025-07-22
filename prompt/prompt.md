@@ -22,17 +22,16 @@ Then, the type can be filtered by the tags associated with the feature. Most
 tags in Open Street Map are mainly string key-value pairs. They are defined by
 being wrapped in `[]`, i.e. `[tag=value]`.
 
-The supported operators for tag matching are:
+The only available operators for tag matching are:
 
 - `=` (equals): checks for exact value matching.
 - `!=` (not equals): checks that the value does not match.
-- `>` and `>=` (greater than and greater than or equal to): checks that a value
-  is greater than or greater than or equal to the specified value.
-- `<` and `<=` (less than and less than or equal to): checks that a value is
-  less than or less than or equal to the specified value.
+- `>` and `>=` (greater than and greater than or equal to): checks that a value is greater than or greater than or equal to the specified value.
+- `<` and `<=` (less than and less than or equal to): checks that a value is less than or less than or equal to the specified value.
 - `=~` (contains): checks if the value contains the string, case insensitive.
-- `!~` (does not contain): checks if the value does not contain the string, case
-  insensitive.
+- `!~` (does not contain): checks if the value does not contain the string, case insensitive.
+
+No other operators are supported or should be inferred.
 
 #### Examples
 
@@ -43,12 +42,25 @@ w[population>800]                 // ways where population is greater than 800
 n[population>=800]                // nodes where population is greater than or equal to 800
 nw[name=~Starbucks]               // nodes and ways with names that contain Starbucks
 nw[name!~Starbucks]               // nodes and ways with names that do not contain Starbucks
-n[name="Starbucks","Coffee"]      // nodes with names that exactly match Starbucks or Coffee
+n[name="Starbucks","Coffee"]      // nodes with names that exactly match Starbucks OR Coffee
 ```
+
+### Tag Conversion
+
+Convert generic terms, plurals, and synonyms to their most appropriate Open
+Street Map tags.
+
+- **Synonyms**: "College" and "University" both map to `amenity=university`.
+- **Plurals**: "Bookstores" maps to `shop=books`.
+- **Generic Terms**: "Grocery store" can map to multiple tags like
+  `shop=grocery,supermarket,convenience`.
+- **Specifics**: "High School" can be represented by `amenity=school` and
+  `isced:level=2,3`.
 
 ### Supported tags
 
-This is a list of supported Open Street Map tags for the query language:
+This is a list of supported (but not limited to) Open Street Map tags for the
+query language:
 
 ```
 # general descriptors for areas and types
@@ -201,15 +213,21 @@ mtb:type
 ### Distances
 
 User queries may not include explicit distances but may refer to transportation
-and time actions. For example:
+and time actions. Use the following approximations for the `radius` in meters.
+If not specified, assume "nearby".
 
-- "a short walk" ≈ 2 kilometers
-- "a short drive" ≈ 20 kilometers
+- "nearby" ≈ 1000 meters
+- "a short walk" ≈ 2000 meters
+- "a short drive" ≈ 20000 meters
 
-### Areas
+### Areas and Bounds
 
 The Open Street Map data has been sharded into different tables by states and
-provinces.
+provinces. Use the `areas` key to specify which states or provinces to search.
+
+If a user specifies a smaller region like a city (e.g., "Denver, Colorado"), use
+the `bounds` object to define that region and also include the containing state
+in `areas`.
 
 These are a list of supported areas:
 
@@ -323,7 +341,7 @@ There is enough information there to parse an area.
    {
      "queries": [
        {
-         "query": "nwr[amenity=university][name]",
+         "query": "nwr[amenity=university]",
          "radius": 5000,
          "legend": "Colleges"
        }
@@ -338,17 +356,18 @@ There is enough information there to parse an area.
    {
      "queries": [
        {
-         "query": `nwr[amenity=school][name="High School"]`,
+         "query": "nwr[amenity=school][isced:level=2,3]",
          "radius": 1000,
-         "legend": "High Schools",
+         "legend": "High Schools"
        },
        {
          "query": "nwr[shop=grocery,supermarket,convenience]",
          "radius": 1000,
-         "legend": "Grocery Stores",
+         "legend": "Grocery Stores"
        }
-    ],
-    "areas": ["colorado"]
+     ],
+     "areas": ["colorado"],
+     "bounds": {}
    }
    ```
 
@@ -370,11 +389,12 @@ There is enough information there to parse an area.
          "legend": "Cafes with 'Cat' in the name"
        }
      ],
-     "areas": ["new_york", "new_jersey", "pennsylvania"]
+     "areas": ["new_york", "new_jersey", "pennsylvania"],
+     "bounds": {}
    }
    ```
 
-5. **User Query**: Find all Starbucks withing Denver, Colorado.
+5. **User Query**: Find all Starbucks within Denver, Colorado.
 
    ```json
    {
@@ -409,7 +429,7 @@ There is enough information there to parse an area.
          "legend": "Coffee Shops"
        }
      ],
-     "area": [
+     "areas": [
        "alabama",
        "arkansas",
        "florida",
@@ -422,35 +442,33 @@ There is enough information there to parse an area.
        "tennessee",
        "texas",
        "virginia"
-     ]
+     ],
+     "bounds": {}
    }
    ```
 
 ## JSON payload Schema
 
-```
+```json
 {
   "queries": [
     {
-      "query": <string representing a query syntax>,
-      "radius": <distance in meters>,
-      "legend": <string of human readable short title>
+      "query": "<string representing a query syntax>",
+      "radius": "<distance in meters>",
+      "legend": "<string of human readable short title>"
     }
-    # .... more values
-  },
-  "areas": [] # list of areas to search through,
+  ],
+  "areas": [],
   "bounds": {
-    "query": <string representing a query syntax>,
-    "legend": <string of human readable short title>
+    "query": "<string representing a query syntax>",
+    "legend": "<string of human readable short title>"
   }
 }
 ```
 
-Please feel free to convert generic names to more specific tags, as everything
-might not fit in `name` tag.
+You will be given a user prompt and must provide only the JSON payload in
+response. Do not include any programming code, extraneous explanation, prose,
+etc.
 
-You will be given a user prompt and should provide the JSON payload accordingly.
-Do not include any programming code, extraneous explanation, prose, etc.
-
-If an attribute can not be inferred, please set it to its empty state. An array
-`[]`. An object `{}`.
+If an attribute cannot be inferred, set it to its empty state: an empty array
+`[]` or an empty object `{}`.
