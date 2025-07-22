@@ -9,7 +9,7 @@ id = "812608f3e6754cdb8ce9e1e36d9320df"
 
 [vars]
 # API_URL = "http://localhost:8080"
-API_URL = "https://knowhere.fly.dev:443"
+API_URL = "https://api.knowhere.live"
 
 [env.production.vars]
-API_URL = "https://knowhere.fly.dev:443"
+API_URL = "https://api.knowhere.live"

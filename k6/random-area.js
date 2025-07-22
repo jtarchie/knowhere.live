@@ -37,7 +37,7 @@ export const options = {
 };
 
 export default function () {
-  const url = new URL("https://knowhere.fly.dev:443/api/runtime");
+  const url = new URL("https://api.knowhere.live:443/api/runtime");
 
   // Define the source parameter as a single line
   const source = `

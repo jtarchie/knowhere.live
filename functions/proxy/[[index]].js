@@ -2,7 +2,7 @@ export async function onRequest(context) {
   const timeout = 1500;
   const request = context.request;
   const modifyURL = new URL(
-    context.env.API_URL || "https://knowhere.fly.dev:443",
+    context.env.API_URL || "https://api.knowhere.live",
   );
   const url = new URL(request.url.replace("/proxy/", "/"));
 
