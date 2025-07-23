@@ -4,6 +4,7 @@ import { Manager, Runtime } from "../render/manager";
 import { Form } from "../form/component";
 import { useEffect, useState } from "preact/hooks";
 import { route } from "preact-router";
+import manifests from "../manifests";
 
 function SearchPage(
   { manifestName }: { path?: string; manifestName?: string },
@@ -23,6 +24,15 @@ function SearchPage(
   useEffect(() => {
     const runtime = manager.load(manifestName);
     setRuntime(runtime);
+  }, [manifestName]);
+
+  useEffect(() => {
+    if (manifestName) {
+      const prettyName = manifests[manifestName]?.about || manifestName;
+      document.title = `Knowhere / ${prettyName} / Search`;
+    } else {
+      document.title = "Knowhere / Search";
+    }
   }, [manifestName]);
 
   if (!runtime) {

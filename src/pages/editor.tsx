@@ -3,6 +3,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { Manager } from "../render/manager";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import CodeMirror from "@uiw/react-codemirror";
+import manifests from "../manifests";
 
 const prefersDarkMode = globalThis.matchMedia &&
   globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -22,6 +23,15 @@ function EditorPage(
     const { manifest: { source } } = manager.load(manifestName);
     setSourceCode(source);
   }, []);
+
+  useEffect(() => {
+    if (manifestName) {
+      const prettyName = manifests[manifestName]?.about || manifestName;
+      document.title = `Knowhere / ${prettyName} / Editor`;
+    } else {
+      document.title = "Knowhere / Editor";
+    }
+  }, [manifestName]);
 
   return (
     <div class="h-screen flex flex-col">

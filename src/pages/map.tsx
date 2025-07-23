@@ -17,6 +17,7 @@ import { fitBounds } from "../render/bounds";
 import { RefCallback } from "preact";
 import { Legend } from "../components/legend";
 import { Dialog } from "../components/dialog";
+import manifests from "../manifests";
 
 const defaultBounds: LngLatBoundsLike = [
   [-124.7844079, 24.396308],
@@ -37,6 +38,15 @@ function MapPage(
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [layers, setLayers] = useState<mapboxgl.Layer[]>([]);
+
+  useEffect(() => {
+    if (manifestName) {
+      const prettyName = manifests[manifestName]?.about || manifestName;
+      document.title = `Knowhere / ${prettyName} / Map`;
+    } else {
+      document.title = "Knowhere / Map";
+    }
+  }, [manifestName]);
 
   useEffect(() => {
     const manager = new Manager();

@@ -1,4 +1,10 @@
+import { useEffect } from "preact/hooks";
+
 function HomePage({}: { path?: string }) {
+  useEffect(() => {
+    document.title = "Knowhere";
+  }, []);
+
   return (
     <div class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
       {/* Navigation */}
