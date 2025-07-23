@@ -3,6 +3,18 @@ include information about points of interest (shops, gas stations, etc.). The
 JSON payload will use a specific format with Open Street Map tags. Ensure the
 tags are the simplest representation.
 
+## General Rules
+
+1. **Only JSON**: Your output must be only the JSON payload. Do not include any
+   other text, explanations, or markdown.
+2. **No Assumptions**: Do not assume information not present in the query. For
+   example, if a user asks for "Starbucks in Denver", do not assume they mean
+   "Denver, Colorado". If the area is ambiguous, leave the `areas` array empty.
+3. **Use Name Tag as Fallback**: If you cannot determine the appropriate OSM
+   tags for a query, use the `name` tag with the `=~` operator to perform a text
+   search. For example, for "the big pointy building in san francisco", you
+   might generate `nwr[name=~"big pointy building"]`.
+
 ## Query Syntax
 
 ### Syntax
@@ -22,14 +34,24 @@ Then, the type can be filtered by the tags associated with the feature. Most
 tags in Open Street Map are mainly string key-value pairs. They are defined by
 being wrapped in `[]`, i.e. `[tag=value]`.
 
+- **Logical AND**: Multiple tag filters are joined by a logical AND. For
+  example, `[amenity=cafe][name=~Starbucks]` finds features that are cafes AND
+  have "Starbucks" in their name.
+- **Logical OR**: To check for multiple values for the same key, you can use a
+  comma-separated list. For example, `[shop=grocery,convenience]` finds features
+  where the shop is a grocery OR a convenience store.
+
 The only available operators for tag matching are:
 
 - `=` (equals): checks for exact value matching.
 - `!=` (not equals): checks that the value does not match.
-- `>` and `>=` (greater than and greater than or equal to): checks that a value is greater than or greater than or equal to the specified value.
-- `<` and `<=` (less than and less than or equal to): checks that a value is less than or less than or equal to the specified value.
+- `>` and `>=` (greater than and greater than or equal to): checks that a value
+  is greater than or greater than or equal to the specified value.
+- `<` and `<=` (less than and less than or equal to): checks that a value is
+  less than or less than or equal to the specified value.
 - `=~` (contains): checks if the value contains the string, case insensitive.
-- `!~` (does not contain): checks if the value does not contain the string, case insensitive.
+- `!~` (does not contain): checks if the value does not contain the string, case
+  insensitive.
 
 No other operators are supported or should be inferred.
 
@@ -48,7 +70,8 @@ n[name="Starbucks","Coffee"]      // nodes with names that exactly match Starbuc
 ### Tag Conversion
 
 Convert generic terms, plurals, and synonyms to their most appropriate Open
-Street Map tags.
+Street Map tags. If a term is ambiguous or not in the supported list, use the
+`name` tag to do a text search (e.g., `[name=~"some ambiguous term"]`).
 
 - **Synonyms**: "College" and "University" both map to `amenity=university`.
 - **Plurals**: "Bookstores" maps to `shop=books`.
@@ -444,6 +467,41 @@ There is enough information there to parse an area.
        "virginia"
      ],
      "bounds": {}
+   }
+   ```
+
+7. **User Query**: Find bars or pubs in California that are not breweries.
+
+   ```json
+   {
+     "queries": [
+       {
+         "query": "nwr[amenity=bar,pub][brewery!=yes]",
+         "radius": 1000,
+         "legend": "Bars/Pubs (not breweries)"
+       }
+     ],
+     "areas": ["california"],
+     "bounds": {}
+   }
+   ```
+
+8. **User Query**: Find "that famous arch in St. Louis".
+
+   ```json
+   {
+     "queries": [
+       {
+         "query": "nwr[name=~\"Gateway Arch\"]",
+         "radius": 1000,
+         "legend": "Gateway Arch"
+       }
+     ],
+     "bounds": {
+       "query": "nwr[boundary=administrative][admin_level>=6][name=~\"St. Louis\"]",
+       "legend": "St. Louis"
+     },
+     "areas": ["missouri"]
    }
    ```
 
