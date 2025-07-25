@@ -97,6 +97,10 @@ export async function onRequest(context) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${context.env.OPENAI_API_KEY}`, // Ensure the API key is set in environment variables
         },
+        cf: {
+          cacheTtl: 1800,
+          cacheEverything: true,
+        },
         body: JSON.stringify(requestBody),
       },
     );
@@ -135,7 +139,10 @@ export async function onRequest(context) {
 
     const message = data.choices[0].message.content;
     return new Response(message, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "max-age=1800",
+      },
     });
   } catch (error) {
     console.error("Unexpected error:", error);
