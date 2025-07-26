@@ -10,14 +10,30 @@ import tinycolor from "tinycolor2";
 const defaultColor = "#555";
 const sourceName = "geojson";
 
-function createLayerDefinitions(legendValue?: string) {
+// Helper function to clean up existing layers
+function removeExistingLayers(map: MapRef, layerIds: string[]) {
+  layerIds.forEach((layerId) => {
+    if (map.getMap().getLayer(layerId)) {
+      map.getMap().removeLayer(layerId);
+    }
+  });
+}
+
+// Helper function to validate layer specifications
+function validateLayerSpec(layer: mapboxgl.LayerSpecification): boolean {
+  return !!(layer.id && layer.type && layer.source);
+}
+
+function createLayerDefinitions(
+  legendValue?: string,
+): mapboxgl.LayerSpecification[] {
   const prefix = legendValue ? `${legendValue}-` : "";
   const legendFilter = legendValue
     ? ["==", ["get", "legend"], legendValue]
     : ["!", ["has", "legend"]];
 
   const polygonFill: FillLayerSpecification = {
-    id: `${prefix}-${sourceName}-fill`,
+    id: `${prefix}${sourceName}-fill`,
     type: "fill",
     source: sourceName,
     paint: {
@@ -28,7 +44,7 @@ function createLayerDefinitions(legendValue?: string) {
   };
 
   const polygonOutlineFill: LineLayerSpecification = {
-    id: `${prefix}-${sourceName}-fill-outline`,
+    id: `${prefix}${sourceName}-fill-outline`,
     type: "line",
     source: sourceName,
     paint: {
@@ -40,7 +56,7 @@ function createLayerDefinitions(legendValue?: string) {
   };
 
   const circle: CircleLayerSpecification = {
-    id: `${prefix}-${sourceName}-marker`,
+    id: `${prefix}${sourceName}-marker`,
     type: "circle",
     source: sourceName,
     paint: {
@@ -70,14 +86,16 @@ function createLayerDefinitions(legendValue?: string) {
   };
 
   const text: SymbolLayerSpecification = {
-    id: `${prefix}-${sourceName}-marker-text`,
+    id: `${prefix}${sourceName}-marker-text`,
     type: "symbol",
     source: sourceName,
     layout: {
       "text-field": ["get", "title"],
       "text-offset": [0, 2],
+      "text-anchor": "top",
+      "text-optional": true,
     },
-    "paint": {
+    paint: {
       "text-halo-color": [
         "coalesce",
         ["get", "marker-color"],
@@ -93,12 +111,14 @@ function createLayerDefinitions(legendValue?: string) {
   };
 
   const symbol: SymbolLayerSpecification = {
-    id: `${prefix}-${sourceName}-marker-icon`,
+    id: `${prefix}${sourceName}-marker-icon`,
     type: "symbol",
     source: sourceName,
     layout: {
       "text-field": ["get", "title"],
       "text-offset": [0, 2],
+      "text-anchor": "top",
+      "text-optional": true,
       "icon-image": ["get", "marker-symbol"],
       "icon-size": [
         "match",
@@ -110,8 +130,9 @@ function createLayerDefinitions(legendValue?: string) {
         1.5,
       ],
       "icon-allow-overlap": false,
+      "icon-optional": true,
     },
-    "paint": {
+    paint: {
       "text-halo-color": [
         "coalesce",
         ["get", "marker-color"],
@@ -127,7 +148,7 @@ function createLayerDefinitions(legendValue?: string) {
   };
 
   const line: LineLayerSpecification = {
-    id: `${prefix}-${sourceName}-line`,
+    id: `${prefix}${sourceName}-line`,
     type: "line",
     source: sourceName,
     paint: {
@@ -138,13 +159,24 @@ function createLayerDefinitions(legendValue?: string) {
     filter: ["all", legendFilter, ["==", ["geometry-type"], "LineString"]],
   };
 
-  return [circle, line, polygonFill, polygonOutlineFill, text, symbol];
+  const layers = [circle, line, polygonFill, polygonOutlineFill, text, symbol];
+
+  // Validate all layers before returning
+  return layers.filter(validateLayerSpec);
 }
+
+// Store event listeners for cleanup
+const eventListeners = new Map<
+  string,
+  Array<
+    { type: string; listener: (event: mapboxgl.MapLayerMouseEvent) => void }
+  >
+>();
 
 function setupLayersAndEvents(
   map: MapRef,
   geoJSON: GeoJSON.FeatureCollection,
-): mapboxgl.Layer[] {
+): { layers: mapboxgl.Layer[]; cleanup: () => void } {
   const legendValues = [
     null,
     ...new Set(
@@ -161,71 +193,119 @@ function setupLayersAndEvents(
     closeOnClick: false,
   });
 
-  map.on("click", layerIDs, (event) => {
-    if (!event) return;
+  // Store references to event handlers for cleanup
+  const mapId = map.getMap().getContainer().id;
+  const listeners: Array<
+    { type: string; listener: (event: mapboxgl.MapLayerMouseEvent) => void }
+  > = [];
 
-    const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
+  const clickHandler = (event: mapboxgl.MapLayerMouseEvent) => {
+    if (!event?.features?.length) return;
 
-    if (features && features.length > 0) {
-      const feature = features[0];
-      const url = feature.properties?.url; // Assuming your property is named 'url'
-      if (url) {
-        globalThis.open(url, "_blank");
+    const feature = event.features[0] as mapboxgl.MapboxGeoJSONFeature;
+    const url = feature.properties?.url;
+
+    if (url && typeof url === "string") {
+      try {
+        // Validate URL before opening
+        new URL(url);
+        globalThis.open(url, "_blank", "noopener,noreferrer");
+      } catch (_error) {
+        console.warn("Invalid URL:", url);
       }
     }
-  });
+  };
 
-  map.on("mouseover", layerIDs, (event) => {
-    if (!event) return;
+  const mouseenterHandler = (event: mapboxgl.MapLayerMouseEvent) => {
+    if (!event?.features?.length) return;
 
-    const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
+    const feature = event.features[0] as mapboxgl.MapboxGeoJSONFeature;
+    const hasUrl = feature.properties?.url;
 
-    if (features && features.length > 0) {
-      const feature = features[0];
-      const url = feature.properties?.url; // Assuming your property is named 'url'
-      if (url) {
-        map.getCanvas().style.cursor = "pointer";
-      }
+    if (hasUrl) {
+      map.getCanvas().style.cursor = "pointer";
     }
-  });
+  };
 
-  map.on("mousemove", layerIDs, (event) => {
-    if (!event) return;
+  const mousemoveHandler = (event: mapboxgl.MapLayerMouseEvent) => {
+    if (!event?.features?.length) return;
 
-    const features = event?.features as mapboxgl.MapboxGeoJSONFeature[];
+    const feature = event.features[0] as mapboxgl.MapboxGeoJSONFeature;
+    const description = feature.properties?.description;
 
-    if (features && features.length > 0) {
-      const feature = features[0];
-      const description = feature.properties?.description;
-
-      if (description) {
-        popup
-          .setLngLat(event.lngLat)
-          .setHTML(description)
-          .addTo(map.getMap());
-      }
+    if (description && typeof description === "string") {
+      popup
+        .setLngLat(event.lngLat)
+        .setHTML(description)
+        .addTo(map.getMap());
     }
-  });
+  };
 
-  map.on("mouseleave", layerIDs, (_) => {
+  const mouseleaveHandler = () => {
     map.getCanvas().style.cursor = "default";
     popup.remove();
-  });
+  };
 
-  return layers;
+  // Add event listeners
+  map.on("click", layerIDs, clickHandler);
+  map.on("mouseenter", layerIDs, mouseenterHandler);
+  map.on("mousemove", layerIDs, mousemoveHandler);
+  map.on("mouseleave", layerIDs, mouseleaveHandler);
+
+  // Store listener references
+  listeners.push(
+    { type: "click", listener: clickHandler },
+    { type: "mouseenter", listener: mouseenterHandler },
+    { type: "mousemove", listener: mousemoveHandler },
+    { type: "mouseleave", listener: mouseleaveHandler },
+  );
+  eventListeners.set(mapId, listeners);
+
+  const cleanup = () => {
+    // Remove event listeners
+    map.off("click", layerIDs, clickHandler);
+    map.off("mouseenter", layerIDs, mouseenterHandler);
+    map.off("mousemove", layerIDs, mousemoveHandler);
+    map.off("mouseleave", layerIDs, mouseleaveHandler);
+
+    // Remove popup
+    popup.remove();
+
+    // Clear stored listeners
+    eventListeners.delete(mapId);
+  };
+
+  return { layers, cleanup };
 }
 
 function applyTransformations(
   geoJSON: GeoJSON.FeatureCollection,
   setter: (features: GeoJSON.FeatureCollection) => void,
 ) {
-  geoJSON.features?.forEach((feature) => {
+  // Create a copy to avoid mutating the original
+  const transformedGeoJSON = JSON.parse(
+    JSON.stringify(geoJSON),
+  ) as GeoJSON.FeatureCollection;
+
+  const isochronePromises: Promise<void>[] = [];
+
+  transformedGeoJSON.features?.forEach((feature) => {
     const properties = feature.properties || {};
-    if (properties.isochrone) {
+    if (properties.isochrone && feature.geometry.type === "Point") {
       const color = properties["marker-color"] || defaultColor;
       const colors = generateLighterColors(color, 3);
 
-      const point = (feature.geometry as GeoJSON.Point).coordinates;
+      const point = feature.geometry.coordinates;
+
+      // Validate coordinates
+      if (
+        !Array.isArray(point) || point.length < 2 ||
+        typeof point[0] !== "number" || typeof point[1] !== "number"
+      ) {
+        console.warn("Invalid coordinates for isochrone feature:", point);
+        return;
+      }
+
       const url = new URL(
         `https://api.mapbox.com/isochrone/v1/mapbox/driving-traffic/${
           point[0]
@@ -239,45 +319,100 @@ function applyTransformations(
       );
       url.searchParams.append("polygons", "true");
       url.searchParams.append("denoise", "1");
-      url.searchParams.append("access_token", mapboxgl.accessToken as string);
 
-      fetch(url.toString()).then(async (response) => {
-        const featureCollection = await response
-          .json() as GeoJSON.FeatureCollection;
-        geoJSON.features = geoJSON.features.concat(
-          featureCollection.features.flatMap((feature, index) => {
-            const coordinates =
-              (feature.geometry as GeoJSON.Polygon).coordinates;
-            let southernmostPoint = coordinates[0];
+      // Check if access token is available
+      if (!mapboxgl.accessToken) {
+        console.warn("Mapbox access token not available for isochrone request");
+        return;
+      }
+      url.searchParams.append("access_token", mapboxgl.accessToken);
 
-            // Iterate through the coordinates to find the point with the smallest latitude
-            coordinates.forEach((point) => {
-              if (point[1] < southernmostPoint[1]) {
-                southernmostPoint = point;
+      const isochronePromise = fetch(url.toString())
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Isochrone API request failed: ${response.status} ${response.statusText}`,
+            );
+          }
+
+          const featureCollection = await response
+            .json() as GeoJSON.FeatureCollection;
+
+          // Validate response structure
+          if (
+            !featureCollection.features ||
+            !Array.isArray(featureCollection.features)
+          ) {
+            throw new Error("Invalid isochrone API response structure");
+          }
+
+          const newFeatures = featureCollection.features.flatMap(
+            (feature, index) => {
+              if (feature.geometry.type !== "Polygon") {
+                console.warn(
+                  "Unexpected geometry type in isochrone response:",
+                  feature.geometry.type,
+                );
+                return [];
               }
-            });
-            const point: GeoJSON.Feature = {
-              type: "Feature",
-              geometry: {
-                "type": "Point",
-                coordinates: southernmostPoint[0], // lon, lat
-              },
-              properties: {
-                title: `${
-                  contourMinutes[contourMinutes.length - index - 1]
-                }m drive`,
-                "marker-color": feature.properties?.fill,
-              },
-            };
-            return [feature, point];
-          }),
-        );
-        setter(geoJSON);
-      });
+
+              const coordinates = feature.geometry.coordinates;
+              if (!coordinates.length || !coordinates[0].length) {
+                console.warn(
+                  "Invalid polygon coordinates in isochrone response",
+                );
+                return [];
+              }
+
+              let southernmostPoint = coordinates[0][0];
+
+              // Find the southernmost point (smallest latitude)
+              coordinates[0].forEach((coord) => {
+                if (
+                  Array.isArray(coord) && coord.length >= 2 &&
+                  coord[1] < southernmostPoint[1]
+                ) {
+                  southernmostPoint = coord;
+                }
+              });
+
+              const labelPoint: GeoJSON.Feature = {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: southernmostPoint,
+                },
+                properties: {
+                  title: `${
+                    contourMinutes[contourMinutes.length - index - 1]
+                  }m drive`,
+                  "marker-color": feature.properties?.fill,
+                },
+              };
+              return [feature, labelPoint];
+            },
+          );
+
+          transformedGeoJSON.features = transformedGeoJSON.features.concat(
+            newFeatures,
+          );
+        })
+        .catch((error) => {
+          console.error("Error fetching isochrone data:", error);
+        });
+
+      isochronePromises.push(isochronePromise);
     }
   });
 
-  return geoJSON;
+  // If there are isochrone requests, wait for them to complete
+  if (isochronePromises.length > 0) {
+    Promise.allSettled(isochronePromises).then(() => {
+      setter(transformedGeoJSON);
+    });
+  }
+
+  return transformedGeoJSON;
 }
 
 function generateLighterColors(hex: string, steps: number) {
@@ -297,13 +432,21 @@ function setupMapWithGeoJSON(
   geoJSON: GeoJSON.FeatureCollection,
   setGeoJSON: (geoJSON: GeoJSON.FeatureCollection) => void,
   setLayers: (layers: mapboxgl.Layer[]) => void,
-) {
+): () => void {
   setGeoJSON(geoJSON);
 
-  const layers = setupLayersAndEvents(map, geoJSON);
+  const { layers, cleanup } = setupLayersAndEvents(map, geoJSON);
   setLayers(layers);
 
   applyTransformations(geoJSON, setGeoJSON);
+
+  // Return cleanup function
+  return cleanup;
 }
 
-export { setupMapWithGeoJSON, sourceName };
+export {
+  eventListeners, // Export for external cleanup if needed
+  removeExistingLayers,
+  setupMapWithGeoJSON,
+  sourceName,
+};

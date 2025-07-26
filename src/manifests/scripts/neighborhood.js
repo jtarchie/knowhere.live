@@ -14,7 +14,7 @@ function zillowURL(bounds) {
         south: bounds.bottom(),
         north: bounds.top(),
       },
-    })
+    }),
   );
 
   return url.toString();
@@ -36,7 +36,7 @@ function overlappingBounds(bbs) {
   for (let i = 0; i < bounds.length; i++) {
     if (used.has(i)) continue;
 
-    let currentGroup = [bounds[i].bound]; // Use the Bound object, not BoundArray
+    const currentGroup = [bounds[i].bound]; // Use the Bound object, not BoundArray
     let currentBound = bounds[i].bound;
     used.add(i);
 
@@ -63,15 +63,14 @@ function overlappingBounds(bbs) {
   return merged;
 }
 
-const areas =
-  params.prompt_query.areas.length > 0
-    ? params.prompt_query.areas.slice(0, 5)
-    : ["colorado"];
+const areas = params.prompt_query.areas.length > 0
+  ? params.prompt_query.areas.slice(0, 5)
+  : ["colorado"];
 
 let bounds = "";
 if (params.prompt_query.bounds?.query) {
   const boundQuery = query.execute(
-    params.prompt_query.bounds.query + `(area=${areas[0]})`
+    params.prompt_query.bounds.query + `(area=${areas[0]})`,
   );
   if (boundQuery.length > 0) {
     bounds = "(bb=" + boundQuery[0].bound().asBB() + ")";
@@ -80,7 +79,7 @@ if (params.prompt_query.bounds?.query) {
 
 const keywords = params.prompt_query.queries.map((match) => {
   const queries = areas.map(
-    (area) => match.query + `[name](area=${area})${bounds}`
+    (area) => match.query + `[name](area=${area})${bounds}`,
   );
   return {
     query: match.query,
@@ -110,7 +109,7 @@ if (keywords.length == 1) {
       keyword.results,
       keywords[0].radius,
       keyword.radius,
-      expectedNeighbors - 1
+      expectedNeighbors - 1,
     );
     grouped.forEach((values) => {
       values.forEach((value) =>
