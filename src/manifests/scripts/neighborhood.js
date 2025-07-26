@@ -14,41 +14,64 @@ function zillowURL(bounds) {
         south: bounds.bottom(),
         north: bounds.top(),
       },
-    }),
+    })
   );
 
   return url.toString();
 }
 
 function overlappingBounds(bbs) {
-  const overlapping = [];
-  bbs.forEach((bounds) => {
-    let found = false;
+  if (bbs.length === 0) return [];
+  if (bbs.length === 1) return bbs;
 
-    for (let index = 0; index < overlapping.length; index++) {
-      if (overlapping[index].asBound().intersects(bounds.asBound())) {
-        overlapping[index] = geo.asBounds(...overlapping[index].concat(bounds));
-        found = true;
-        break;
+  // Convert BoundArray objects to Bound objects once to avoid repeated conversions
+  const bounds = bbs.map((boundArray) => ({
+    original: boundArray,
+    bound: boundArray.asBound(),
+  }));
+
+  const merged = [];
+  const used = new Set();
+
+  for (let i = 0; i < bounds.length; i++) {
+    if (used.has(i)) continue;
+
+    let currentGroup = [bounds[i].bound]; // Use the Bound object, not BoundArray
+    let currentBound = bounds[i].bound;
+    used.add(i);
+
+    // Find all bounds that intersect with current group
+    let foundIntersection = true;
+    while (foundIntersection) {
+      foundIntersection = false;
+
+      for (let j = 0; j < bounds.length; j++) {
+        if (used.has(j)) continue;
+
+        if (currentBound.intersects(bounds[j].bound)) {
+          currentGroup.push(bounds[j].bound); // Use the Bound object, not BoundArray
+          currentBound = geo.asBounds(...currentGroup).asBound();
+          used.add(j);
+          foundIntersection = true;
+        }
       }
     }
 
-    if (!found) {
-      overlapping.push(bounds);
-    }
-  });
+    merged.push(geo.asBounds(...currentGroup));
+  }
 
-  return overlapping;
+  return merged;
 }
 
-const areas = params.prompt_query.areas.length > 0
-  ? params.prompt_query.areas.slice(0, 5)
-  : ["colorado"];
+const areas =
+  params.prompt_query.areas.length > 0
+    ? params.prompt_query.areas.slice(0, 5)
+    : ["colorado"];
 
 let bounds = "";
 if (params.prompt_query.bounds?.query) {
   const boundQuery = query.execute(
-    params.prompt_query.bounds.query + `(area=${areas[0]})`,
+    params.prompt_query.bounds.query + `(area=${areas[0]})`
   );
   if (boundQuery.length > 0) {
     bounds = "(bb=" + boundQuery[0].bound().asBB() + ")";
@@ -57,7 +80,7 @@ if (params.prompt_query.bounds?.query) {
 
 const keywords = params.prompt_query.queries.map((match) => {
   const queries = areas.map(
-    (area) => match.query + `[name](area=${area})${bounds}`,
+    (area) => match.query + `[name](area=${area})${bounds}`
   );
   return {
     query: match.query,
@@ -87,7 +110,7 @@ if (keywords.length == 1) {
       keyword.results,
       keywords[0].radius,
       keyword.radius,
-      expectedNeighbors - 1,
+      expectedNeighbors - 1
     );
     grouped.forEach((values) => {
       values.forEach((value) =>
@@ -135,13 +158,21 @@ let features = entries.flatMap((neighborhood, _) => {
 
 let overlapping = neighborhoodBounds;
 
-for (let i = 0; i < 5; i++) {
-  const overlap = overlappingBounds(overlapping);
-  if (overlap.length === overlapping.length) {
-    break;
-  }
+// Only run overlap consolidation if we have multiple bounds
+if (neighborhoodBounds.length > 1) {
+  // Single pass should be sufficient with the improved algorithm
+  overlapping = overlappingBounds(neighborhoodBounds);
 
-  overlapping = overlap;
+  // Only do a second pass if we actually merged something
+  if (
+    overlapping.length < neighborhoodBounds.length &&
+    overlapping.length > 1
+  ) {
+    const secondPass = overlappingBounds(overlapping);
+    if (secondPass.length < overlapping.length) {
+      overlapping = secondPass;
+    }
+  }
 }
 
 features = overlapping
