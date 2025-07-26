@@ -169,7 +169,7 @@ function createLayerDefinitions(
 const eventListeners = new Map<
   string,
   Array<
-    { type: string; listener: (event: mapboxgl.MapLayerMouseEvent) => void }
+    { type: string; listener: (event: mapboxgl.MapMouseEvent) => void }
   >
 >();
 
@@ -196,13 +196,13 @@ function setupLayersAndEvents(
   // Store references to event handlers for cleanup
   const mapId = map.getMap().getContainer().id;
   const listeners: Array<
-    { type: string; listener: (event: mapboxgl.MapLayerMouseEvent) => void }
+    { type: string; listener: (event: mapboxgl.MapMouseEvent) => void }
   > = [];
 
-  const clickHandler = (event: mapboxgl.MapLayerMouseEvent) => {
+  const clickHandler = (event: mapboxgl.MapMouseEvent) => {
     if (!event?.features?.length) return;
 
-    const feature = event.features[0] as mapboxgl.MapboxGeoJSONFeature;
+    const feature = event.features[0] as mapboxgl.GeoJSONFeature;
     const url = feature.properties?.url;
 
     if (url && typeof url === "string") {
@@ -216,10 +216,10 @@ function setupLayersAndEvents(
     }
   };
 
-  const mouseenterHandler = (event: mapboxgl.MapLayerMouseEvent) => {
+  const mouseenterHandler = (event: mapboxgl.MapMouseEvent) => {
     if (!event?.features?.length) return;
 
-    const feature = event.features[0] as mapboxgl.MapboxGeoJSONFeature;
+    const feature = event.features[0] as mapboxgl.GeoJSONFeature;
     const hasUrl = feature.properties?.url;
 
     if (hasUrl) {
@@ -227,10 +227,10 @@ function setupLayersAndEvents(
     }
   };
 
-  const mousemoveHandler = (event: mapboxgl.MapLayerMouseEvent) => {
+  const mousemoveHandler = (event: mapboxgl.MapMouseEvent) => {
     if (!event?.features?.length) return;
 
-    const feature = event.features[0] as mapboxgl.MapboxGeoJSONFeature;
+    const feature = event.features[0] as mapboxgl.GeoJSONFeature;
     const description = feature.properties?.description;
 
     if (description && typeof description === "string") {
